@@ -262,13 +262,14 @@
       <!-- XMLHTTPREQUEST -->
       <div class="main-section">
         <input type="checkbox" id="xmlhttprequest_main_checkbox">
-        <span class="section-header"><i>Filter XMLHttpRequest requests:</i></span> <span id="experimental">(experimental only)</span>
+        <span class="section-header">Filter XMLHttpRequest requests:</span>
       </div>
       <div class="subsection">
         <div class="row">
           <select id="xmlhttprequest_type_of_restriction" class="long-select">
-            <option value="a" selected>Always ask user to allow every XMLHttpRequest request</option>
-            <option value="b">Block all XMLHttpRequest requests</option>
+            <option value="allow" selected>Allow all XMLHttpRequest request</option>
+            <option value="confirm">Confirm each XHR request</option>
+            <option value="block">Block all XHR requests (experimental only)</option>
           </select>
         </div>
       </div>
