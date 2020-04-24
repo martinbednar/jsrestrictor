@@ -5,6 +5,9 @@ describe("Helpers", function() {
 		it("should be defined",function() {
 			expect(escape).toBeDefined();
 		});
+		it("should return string",function() {
+			expect(escape("")).toEqual(jasmine.any(String));
+		});
 		it("should replace single character in the middle of the word",function() {
 			expect(escape('te"st')).toBe("te&quot;st");
 			expect(escape("te'st")).toBe("te&#039;st");
