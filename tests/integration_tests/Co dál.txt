@@ -1,0 +1,23 @@
+Zajímavá chyba (mám povolený přístup k poloze): https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_geo_coordinates
+
+
+Získání Geolokačních dat: https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_geo_coordinates
+
+function getLocation() {
+  if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    console.log('ERROR');
+  }
+}
+
+function showPosition(position) {
+	console.log(position.coords.latitude + ' ' + 	position.coords.longitude);
+}
+
+
+
+https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates/longitude
+
+
+Povolení získání pozice v prohlížeči nástrojem Selenium: https://stackoverflow.com/questions/34740547/how-to-enable-geolocation-permissions-for-a-website-in-firefox-profile-using-sel
