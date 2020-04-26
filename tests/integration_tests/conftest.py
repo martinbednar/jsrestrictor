@@ -1,4 +1,3 @@
-# content of a/conftest.py
 import pytest
 import os
 
