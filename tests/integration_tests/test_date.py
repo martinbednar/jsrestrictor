@@ -14,8 +14,9 @@ def test_minutes(driver):
 
 
 def test_seconds(driver):
-	seconds = driver.execute_script("let d = new Date(); return d.getSeconds()")
-	assert seconds == datetime.now().second
+	js_seconds = driver.execute_script("let d = new Date(); return d.getSeconds()")
+	p_seconds = datetime.now().second
+	assert (js_seconds >= (p_seconds-1)) and (js_seconds <= (p_seconds+1))
 
 
 def test_milliseconds(driver):
