@@ -3,10 +3,10 @@ class Navigator:
     appVersion = "5.0 (Windows)"
     platform = "Win32"
     vendor = "Google Inc."
-    language = "en-US, en"
-    languages = "en-US, en"
-    doNotTrack = "yes"
-    cookieEnabled = "yes"
+    language = "en-US"
+    languages = ["en-US", "en"]
+    doNotTrack = "1"
+    cookieEnabled = True
     oscpu = "undefined"
 
 
