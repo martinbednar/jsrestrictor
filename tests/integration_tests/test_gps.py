@@ -4,19 +4,8 @@ import setting
 
 
 def test_accuracy(driver):
-    driver.execute_script("function getLocation() {"
-                          "if (navigator.geolocation) {"
-                          "navigator.geolocation.getCurrentPosition(showPosition);"
-                          "} else {"
-                          "console.log('ERROR');"
-                          "}"
-                          "}"
-                          "function showPosition(position) {"
-                          "console.warn(position.coords.accuracy);"
-                          "}"
-                          "getLocation();")
-    time.sleep(1)
-    logs = driver.get_log('browser')
-    print('logy:')
-    print(logs);
-    assert 1 == 1
+	show_gps_button = driver.find_element_by_xpath("//button[text()='Show GPS data']")
+	show_gps_button.click()
+	time.sleep(2)
+	print(driver.find_element_by_xpath("//div[@id='placeToWriteGPSDetails']").text)
+	assert True
