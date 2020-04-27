@@ -40,7 +40,7 @@ describe("URL", function() {
 			expect(extractRootDomain("sub.test.co.ck")).toBe("test.co.ck");
 			expect(extractRootDomain("test.sub.test.co.ck")).toBe("test.co.ck");
 		});
-		it("should return IP address for IP address (no domainname)",function() {
+		xit("should return IP address for IP address (no domainname) - example URL: http://89.45.196.133/paneln/Login.aspx)",function() {
 			//example web page: http://89.45.196.133/paneln/Login.aspx
 			expect(extractRootDomain("89.45.196.133")).toBe("89.45.196.133");
 		});

@@ -3,6 +3,8 @@ Zajímavá chyba (mám povolený přístup k poloze): https://www.w3schools.com/
 
 Získání Geolokačních dat: https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_geo_coordinates
 
+var gps;
+
 function getLocation() {
   if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(showPosition);
@@ -12,12 +14,61 @@ function getLocation() {
 }
 
 function showPosition(position) {
-	console.log(position.coords.latitude + ' ' + 	position.coords.longitude);
+	gps = 'pozice: ' + position.coords.latitude + ' ' + 	position.coords.longitude;
+}
+function wait(ms)
+{
+var d = new Date();
+var d2 = null;
+do { d2 = new Date(); }
+while(d2-d < ms);
 }
 
+getLocation();
+wait(1000);
+gps2=gps;
+console.log(gps2);
 
 
 https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates/longitude
 
+
+https://stackoverflow.com/questions/22196950/make-geolocation-call-synchronously-in-javascript
+
+var geolocation = (function() {
+   var geoposition;
+   var options = {
+     maximumAge: 1000,
+     timeout: 15000,
+     enableHighAccuracy: false
+   };
+
+   function _onSuccess (callback, position) {
+     geoposition = position
+     callback(geoposition);
+   };
+
+   function _onError (callback, error) {
+     console.log(error)
+     callback();
+   };
+
+   function _getLocation (callback) {
+     navigator.geolocation.getCurrentPosition(
+       _onSuccess.bind(this, callback),
+       _onError.bind(this, callback), 
+       options
+     );
+   }
+
+  return {
+    location: _getLocation  
+  }
+
+}());
+
+geolocation.location(function(position){
+  console.log(position);
+});
 
 Povolení získání pozice v prohlížeči nástrojem Selenium: https://stackoverflow.com/questions/34740547/how-to-enable-geolocation-permissions-for-a-website-in-firefox-profile-using-sel
