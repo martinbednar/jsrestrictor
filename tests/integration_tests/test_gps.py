@@ -1,11 +1,22 @@
+import time
+
 import setting
 
 
 def test_accuracy(driver):
-	device_memory = driver.execute_script("return window.navigator.deviceMemory")
-	assert device_memory == setting.expected_values.device.deviceMemory
-
-
-def test_hardware_concurrency(driver):
-	hardware_concurrency = driver.execute_script("return window.navigator.hardwareConcurrency")
-	assert hardware_concurrency == setting.expected_values.device.hardwareConcurrency
+    driver.execute_script("function getLocation() {"
+                          "if (navigator.geolocation) {"
+                          "navigator.geolocation.getCurrentPosition(showPosition);"
+                          "} else {"
+                          "console.log('ERROR');"
+                          "}"
+                          "}"
+                          "function showPosition(position) {"
+                          "console.warn(position.coords.accuracy);"
+                          "}"
+                          "getLocation();")
+    time.sleep(1)
+    logs = driver.get_log('browser')
+    print('logy:')
+    print(logs);
+    assert 1 == 1
