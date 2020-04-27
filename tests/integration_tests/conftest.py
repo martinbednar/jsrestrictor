@@ -9,7 +9,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 def set_jsr_to_level(driver, level):
 	driver.get('chrome-extension://ammoloihpcbognfddfjcljgembpibcmb/options.html')
 	driver.find_element_by_id('level-' + str(level)).click()
-	driver.get('https://polcak.github.io/jsrestrictor/')
+	driver.get('https://polcak.github.io/jsrestrictor/test/test.html')
 
 @pytest.fixture(scope="session",autouse=True)
 def driver(request):
