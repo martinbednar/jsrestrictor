@@ -14,20 +14,10 @@ function getLocation() {
 }
 
 function showPosition(position) {
-	gps = 'pozice: ' + position.coords.latitude + ' ' + 	position.coords.longitude;
-}
-function wait(ms)
-{
-var d = new Date();
-var d2 = null;
-do { d2 = new Date(); }
-while(d2-d < ms);
+	console.log('pozice: ' + position.coords.latitude + ' ' + 	position.coords.longitude);
 }
 
 getLocation();
-wait(1000);
-gps2=gps;
-console.log(gps2);
 
 
 https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates/longitude
