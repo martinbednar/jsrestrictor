@@ -3,3 +3,5 @@
 chrome_JSR/
 firefox_JSR/
 tests/integration_tests/__pycache__/
+*.crx
+*.pem
