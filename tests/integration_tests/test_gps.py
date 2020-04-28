@@ -8,7 +8,7 @@ import setting
 def position(driver):
 	show_gps_button = driver.find_element_by_xpath("//button[text()='Show GPS data']")
 	show_gps_button.click()
-	time.sleep(1)
+	time.sleep(5)
 	location = driver.find_element_by_xpath("//div[@id='placeToWriteGPSDetails']").text
 	location = location.replace(" ", "").split()
 	myDict = {}
