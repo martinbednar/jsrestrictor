@@ -3,5 +3,6 @@
 chrome_JSR/
 firefox_JSR/
 tests/integration_tests/__pycache__/
-*.crx
 *.pem
+chrome/chrome_JSR_rewrite.crx
+firefox/firefox_JSR_rewrite.xpi
