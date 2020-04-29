@@ -6,6 +6,9 @@ from enum import Enum
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class BrowserType(Enum):
@@ -15,7 +18,7 @@ class BrowserType(Enum):
 
 @pytest.fixture(scope="session", autouse=True)
 def driver():
-	browser = Browser(type=BrowserType.FIREFOX)
+	browser = Browser(type=BrowserType.CHROME)
 	browser.jsr_level = 3
 	yield browser.driver
 	browser.driver.quit()
@@ -31,6 +34,17 @@ class Browser:
 			for elem in self.driver.find_elements_by_css_selector('div#mainDiv div.outputContainer div.sections div.section:first-child > pre.entries > span.kids > span.mrName'):
 				if 'id=jsr@javascriptrestrictor' in elem.text:
 					self._jsr_options_page = elem.text.split(',')[2].split('=')[1][:-1] + "options.html"
+		if self._type == BrowserType.CHROME:
+			self.driver.get('chrome://system/')
+			WebDriverWait(self.driver, 10).until(
+				EC.presence_of_element_located((By.ID, 'extensions-value-btn'))
+			)
+			self.driver.find_element_by_id('extensions-value-btn').click()
+			url = ""
+			for elem in self.driver.find_element_by_id('extensions-value').text.splitlines():
+				if 'JavaScript Restrictor' in elem:
+					self._jsr_options_page = "chrome-extension://" + elem.split(':')[0][:-1] + "/options.html"
+		time.sleep(10)
 
 	def __init__(self, type):
 		self._type = type
@@ -53,6 +67,7 @@ class Browser:
 			options.add_argument("user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
 
 			self.driver = webdriver.Chrome(executable_path=executable_path, options=options)
+			self.find_options_jsr_page_url()
 
 	@property
 	def jsr_level(self):
@@ -64,7 +79,7 @@ class Browser:
 		time.sleep(2)
 
 		if self._type == BrowserType.CHROME:
-			self.driver.get('chrome-extension://ammoloihpcbognfddfjcljgembpibcmb/options.html')
+			self.driver.get(self._jsr_options_page)
 		elif self._type == BrowserType.FIREFOX:
 			self.driver.get(self._jsr_options_page)
 		time.sleep(2)
