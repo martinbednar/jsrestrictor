@@ -1,8 +1,0 @@
-Firefox:
-
-driver.get('about:memory')
-	driver.find_element_by_id('measureButton').click()
-	time.sleep(1)
-	for elem in driver.find_elements_by_css_selector('div#mainDiv div.outputContainer div.sections div.section:first-child > pre.entries > span.kids > span.mrName'):
-		if ('id=jsr@javascriptrestrictor' in elem.text):
-			url = elem.text.split(',')[2].split('=')[1][:-1] + "options.html"
