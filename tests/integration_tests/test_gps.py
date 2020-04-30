@@ -1,5 +1,8 @@
-import time
 import pytest
+
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 import setting
 
@@ -8,14 +11,16 @@ import setting
 def position(driver):
 	show_gps_button = driver.find_element_by_xpath("//button[text()='Show GPS data']")
 	show_gps_button.click()
-	time.sleep(10)
-	location = driver.find_element_by_xpath("//div[@id='placeToWriteGPSDetails']").text
+	WebDriverWait(driver, 10).until(
+		EC.presence_of_element_located((By.ID, 'mapnavi'))
+	)
+	location = driver.find_element_by_id('placeToWriteGPSDetails').text
 	location = location.replace(" ", "").split()
-	myDict = {}
+	my_dict = {}
 	for property in location:
 		property = property.split(':')
-		myDict[property[0].lower()] = property[1]
-	return myDict
+		my_dict[property[0].lower()] = property[1]
+	return my_dict
 
 
 def test_accuracy(position):
