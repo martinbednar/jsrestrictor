@@ -1,5 +1,4 @@
 import pytest
-import os
 from enum import Enum
 
 from selenium import webdriver
@@ -17,7 +16,7 @@ class BrowserType(Enum):
 
 @pytest.fixture(scope="session", autouse=True)
 def driver():
-    browser = Browser(type=BrowserType.CHROME)
+    browser = Browser(type=BrowserType.FIREFOX)
     browser.jsr_level = 3
     yield browser.driver
     browser.driver.quit()
@@ -53,7 +52,6 @@ class Browser:
         self.__jsr_level = 2
         if type == BrowserType.FIREFOX:
             executable_path = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\geckodriver.exe"
-            os.environ["webdriver.firefox.driver"] = executable_path
 
             profile = webdriver.FirefoxProfile(
                 'C:\\Users\\Martin\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\voxsqf3a.default-esr')
@@ -65,7 +63,6 @@ class Browser:
             self.find_options_jsr_page_url()
         elif type == BrowserType.CHROME:
             executable_path = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\chromedriver.exe"
-            os.environ["webdriver.chrome.driver"] = executable_path
 
             options = Options()
             options.add_extension(
