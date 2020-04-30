@@ -1,7 +1,7 @@
 import time
 import random
 
-import setting
+import expected_values
 
 
 def test_performance(driver):
