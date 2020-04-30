@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import setting
+import expected_values
 
 
 def test_hours(driver):
