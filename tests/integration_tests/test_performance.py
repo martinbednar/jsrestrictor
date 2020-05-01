@@ -1,7 +1,7 @@
 import time
 import random
 
-from driver import driver
+from browser import driver
 import expected_values
 
 

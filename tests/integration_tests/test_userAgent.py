@@ -1,6 +1,5 @@
+from browser import driver
 import expected_values
-
-from driver import driver
 
 
 def test_user_agent():

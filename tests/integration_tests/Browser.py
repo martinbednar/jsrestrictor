@@ -58,6 +58,8 @@ class Browser:
 
             self.driver = webdriver.Chrome(executable_path=executable_path, options=options)
             self.find_options_jsr_page_url()
+        global driver
+        driver = self.driver
 
     @property
     def jsr_level(self):
