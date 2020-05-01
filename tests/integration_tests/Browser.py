@@ -75,3 +75,6 @@ class Browser:
         self.driver.find_element_by_id('level-' + str(level)).click()
         self.driver.get('https://polcak.github.io/jsrestrictor/test/test.html')
         self.__jsr_level = level
+
+    def quit(self):
+        self.driver.quit()
