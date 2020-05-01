@@ -1,8 +1,10 @@
 import pytest
 
-import driver
+import browser
+from browser_type import BrowserType
 
 
-driver.init()
+myChrome = browser.Browser(BrowserType.CHROME)
+myChrome.jsr_level = 3
 pytest.main()
-driver.driver.quit()
+myChrome.driver.quit()
