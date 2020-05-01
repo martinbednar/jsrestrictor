@@ -1,10 +1,11 @@
 import time
 import random
 
+from driver import driver
 import expected_values
 
 
-def test_performance(driver):
+def test_performance():
 	time.sleep(random.randint(1, 3))
 	performance1 = str(driver.execute_script("return window.performance.now()"))
 	time.sleep(random.randint(1, 3))
