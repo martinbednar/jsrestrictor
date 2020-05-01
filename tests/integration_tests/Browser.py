@@ -8,6 +8,9 @@ from selenium.webdriver.support import expected_conditions as ec
 from browser_type import BrowserType
 
 
+driver = None
+
+
 class Browser:
     def find_options_jsr_page_url(self):
         self.driver.switch_to.window(self.driver.window_handles[0])
@@ -78,3 +81,6 @@ class Browser:
 
     def quit(self):
         self.driver.quit()
+        global driver
+        del driver
+        del self
