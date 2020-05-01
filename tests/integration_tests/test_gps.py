@@ -21,7 +21,7 @@ def position():
 	for property in location:
 		property = property.split(':')
 		my_dict[property[0].lower()] = property[1]
-	yield my_dict
+	return my_dict
 
 
 def test_accuracy(position):
