@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from browser_type import BrowserType
 
 
-driver = None
+#driver = None
 
 
 class Browser:
@@ -82,5 +82,6 @@ class Browser:
     def quit(self):
         self.driver.quit()
         global driver
-        del driver
+        #driver.quit()
+        driver = None
         del self
