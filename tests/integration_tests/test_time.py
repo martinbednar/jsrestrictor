@@ -23,4 +23,7 @@ def test_seconds(driver):
 
 def test_milliseconds(driver, expected):
 	time_in_milliseconds = driver.execute_script("let d = new Date(); return d.getTime()")
-	assert is_in_accuracy(time_in_milliseconds, int(expected.accuracyOfDate*1000))
+	if expected.accuracyOfDate == 'REAL VALUE':
+		assert True
+	else:
+		assert is_in_accuracy(time_in_milliseconds, int(expected.accuracyOfDate*1000))

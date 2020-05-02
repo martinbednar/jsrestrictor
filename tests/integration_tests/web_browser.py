@@ -5,7 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
-from browser_type import BrowserType
+from web_browser_type import BrowserType
+from values_real import init
 
 
 class Browser:
@@ -38,28 +39,36 @@ class Browser:
         self._jsr_options_page = ""
         if type == BrowserType.FIREFOX:
             executable_path = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\geckodriver.exe"
-
             profile = webdriver.FirefoxProfile(
                 'C:\\Users\\Martin\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\voxsqf3a.default-esr')
 
             self.driver = webdriver.Firefox(profile, executable_path=executable_path)
+            self.real = init(self.driver)
+
             self.driver.install_addon(
                 'D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\firefox\\firefox_JSR_master.xpi',
                 temporary=True)
             self.find_options_jsr_page_url()
         elif type == BrowserType.CHROME:
             executable_path = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\chromedriver.exe"
-
             options = Options()
-            options.add_extension(
-                'D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome\\chrome_JSR_master.crx')
             options.add_argument(
                 "user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
 
+            driver_tmp = webdriver.Chrome(executable_path=executable_path, options=options)
+            self.real = init(driver_tmp)
+            driver_tmp.quit()
+
+            #options = Options()
+            options.add_extension(
+                'D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome\\chrome_JSR_master.crx')
+            #options.add_argument(
+            #    "user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
+
             self.driver = webdriver.Chrome(executable_path=executable_path, options=options)
             self.find_options_jsr_page_url()
-        global driver
-        driver = self.driver
+        global browser
+        browser = self
 
     @property
     def jsr_level(self):

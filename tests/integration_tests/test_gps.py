@@ -1,52 +1,64 @@
 import pytest
 
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
+from position import get_position
 
 
 @pytest.fixture(scope='module', autouse=True)
-def position(driver):
-	driver.find_element_by_xpath("//button[text()='Show GPS data']").click()
-	WebDriverWait(driver, 10).until(
-		ec.presence_of_element_located((By.ID, 'mapnavi'))
-	)
-	location = driver.find_element_by_id('placeToWriteGPSDetails').text
-	location = location.replace(" ", "").split()
-	my_dict = {}
-	for property in location:
-		property = property.split(':')
-		my_dict[property[0].lower()] = property[1]
-	return my_dict
+def position(browser):
+	return get_position(browser.driver)
 
 
-def test_accuracy(position, expected):
-	assert position['accuracy'] == expected.geolocation.accuracy
+def test_accuracy(browser, position, expected):
+	if expected.geolocation.accuracy == 'REAL VALUE':
+		assert abs(int(position['accuracy']) - int(browser.real.geolocation.accuracy)) < 2
+	else:
+		assert position['accuracy'] == expected.geolocation.accuracy
 
 
-def test_altitude(position, expected):
-	assert position['altitude'] == expected.geolocation.altitude
+def test_altitude(browser, position, expected):
+	if expected.geolocation.altitude == 'REAL VALUE':
+		assert position['altitude'] == browser.real.geolocation.altitude
+	else:
+		assert position['altitude'] == expected.geolocation.altitude
 
 
-def test_altitudeaccurac(position, expected):
-	assert position['altitudeaccurac'] == expected.geolocation.altitudeAccurac
+def test_altitudeaccurac(browser, position, expected):
+	if expected.geolocation.altitudeAccurac == 'REAL VALUE':
+		assert position['altitudeaccurac'] == browser.real.geolocation.altitudeAccurac
+	else:
+		assert position['altitudeaccurac'] == expected.geolocation.altitudeAccurac
 
 
-def test_heading(position, expected):
-	assert position['heading'] == expected.geolocation.heading
+def test_heading(browser, position, expected):
+	if expected.geolocation.heading == 'REAL VALUE':
+		assert position['heading'] == browser.real.geolocation.heading
+	else:
+		assert position['heading'] == expected.geolocation.heading
 
 
-def test_latitude(position, expected):
-	assert position['latitude'] == expected.geolocation.latitude
+def test_latitude(browser, position, expected):
+	if expected.geolocation.latitude == 'REAL VALUE':
+		assert round(float(position['latitude']), 1) == round(float(browser.real.geolocation.latitude), 1)
+	else:
+		assert position['latitude'] == expected.geolocation.latitude
 
 
-def test_longitude(position, expected):
-	assert position['longitude'] == expected.geolocation.longitude
+def test_longitude(browser, position, expected):
+	if expected.geolocation.latitude == 'REAL VALUE':
+		assert round(float(position['longitude']), 1) == round(float(browser.real.geolocation.longitude), 1)
+	else:
+		assert position['longitude'] == expected.geolocation.longitude
 
 
-def test_speed(position, expected):
-	assert position['speed'] == expected.geolocation.speed
+def test_speed(browser, position, expected):
+	if expected.geolocation.speed == 'REAL VALUE':
+		assert position['speed'] == browser.real.geolocation.speed
+	else:
+		assert position['speed'] == expected.geolocation.speed
 
 
-def test_timestamp(position, expected):
-	assert position['timestamp'] == expected.geolocation.timestamp
+def test_timestamp(browser, position, expected):
+	if expected.geolocation.timestamp == 'REAL VALUE':
+		assert True
+	else:
+		assert position['timestamp'] == expected.geolocation.timestamp
