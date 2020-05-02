@@ -59,11 +59,8 @@ class Browser:
             self.real = init(driver_tmp)
             driver_tmp.quit()
 
-            #options = Options()
             options.add_extension(
                 'D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome\\chrome_JSR_master.crx')
-            #options.add_argument(
-            #    "user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
 
             self.driver = webdriver.Chrome(executable_path=executable_path, options=options)
             self.find_options_jsr_page_url()
