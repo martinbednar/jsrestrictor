@@ -8,9 +8,6 @@ from selenium.webdriver.support import expected_conditions as ec
 from browser_type import BrowserType
 
 
-#driver = None
-
-
 class Browser:
     def find_options_jsr_page_url(self):
         self.driver.switch_to.window(self.driver.window_handles[0])
@@ -78,10 +75,13 @@ class Browser:
         self.driver.find_element_by_id('level-' + str(level)).click()
         self.driver.get('https://polcak.github.io/jsrestrictor/test/test.html')
         self.__jsr_level = level
+        global jsr_level
+        jsr_level = level
 
     def quit(self):
         self.driver.quit()
         global driver
-        #driver.quit()
         driver = None
+        global jsr_level
+        jsr_level = None
         del self

@@ -4,13 +4,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
-import expected_values
-
 
 @pytest.fixture(scope='module', autouse=True)
 def position(driver):
-	show_gps_button = driver.find_element_by_xpath("//button[text()='Show GPS data']")
-	show_gps_button.click()
+	driver.find_element_by_xpath("//button[text()='Show GPS data']").click()
 	WebDriverWait(driver, 10).until(
 		ec.presence_of_element_located((By.ID, 'mapnavi'))
 	)
@@ -23,33 +20,33 @@ def position(driver):
 	return my_dict
 
 
-def test_accuracy(position):
-	assert position['accuracy'] == '0'
+def test_accuracy(position, expected):
+	assert position['accuracy'] == expected.geolocation.accuracy
 
 
-def test_altitude(position):
-	assert position['altitude'] == '0'
+def test_altitude(position, expected):
+	assert position['altitude'] == expected.geolocation.altitude
 
 
-def test_altitudeaccurac(position):
-	assert position['altitudeaccurac'] == '0'
+def test_altitudeaccurac(position, expected):
+	assert position['altitudeaccurac'] == expected.geolocation.altitudeAccurac
 
 
-def test_heading(position):
-	assert position['heading'] == '0'
+def test_heading(position, expected):
+	assert position['heading'] == expected.geolocation.heading
 
 
-def test_latitude(position):
-	assert position['latitude'] == '0'
+def test_latitude(position, expected):
+	assert position['latitude'] == expected.geolocation.latitude
 
 
-def test_longitude(position):
-	assert position['longitude'] == '0'
+def test_longitude(position, expected):
+	assert position['longitude'] == expected.geolocation.longitude
 
 
-def test_speed(position):
-	assert position['speed'] == '0'
+def test_speed(position, expected):
+	assert position['speed'] == expected.geolocation.speed
 
 
-def test_timestamp(position):
-	assert position['timestamp'] == '0'
+def test_timestamp(position, expected):
+	assert position['timestamp'] == expected.geolocation.timestamp

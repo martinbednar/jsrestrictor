@@ -1,11 +1,8 @@
-import expected_values
-
-
-def test_device_memory(driver):
+def test_device_memory(driver, expected):
 	device_memory = driver.execute_script("return window.navigator.deviceMemory")
-	assert device_memory == expected_values.level1.device.deviceMemory
+	assert device_memory == expected.device.deviceMemory
 
 
-def test_hardware_concurrency(driver):
+def test_hardware_concurrency(driver, expected):
 	hardware_concurrency = driver.execute_script("return window.navigator.hardwareConcurrency")
-	assert hardware_concurrency == expected_values.level1.device.hardwareConcurrency
+	assert hardware_concurrency == expected.device.hardwareConcurrency

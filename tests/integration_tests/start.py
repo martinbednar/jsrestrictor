@@ -3,7 +3,7 @@ import pytest
 from browser import Browser
 from browser_type import BrowserType
 from configuration import config
-
+import expected_values
 
 for browser_type in config.browsers:
     my_browser = Browser(browser_type)
