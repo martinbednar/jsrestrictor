@@ -1,24 +1,26 @@
 from datetime import datetime
 
-import expected_values
+from math_operations import is_in_accuracy
 
 
 def test_hours(driver):
-	hours = driver.execute_script("let d = new Date(); return d.getHours()")
-	assert hours == datetime.now().hour
+	js_hours = driver.execute_script("let d = new Date(); return d.getHours()")
+	p_hours = datetime.now().hour
+	assert abs(js_hours - p_hours) < 2
 
 
 def test_minutes(driver):
-	minutes = driver.execute_script("let d = new Date(); return d.getMinutes()")
-	assert minutes == datetime.now().minute
+	js_minutes = driver.execute_script("let d = new Date(); return d.getMinutes()")
+	p_minutes = datetime.now().minute
+	assert abs(js_minutes - p_minutes) < 2
 
 
 def test_seconds(driver):
 	js_seconds = driver.execute_script("let d = new Date(); return d.getSeconds()")
 	p_seconds = datetime.now().second
-	assert (js_seconds >= (p_seconds-1)) and (js_seconds <= (p_seconds+1))
+	assert abs(js_seconds - p_seconds) < 2
 
 
-def test_milliseconds(driver):
-	milliseconds = driver.execute_script("let d = new Date(); return d.getMilliseconds()")
-	assert milliseconds == 0
+def test_milliseconds(driver, expected):
+	time_in_milliseconds = driver.execute_script("let d = new Date(); return d.getTime()")
+	assert is_in_accuracy(time_in_milliseconds, int(expected.accuracyOfDate*1000))
