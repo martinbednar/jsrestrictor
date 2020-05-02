@@ -10,8 +10,12 @@ import expected_values
 
 
 @pytest.fixture(scope='module', autouse=True)
-def position():
+def reload_modules():
 	importlib.reload(browser)
+
+
+@pytest.fixture(scope='module', autouse=True)
+def position():
 	show_gps_button = browser.driver.find_element_by_xpath("//button[text()='Show GPS data']")
 	show_gps_button.click()
 	WebDriverWait(browser.driver, 10).until(
