@@ -1,22 +1,22 @@
 import pytest
 import importlib
-import browser
-import expected_values
+import web_browser
+import values_expected
 
 
 @pytest.fixture(scope="session", autouse=True)
-def driver():
-    importlib.reload(browser)
-    return browser.driver
+def browser():
+    importlib.reload(web_browser)
+    return web_browser.browser
 
 
 @pytest.fixture(scope="session", autouse=True)
 def expected():
-    if browser.jsr_level == 0:
-        return expected_values.level0
-    elif browser.jsr_level == 1:
-        return expected_values.level1
-    elif browser.jsr_level == 2:
-        return expected_values.level1
-    elif browser.jsr_level == 3:
-        return expected_values.level1
+    if web_browser.jsr_level == 0:
+        return values_expected.level0
+    elif web_browser.jsr_level == 1:
+        return values_expected.level3
+    elif web_browser.jsr_level == 2:
+        return values_expected.level3
+    elif web_browser.jsr_level == 3:
+        return values_expected.level3
