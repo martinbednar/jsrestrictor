@@ -1,27 +1,20 @@
 import pytest
-import importlib
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
-import browser
 import expected_values
 
 
 @pytest.fixture(scope='module', autouse=True)
-def reload_modules():
-	importlib.reload(browser)
-
-
-@pytest.fixture(scope='module', autouse=True)
-def position():
-	show_gps_button = browser.driver.find_element_by_xpath("//button[text()='Show GPS data']")
+def position(driver):
+	show_gps_button = driver.find_element_by_xpath("//button[text()='Show GPS data']")
 	show_gps_button.click()
-	WebDriverWait(browser.driver, 10).until(
+	WebDriverWait(driver, 10).until(
 		ec.presence_of_element_located((By.ID, 'mapnavi'))
 	)
-	location = browser.driver.find_element_by_id('placeToWriteGPSDetails').text
+	location = driver.find_element_by_id('placeToWriteGPSDetails').text
 	location = location.replace(" ", "").split()
 	my_dict = {}
 	for property in location:
