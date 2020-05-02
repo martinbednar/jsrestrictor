@@ -1,17 +1,24 @@
 import time
 import random
+import pytest
+import importlib
 
-from browser import driver
+import browser
 import expected_values
+
+
+@pytest.fixture(scope='module', autouse=True)
+def reload_modules():
+	importlib.reload(browser)
 
 
 def test_performance():
 	time.sleep(random.randint(1, 3))
-	performance1 = str(driver.execute_script("return window.performance.now()"))
+	performance1 = str(browser.driver.execute_script("return window.performance.now()"))
 	time.sleep(random.randint(1, 3))
-	performance2 = str(driver.execute_script("return window.performance.now()"))
+	performance2 = str(browser.driver.execute_script("return window.performance.now()"))
 	time.sleep(random.randint(1, 3))
-	performance3 = str(driver.execute_script("return window.performance.now()"))
+	performance3 = str(browser.driver.execute_script("return window.performance.now()"))
 	assert performance1[-1] == '0'
 	if len(performance1) > 1: assert performance1[-2] == '0'
 	if len(performance1) > 2: assert performance1[-3] == '0'
