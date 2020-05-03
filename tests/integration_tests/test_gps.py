@@ -10,7 +10,7 @@ def position(browser):
 
 def test_accuracy(browser, position, expected):
 	if expected.geolocation.accuracy == 'REAL VALUE':
-		assert abs(int(position['accuracy']) - int(browser.real.geolocation.accuracy)) < 2
+		assert (abs(int(position['accuracy']) - int(browser.real.geolocation.accuracy)) < 20) and (position['accuracy'] != '0')
 	else:
 		assert position['accuracy'] == expected.geolocation.accuracy
 

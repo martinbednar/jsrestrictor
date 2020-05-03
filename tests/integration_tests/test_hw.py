@@ -1,14 +1,22 @@
-def test_device_memory(driver, expected):
-	device_memory = driver.execute_script("return window.navigator.deviceMemory")
+import pytest
+
+from values_from_browser import get_device
+
+
+@pytest.fixture(scope='module', autouse=True)
+def device(browser):
+	return get_device(browser.driver)
+
+
+def test_device_memory(browser, device, expected):
 	if expected.device.deviceMemory == 'REAL VALUE':
-		assert True
+		assert device['deviceMemory'] == browser.real.device.deviceMemory
 	else:
-		assert device_memory == expected.device.deviceMemory
+		assert device['deviceMemory'] == expected.device.deviceMemory
 
 
-def test_hardware_concurrency(driver, expected):
-	hardware_concurrency = driver.execute_script("return window.navigator.hardwareConcurrency")
+def test_hardware_concurrency(browser, device, expected):
 	if expected.device.hardwareConcurrency == 'REAL VALUE':
-		assert True
+		assert device['hardwareConcurrency'] == browser.real.device.hardwareConcurrency
 	else:
-		assert hardware_concurrency == expected.device.hardwareConcurrency
+		assert device['hardwareConcurrency'] == expected.device.hardwareConcurrency

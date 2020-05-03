@@ -29,3 +29,9 @@ def get_navigator(driver):
                  'doNotTrack': driver.execute_script("return window.navigator.doNotTrack"),
                  'oscpu': driver.execute_script("return window.navigator.oscpu")}
     return navigator
+
+
+def get_device(driver):
+    device = {'deviceMemory': driver.execute_script("return window.navigator.deviceMemory"),
+              'hardwareConcurrency': driver.execute_script("return window.navigator.hardwareConcurrency")}
+    return device
