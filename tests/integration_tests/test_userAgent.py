@@ -1,62 +1,64 @@
-def test_user_agent(driver, expected):
-	user_agent = driver.execute_script("return window.navigator.userAgent")
+from values_from_browser import get_navigator
+
+
+def test_user_agent(browser, expected):
 	if expected.navigator.userAgent == 'REAL VALUE':
-		assert True
+		assert get_navigator(browser.driver)['userAgent'] == browser.real.navigator.userAgent
 	else:
-		assert user_agent == expected.navigator.userAgent
+		assert get_navigator(browser.driver)['userAgent'] == expected.navigator.userAgent
 
 
-def test_app_version(driver, expected):
-	app_version = driver.execute_script("return window.navigator.appVersion")
+def test_app_version(browser, expected):
 	if expected.navigator.appVersion == 'REAL VALUE':
-		assert True
+		assert get_navigator(browser.driver)['appVersion'] == browser.real.navigator.appVersion
 	else:
-		assert app_version == expected.navigator.appVersion
+		assert get_navigator(browser.driver)['appVersion'] == expected.navigator.appVersion
 
 
-def test_platform(driver, expected):
-	platform = driver.execute_script("return window.navigator.platform")
+def test_platform(browser, expected):
 	if expected.navigator.platform == 'REAL VALUE':
-		assert True
+		assert get_navigator(browser.driver)['platform'] == browser.real.navigator.platform
 	else:
-		assert platform == expected.navigator.platform
+		assert get_navigator(browser.driver)['platform'] == expected.navigator.platform
 
 
-def test_vendor(driver, expected):
-	vendor = driver.execute_script("return window.navigator.vendor")
+def test_vendor(browser, expected):
 	if expected.navigator.vendor == 'REAL VALUE':
-		assert True
+		assert get_navigator(browser.driver)['vendor'] == browser.real.navigator.vendor
 	else:
-		assert vendor == expected.navigator.vendor
+		assert get_navigator(browser.driver)['vendor'] == expected.navigator.vendor
 
 
-def test_language(driver, expected):
-	language = driver.execute_script("return window.navigator.language")
+def test_language(browser, expected):
 	if expected.navigator.language == 'REAL VALUE':
-		assert True
+		assert get_navigator(browser.driver)['language'] == browser.real.navigator.language
 	else:
-		assert language == expected.navigator.language
+		assert get_navigator(browser.driver)['language'] == expected.navigator.language
 
 
-def test_languages(driver, expected):
-	languages = driver.execute_script("return window.navigator.languages")
+def test_languages(browser, expected):
 	if expected.navigator.languages == 'REAL VALUE':
-		assert True
+		assert get_navigator(browser.driver)['languages'] == browser.real.navigator.languages
 	else:
-		assert languages == expected.navigator.languages
+		assert get_navigator(browser.driver)['languages'] == expected.navigator.languages
 
 
-def test_cookie_enabled(driver, expected):
-	cookie_enabled = driver.execute_script("return window.navigator.cookieEnabled")
+def test_cookie_enabled(browser, expected):
 	if expected.navigator.cookieEnabled == 'REAL VALUE':
-		assert True
+		assert get_navigator(browser.driver)['doNotTrack'] == browser.real.navigator.doNotTrack
 	else:
-		assert cookie_enabled == expected.navigator.cookieEnabled
+		assert get_navigator(browser.driver)['cookieEnabled'] == expected.navigator.cookieEnabled
 
 
-def test_do_not_track(driver, expected):
-	do_not_track = driver.execute_script("return window.navigator.doNotTrack")
+def test_do_not_track(browser, expected):
 	if expected.navigator.doNotTrack == 'REAL VALUE':
-		assert True
+		assert get_navigator(browser.driver)['cookieEnabled'] == browser.real.navigator.cookieEnabled
 	else:
-		assert do_not_track == expected.navigator.doNotTrack
+		assert get_navigator(browser.driver)['doNotTrack'] == expected.navigator.doNotTrack
+
+
+def test_oscpu(browser, expected):
+	if expected.navigator.doNotTrack == 'REAL VALUE':
+		assert get_navigator(browser.driver)['oscpu'] == browser.real.navigator.oscpu
+	else:
+		assert get_navigator(browser.driver)['oscpu'] == expected.navigator.oscpu
