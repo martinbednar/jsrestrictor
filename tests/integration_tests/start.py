@@ -9,5 +9,5 @@ for browser_type in config.browsers:
     my_browser = Browser(browser_type)
     for jsr_level in config.jsr_levels:
         my_browser.jsr_level = jsr_level
-        pytest.main(['test_userAgent.py'])
+        pytest.main()
     my_browser.quit()

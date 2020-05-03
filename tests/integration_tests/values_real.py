@@ -5,6 +5,7 @@ import values_from_browser
 def init(driver):
     position = values_from_browser.get_position(driver)
     navigator = values_from_browser.get_navigator(driver)
+    device = values_from_browser.get_device(driver)
     global real
     real = TestedValues(
         user_agent=navigator['userAgent'],
@@ -24,8 +25,8 @@ def init(driver):
         longitude=position['longitude'],
         speed=position['speed'],
         timestamp=None,
-        device_memory=None,
-        hardware_concurrency=None,
+        device_memory=device['deviceMemory'],
+        hardware_concurrency=device['hardwareConcurrency'],
         referrer=None,
         accuracy_of_date=None,
         accuracy_performance=None,
