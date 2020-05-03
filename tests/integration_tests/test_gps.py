@@ -1,6 +1,6 @@
 import pytest
 
-from position import get_position
+from values_from_browser import get_position
 
 
 @pytest.fixture(scope='module', autouse=True)

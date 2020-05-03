@@ -1,20 +1,21 @@
 from values_tested import TestedValues
-from position import get_position
+import values_from_browser
 
 
 def init(driver):
-    position = get_position(driver)
+    position = values_from_browser.get_position(driver)
+    navigator = values_from_browser.get_navigator(driver)
     global real
     real = TestedValues(
-        user_agent=None,
-        app_version=None,
-        platform=None,
-        vendor=None,
-        language=None,
-        languages=None,
-        do_not_track=None,
-        cookie_enabled=None,
-        oscpu=None,
+        user_agent=navigator['userAgent'],
+        app_version=navigator['appVersion'],
+        platform=navigator['platform'],
+        vendor=navigator['vendor'],
+        language=navigator['language'],
+        languages=navigator['languages'],
+        cookie_enabled=navigator['cookieEnabled'],
+        do_not_track=navigator['doNotTrack'],
+        oscpu=navigator['oscpu'],
         accuracy=position['accuracy'],
         altitude=position['altitude'],
         altitude_accurac=position['altitudeaccurac'],
