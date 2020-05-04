@@ -6,7 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
 from web_browser_type import BrowserType
-from values_real import init
+import values_real
+from configuration import Config
 
 
 class Browser:
@@ -38,31 +39,19 @@ class Browser:
         self.__jsr_level = 2
         self._jsr_options_page = ""
         if type == BrowserType.FIREFOX:
-            executable_path = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\geckodriver.exe"
-            profile = webdriver.FirefoxProfile(
-                'C:\\Users\\Martin\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\voxsqf3a.default-esr')
-
-            self.driver = webdriver.Firefox(profile, executable_path=executable_path)
-            self.real = init(self.driver)
-
-            self.driver.install_addon(
-                'D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\firefox\\firefox_JSR_master.xpi',
-                temporary=True)
+            self.driver = webdriver.Firefox(firefox_profile=webdriver.FirefoxProfile(Config.firefox_profile),
+                                            executable_path=Config.firefox_driver)
+            self.real = values_real.init(self.driver)
+            self.driver.install_addon(Config.firefox_jsr_extension, temporary=True)
             self.find_options_jsr_page_url()
         elif type == BrowserType.CHROME:
-            executable_path = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\chromedriver.exe"
             options = Options()
-            options.add_argument(
-                "user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
-
-            driver_tmp = webdriver.Chrome(executable_path=executable_path, options=options)
-            self.real = init(driver_tmp)
+            options.add_argument("user-data-dir=" + Config.chrome_profile)
+            driver_tmp = webdriver.Chrome(executable_path=Config.chrome_driver, options=options)
+            self.real = values_real.init(driver_tmp)
             driver_tmp.quit()
-
-            options.add_extension(
-                'D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome\\chrome_JSR_master.crx')
-
-            self.driver = webdriver.Chrome(executable_path=executable_path, options=options)
+            options.add_extension(Config.chrome_jsr_extension)
+            self.driver = webdriver.Chrome(executable_path=Config.chrome_driver, options=options)
             self.find_options_jsr_page_url()
 
     @property
@@ -76,8 +65,8 @@ class Browser:
         elif self.type == BrowserType.FIREFOX:
             self.driver.get(self._jsr_options_page)
         self.driver.find_element_by_id('level-' + str(level)).click()
-        self.driver.get('https://polcak.github.io/jsrestrictor/test/test.html')
         self.__jsr_level = level
+        self.driver.get(Config.testing_page)
 
     def quit(self):
         self.driver.quit()
