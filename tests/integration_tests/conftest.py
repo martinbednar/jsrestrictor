@@ -15,8 +15,8 @@ def expected():
     if web_browser.jsr_level == 0:
         return values_expected.level0
     elif web_browser.jsr_level == 1:
-        return values_expected.level3
+        return values_expected.level1
     elif web_browser.jsr_level == 2:
-        return values_expected.level3
+        return values_expected.level2
     elif web_browser.jsr_level == 3:
         return values_expected.level3

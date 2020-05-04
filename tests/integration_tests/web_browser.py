@@ -12,8 +12,11 @@ from values_real import init
 class Browser:
     def find_options_jsr_page_url(self):
         self.driver.switch_to.window(self.driver.window_handles[0])
-        if self._type == BrowserType.FIREFOX:
+        if self.type == BrowserType.FIREFOX:
             self.driver.get('about:memory')
+            WebDriverWait(self.driver, 10).until(
+                ec.presence_of_element_located((By.ID, 'measureButton'))
+            )
             self.driver.find_element_by_id('measureButton').click()
             WebDriverWait(self.driver, 10).until(
                 ec.presence_of_element_located((By.ID, 'end0'))
@@ -23,7 +26,7 @@ class Browser:
                     'span.mrName'):
                 if 'id=jsr@javascriptrestrictor' in elem.text:
                     self._jsr_options_page = elem.text.split(',')[2].split('=')[1][:-1] + "options.html"
-        if self._type == BrowserType.CHROME:
+        if self.type == BrowserType.CHROME:
             self.driver.get('chrome://system/')
             WebDriverWait(self.driver, 10).until(
                 ec.presence_of_element_located((By.ID, 'extensions-value-btn'))
@@ -34,7 +37,7 @@ class Browser:
                     self._jsr_options_page = "chrome-extension://" + elem.split(':')[0][:-1] + "/options.html"
 
     def __init__(self, type):
-        self._type = type
+        self.type = type
         self.__jsr_level = 2
         self._jsr_options_page = ""
         if type == BrowserType.FIREFOX:
@@ -74,9 +77,9 @@ class Browser:
     @jsr_level.setter
     def jsr_level(self, level):
         self.driver.switch_to.window(self.driver.window_handles[0])
-        if self._type == BrowserType.CHROME:
+        if self.type == BrowserType.CHROME:
             self.driver.get(self._jsr_options_page)
-        elif self._type == BrowserType.FIREFOX:
+        elif self.type == BrowserType.FIREFOX:
             self.driver.get(self._jsr_options_page)
         self.driver.find_element_by_id('level-' + str(level)).click()
         self.driver.get('https://polcak.github.io/jsrestrictor/test/test.html')

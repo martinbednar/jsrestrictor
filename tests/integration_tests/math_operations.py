@@ -1,6 +1,6 @@
 def is_in_accuracy(number, accuracy):
-    number_str = str(number)[::-1]
-    accuracy_str = str(accuracy)[::-1]
+    number_str = str(int(number))[::-1]
+    accuracy_str = str(int(accuracy))[::-1]
     index = 0
     while accuracy_str[index] == '0':
         if index < len(number_str):
