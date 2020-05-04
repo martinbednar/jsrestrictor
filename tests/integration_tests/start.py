@@ -11,5 +11,5 @@ for browser_type in Config.tested_browsers:
     set_shared_browser(my_browser)
     for jsr_level in Config.tested_jsr_levels:
         my_browser.jsr_level = jsr_level
-        pytest.main(['test_hw.py', '-s'])
+        pytest.main()
     my_browser.quit()

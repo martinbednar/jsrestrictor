@@ -10,7 +10,6 @@ def browser():
 
 @pytest.fixture(scope="session", autouse=True)
 def expected():
-    print(get_shared_browser())
     if get_shared_browser().jsr_level == 0:
         return values_expected.level0
     elif get_shared_browser().jsr_level == 1:
