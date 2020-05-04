@@ -6,8 +6,7 @@ def init(driver):
     position = values_from_browser.get_position(driver)
     navigator = values_from_browser.get_navigator(driver)
     device = values_from_browser.get_device(driver)
-    global real
-    real = TestedValues(
+    return TestedValues(
         user_agent=navigator['userAgent'],
         app_version=navigator['appVersion'],
         platform=navigator['platform'],
@@ -32,4 +31,3 @@ def init(driver):
         accuracy_performance=None,
         protect_canvas=None
     )
-    return real
