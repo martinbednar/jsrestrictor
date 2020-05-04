@@ -14,9 +14,6 @@ class Browser:
         self.driver.switch_to.window(self.driver.window_handles[-1])
         if self.type == BrowserType.FIREFOX:
             self.driver.get('about:memory')
-            WebDriverWait(self.driver, 10).until(
-                ec.presence_of_element_located((By.ID, 'measureButton'))
-            )
             self.driver.find_element_by_id('measureButton').click()
             WebDriverWait(self.driver, 10).until(
                 ec.presence_of_element_located((By.ID, 'end0'))
