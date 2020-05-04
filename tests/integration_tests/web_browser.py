@@ -76,7 +76,6 @@ class Browser:
 
     @jsr_level.setter
     def jsr_level(self, level):
-        self.driver.switch_to.window(self.driver.window_handles[0])
         if self.type == BrowserType.CHROME:
             self.driver.get(self._jsr_options_page)
         elif self.type == BrowserType.FIREFOX:
