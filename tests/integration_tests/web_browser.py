@@ -67,8 +67,6 @@ class Browser:
 
             self.driver = webdriver.Chrome(executable_path=executable_path, options=options)
             self.find_options_jsr_page_url()
-        global browser
-        browser = self
 
     @property
     def jsr_level(self):
@@ -83,13 +81,7 @@ class Browser:
         self.driver.find_element_by_id('level-' + str(level)).click()
         self.driver.get('https://polcak.github.io/jsrestrictor/test/test.html')
         self.__jsr_level = level
-        global jsr_level
-        jsr_level = level
 
     def quit(self):
         self.driver.quit()
-        global driver
-        driver = None
-        global jsr_level
-        jsr_level = None
         del self
