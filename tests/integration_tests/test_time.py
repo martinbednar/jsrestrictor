@@ -1,4 +1,6 @@
 from datetime import datetime
+import time
+import random
 
 from math_operations import is_in_accuracy
 
@@ -22,8 +24,15 @@ def test_seconds(browser):
 
 
 def test_milliseconds(browser, expected):
-	time_in_milliseconds = browser.driver.execute_script("let d = new Date(); return d.getTime()")
+	is_millisecond_rounded = True
+	for _ in range(3):
+		time.sleep(random.randint(1, 3))
+		time_in_milliseconds = browser.driver.execute_script("let d = new Date(); return d.getTime()")
+		if expected.accuracyOfDate == 'REAL VALUE':
+			if int(time_in_milliseconds/10)*10 != time_in_milliseconds:
+				is_millisecond_rounded = False
+		else:
+			assert is_in_accuracy(time_in_milliseconds, int(expected.accuracyOfDate*1000))
+
 	if expected.accuracyOfDate == 'REAL VALUE':
-		assert True
-	else:
-		assert is_in_accuracy(time_in_milliseconds, int(expected.accuracyOfDate*1000))
+		assert not is_millisecond_rounded
