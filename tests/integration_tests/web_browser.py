@@ -11,7 +11,7 @@ from values_real import init
 
 class Browser:
     def find_options_jsr_page_url(self):
-        self.driver.switch_to.window(self.driver.window_handles[0])
+        self.driver.switch_to.window(self.driver.window_handles[-1])
         if self.type == BrowserType.FIREFOX:
             self.driver.get('about:memory')
             WebDriverWait(self.driver, 10).until(
