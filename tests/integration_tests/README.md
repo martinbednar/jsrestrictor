@@ -21,7 +21,8 @@ These programs and tools are required to be installed:
 * [Mozilla Firefox ESR](https://www.mozilla.org/en-US/firefox/all/#product-desktop-esr) - Be careful, ESR (or Developer or Nightly edition) is required. But the ESR edition is preferred.
 
 If you have problems with installing Mozzila Firefox ESR on Linux, try this way:
-```sudo add-apt-repository ppa:jonathonf/firefox-esr
+```
+sudo add-apt-repository ppa:jonathonf/firefox-esr
 sudo apt-get update
 sudo apt-get install firefox-esr
 ```
