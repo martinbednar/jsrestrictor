@@ -23,7 +23,8 @@ These programs and tools are required to be installed:
 If you have problems with installing Mozzila Firefox ESR on Linux, try this way:
 ```sudo add-apt-repository ppa:jonathonf/firefox-esr
 sudo apt-get update
-sudo apt-get install firefox-esr```
+sudo apt-get install firefox-esr
+```
 
 No other versions of Google Chrome and especially Mozilla Firefox may be installed on the same machine.
 Web browser driver automatically select installed version of web browser so it is better to have installed only one correct version of each web browser.
