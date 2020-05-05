@@ -1,6 +1,6 @@
 import pytest
 
-from values_from_browser import get_device
+from values_getters import get_device
 
 
 @pytest.fixture(scope='module', autouse=True)

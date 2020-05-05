@@ -1,11 +1,11 @@
 from values_tested import TestedValues
-import values_from_browser
+import values_getters
 
 
 def init(driver):
-    position = values_from_browser.get_position(driver)
-    navigator = values_from_browser.get_navigator(driver)
-    device = values_from_browser.get_device(driver)
+    position = values_getters.get_position(driver)
+    navigator = values_getters.get_navigator(driver)
+    device = values_getters.get_device(driver)
     return TestedValues(
         user_agent=navigator['userAgent'],
         app_version=navigator['appVersion'],

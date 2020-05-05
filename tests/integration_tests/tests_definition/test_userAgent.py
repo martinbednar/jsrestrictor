@@ -1,6 +1,6 @@
 import pytest
 
-from values_from_browser import get_navigator
+from values_getters import get_navigator
 
 
 @pytest.fixture(scope='module', autouse=True)
