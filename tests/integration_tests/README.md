@@ -20,6 +20,11 @@ These programs and tools are required to be installed:
 * [Google Chrome](https://www.google.com/chrome/) only on Windows
 * [Mozilla Firefox ESR](https://www.mozilla.org/en-US/firefox/all/#product-desktop-esr) - Be careful, ESR (or Developer or Nightly edition) is required. But the ESR edition is preferred.
 
+If you have problems with installing Mozzila Firefox ESR on Linux, try this way:
+`sudo add-apt-repository ppa:jonathonf/firefox-esr`
+`sudo apt-get update`
+`sudo apt-get install firefox-esr`
+
 No other versions of Google Chrome and especially Mozilla Firefox may be installed on the same machine.
 Web browser driver automatically select installed version of web browser so it is better to have installed only one correct version of each web browser.
 Web browsers may not have installed Javascript restrictor extension. Python script will install it itself before running tests.
