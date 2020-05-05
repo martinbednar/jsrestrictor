@@ -9,6 +9,7 @@ It is necessary to manually setup testing environment before first tests running
 
 # SETUP TEST ENVIRONMENT
 
+It is recommended to run tests on Windows. It is able to run them on Linux, but with certain restrictions mentioned below.
 
 ## Install required program and tools
 
@@ -16,10 +17,10 @@ These programs and tools are required to be installed:
 * [Python 3.5+](https://www.python.org/downloads/)
 * [Python package "pytest"](https://pypi.org/project/pytest/)
 * [Python package "selenium"](https://pypi.org/project/selenium/)
-* [Google Chrome](https://www.google.com/chrome/)
+* [Google Chrome](https://www.google.com/chrome/) only on Windows
 * [Mozilla Firefox ESR](https://www.mozilla.org/en-US/firefox/all/#product-desktop-esr) - Be careful, ESR (or Developer or Nightly edition) is required. But the ESR edition is preferred.
 
-No other versions of Google Chrome and especially Mozilla Firefox have to be installed.
+No other versions of Google Chrome and especially Mozilla Firefox may be installed on the same machine.
 Web browser driver automatically select installed version of web browser so it is better to have installed only one correct version of each web browser.
 Web browsers may not have installed Javascript restrictor extension. Python script will install it itself before running tests.
 
@@ -41,7 +42,7 @@ Open file "configuration.py" from folder "integration_tests" for editing and upd
 
 ### on Windows OS
 
-All single '\' in path have to be replaced with '\\'.
+All occurrences of the character '\' in path have to be replaced with '\\'.
 
 * firefox_driver = path to gecko driver. Gecko driver is included in folder "common_files" or it is able to download it.
 * firefox_profile = path to folder of firefox profile of Mozilla Firefox ESR with enabled access to location. It is typically located in C:\Users\<username>\AppData\Roaming\Mozilla\Firefox\Profiles\<profilename>.default-esr
@@ -51,18 +52,23 @@ All single '\' in path have to be replaced with '\\'.
 
 ### on Linux OS
 
+On Linux it is not able to test JSR extension in Google Chrome browser, because Google Chromu is not supported on Linux. And Chromium cannot fully replace Google Chrome for testing purpose.
 
+* tested_browsers = [BrowserType.FIREFOX]  #Remove "BrowserType.CHROME" because Google Chrome is not supported on Linux and leave only "BrowserType.FIREFOX" in array.
+* firefox_driver = path to gecko driver. Gecko driver is included in folder "common_files" or it is able to download it.
+* firefox_profile = path to folder of firefox profile of Mozilla Firefox ESR with enabled access to location. It is typically located in /home/<username>/.mozilla/firefox/<profilename>.default-esr
+* firefox_jsr_extension = path to xpi package of JSR (package importable to Firefox). Xpi packages is included in folder "common_files" or it is able to create it from JSR source files.
 
 # RUN TESTS
 
 ### on Windows OS
 
-Open PowerShell in folder "integration_tests" and run command:
+Open PowerShell (or ComandPrompt, but PowerShell is recomemded) in folder "integration_tests" and run command:
 	python start.py
 
-When script execution starts for the first time, OS Windows will ask you to allow Firewall Exception for this script (for Python). Click "Allow".
+When script execution starts for the first time, OS Windows may ask you to allow Firewall Exception for this script (for Python). Click "Allow".
 
 ### on Linux OS
 
-
-If something unexpected happened during Python script execution, try to check configuration file and start testing again.
+Open Terminal in folder "integration_tests" and run command:
+	python3 start.py
