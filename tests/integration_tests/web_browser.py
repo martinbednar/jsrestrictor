@@ -45,11 +45,10 @@ class Browser:
             self.driver.install_addon(Config.firefox_jsr_extension, temporary=True)
             self.find_options_jsr_page_url()
         elif type == BrowserType.CHROME:
-            options = Options()
-            options.add_argument("user-data-dir=" + Config.chrome_profile)
-            driver_tmp = webdriver.Chrome(executable_path=Config.chrome_driver, options=options)
+            driver_tmp = webdriver.Chrome(executable_path=Config.chrome_driver)
             self.real = values_real.init(driver_tmp)
             driver_tmp.quit()
+            options = Options()
             options.add_extension(Config.chrome_jsr_extension)
             self.driver = webdriver.Chrome(executable_path=Config.chrome_driver, options=options)
             self.find_options_jsr_page_url()
