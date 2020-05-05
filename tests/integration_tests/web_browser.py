@@ -10,7 +10,14 @@ import values_real
 from configuration import Config
 
 
+## Browser object represents one browser in which tests run. E.g.: chrome, firefox
+#
+#  Class Browser contains method definition for creating browser, installing JSR to browser and changing JSR level.
+#  Browser object has information about itself - browser type, current jsr level, real tested values of browser etc.
+#  Methods are sometimes divided based on browser type - same operations are made differently in different browser.
+#  Created browser object offers uniform way how to work with every browser.
 class Browser:
+    ## Find URL of JSR option page after JSR was installed to browser.
     def find_options_jsr_page_url(self):
         self.driver.switch_to.window(self.driver.window_handles[-1])
         if self.type == BrowserType.FIREFOX:
@@ -34,6 +41,7 @@ class Browser:
                 if 'JavaScript Restrictor' in elem:
                     self._jsr_options_page = "chrome-extension://" + elem.split(':')[0][:-1] + "/options.html"
 
+    ## Create new browser of given type (Chrome, Firefox).
     def __init__(self, type):
         self.type = type
         self.__jsr_level = 2
@@ -53,10 +61,14 @@ class Browser:
             self.driver = webdriver.Chrome(executable_path=Config.chrome_driver, options=options)
             self.find_options_jsr_page_url()
 
+    ## Get current level of JSR in browser.
     @property
     def jsr_level(self):
         return self.__jsr_level
 
+    ## Set current level of JSR in browser.
+    #
+    # To set JSR level is needed to go to JSR option page and select given default level.
     @jsr_level.setter
     def jsr_level(self, level):
         if self.type == BrowserType.CHROME:
@@ -67,6 +79,7 @@ class Browser:
         self.__jsr_level = level
         self.driver.get(Config.testing_page)
 
+    ## Quit browser driver, close browser window and delete itself.
     def quit(self):
         self.driver.quit()
         del self
