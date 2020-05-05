@@ -1,7 +1,7 @@
 import pytest
 from time import time
 
-from values_from_browser import get_position
+from values_getters import get_position
 from math_operations import is_in_accuracy
 
 
