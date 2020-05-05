@@ -7,3 +7,4 @@ tests/integration_tests/__pycache__/
 chrome/chrome_JSR_rewrite.crx
 firefox/firefox_JSR_rewrite.xpi
 *.log
+tests/integration_tests/tests_definition/__pycache__/
