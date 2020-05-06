@@ -22,6 +22,6 @@ for browser_type in Config.tested_browsers:
         # set jsr_level to given level
         my_browser.jsr_level = jsr_level
         # run set of tests
-        pytest.main()
+        pytest.main(['./tests_definition/test_referrer.py'])
     # Close browser.
     my_browser.quit()
