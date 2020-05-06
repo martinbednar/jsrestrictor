@@ -28,11 +28,11 @@ def test_milliseconds(browser, expected):
 	for _ in range(3):
 		time.sleep(random.randint(1, 3))
 		time_in_milliseconds = browser.driver.execute_script("let d = new Date(); return d.getTime()")
-		if expected.accuracyOfDate == 'REAL VALUE':
+		if expected.time['accuracy'] == 'EXACTLY':
 			if int(time_in_milliseconds/10)*10 != time_in_milliseconds:
 				is_millisecond_rounded = False
 		else:
-			assert is_in_accuracy(time_in_milliseconds, int(expected.accuracyOfDate*1000))
+			assert is_in_accuracy(time_in_milliseconds, int(expected.time['accuracy']*1000))
 
-	if expected.accuracyOfDate == 'REAL VALUE':
+	if expected.time['accuracy'] == 'EXACTLY':
 		assert not is_millisecond_rounded

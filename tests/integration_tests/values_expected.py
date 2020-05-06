@@ -1,6 +1,16 @@
 from values_tested import TestedValues
 from web_browser_type import BrowserType
 
+## Module contains definitions for expected values of default levels od JSR.
+#
+#  Expected values are comparing during testing with current values of variables.
+#  'REAL VALUE' means that current value should not be spoofed.
+#  'EXACTLY' means that current value should not be rounded
+#       (the small deviation caused by the script runtime is neglected)
+#  This module can be edited when definition of default levels will be changed.
+
+
+## Expected values for default level 0 of JSR.
 level0 = TestedValues(
     user_agent={BrowserType.FIREFOX: 'REAL VALUE',
                 BrowserType.CHROME: 'REAL VALUE'},
@@ -13,8 +23,8 @@ level0 = TestedValues(
     do_not_track='REAL VALUE',
     cookie_enabled='REAL VALUE',
     oscpu='REAL VALUE',
-    accuracy={'value': 'REAL VALUE',
-              'accuracy': 'EXACTLY'},
+    gps_accuracy={'value': 'REAL VALUE',
+                  'accuracy': 'EXACTLY'},
     altitude={'value': 'REAL VALUE',
               'accuracy': 'EXACTLY'},
     altitude_accurac={'value': 'REAL VALUE',
@@ -32,11 +42,14 @@ level0 = TestedValues(
     device_memory='REAL VALUE',
     hardware_concurrency='REAL VALUE',
     referrer='REAL VALUE',
-    accuracy_of_date='REAL VALUE',
-    accuracy_performance='REAL VALUE',
+    time={'value': 'REAL VALUE',
+          'accuracy': 'EXACTLY'},
+    performance={'value': 'REAL VALUE',
+                 'accuracy': 'EXACTLY'},
     protect_canvas=False
 )
 
+## Expected values for default level 1 of JSR.
 level1 = TestedValues(
     user_agent={BrowserType.FIREFOX: 'REAL VALUE',
                 BrowserType.CHROME: 'REAL VALUE'},
@@ -49,8 +62,8 @@ level1 = TestedValues(
     do_not_track="1",
     cookie_enabled=True,
     oscpu='REAL VALUE',
-    accuracy={'value': 'REAL VALUE',
-              'accuracy': 1230},
+    gps_accuracy={'value': 'REAL VALUE',
+                  'accuracy': 1230},
     altitude={'value': 'REAL VALUE',
               'accuracy': 1230},
     altitude_accurac={'value': 'REAL VALUE',
@@ -68,11 +81,14 @@ level1 = TestedValues(
     device_memory=4,
     hardware_concurrency=2,
     referrer='REAL VALUE',
-    accuracy_of_date=1.230,
-    accuracy_performance=1230,
+    time={'value': 'REAL VALUE',
+          'accuracy': 1.230},
+    performance={'value': 'REAL VALUE',
+                 'accuracy': 1230},
     protect_canvas="off"
 )
 
+## Expected values for default level 2 of JSR.
 level2 = TestedValues(
     user_agent={BrowserType.FIREFOX: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0",
                 BrowserType.CHROME: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -86,8 +102,8 @@ level2 = TestedValues(
     do_not_track="1",
     cookie_enabled=True,
     oscpu=None,
-    accuracy={'value': 'REAL VALUE',
-              'accuracy': 1200},
+    gps_accuracy={'value': 'REAL VALUE',
+                  'accuracy': 1200},
     altitude={'value': 'REAL VALUE',
               'accuracy': 1200},
     altitude_accurac={'value': 'REAL VALUE',
@@ -105,11 +121,14 @@ level2 = TestedValues(
     device_memory=4,
     hardware_concurrency=2,
     referrer="",
-    accuracy_of_date=1.200,
-    accuracy_performance=1200,
+    time={'value': 'REAL VALUE',
+          'accuracy': 1.200},
+    performance={'value': 'REAL VALUE',
+                 'accuracy': 1200},
     protect_canvas="on"
 )
 
+## Expected values for default level 3 of JSR.
 level3 = TestedValues(
     user_agent={
         BrowserType.FIREFOX: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -125,8 +144,8 @@ level3 = TestedValues(
     do_not_track="1",
     cookie_enabled=True,
     oscpu=None,
-    accuracy={'value': '0',
-              'accuracy': 'EXACTLY'},
+    gps_accuracy={'value': '0',
+                  'accuracy': 'EXACTLY'},
     altitude={'value': '0',
               'accuracy': 'EXACTLY'},
     altitude_accurac={'value': '0',
@@ -144,7 +163,9 @@ level3 = TestedValues(
     device_memory=4,
     hardware_concurrency=2,
     referrer="",
-    accuracy_of_date=1.000,
-    accuracy_performance=1000,
+    time={'value': 'REAL VALUE',
+          'accuracy': 1.000},
+    performance={'value': 'REAL VALUE',
+                 'accuracy': 1000},
     protect_canvas="on"
 )
