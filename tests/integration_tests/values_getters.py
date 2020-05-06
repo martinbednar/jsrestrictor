@@ -51,3 +51,21 @@ def get_device(driver):
     device = {'deviceMemory': driver.execute_script("return window.navigator.deviceMemory"),
               'hardwareConcurrency': driver.execute_script("return window.navigator.hardwareConcurrency")}
     return device
+
+
+## Get referrer - where the page was navigated from.
+#
+#  In this case webpage FIT VUT is opened through Google search and referrer on page FIT VUT is returned.
+def get_referrer(driver):
+    driver.get('https://www.google.com/')
+    search_input = driver.find_element_by_name('q')
+    search_input.send_keys("FIT VUT")
+    search_input.submit()
+    WebDriverWait(driver, 10).until(
+        ec.presence_of_element_located((By.ID, 'res'))
+    )
+    driver.find_elements_by_xpath('//a[@href="https://www.fit.vut.cz/"]')[0].click()
+    WebDriverWait(driver, 10).until(
+        ec.presence_of_element_located((By.ID, 'main'))
+    )
+    return driver.execute_script("return document.referrer")

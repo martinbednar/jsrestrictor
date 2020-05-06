@@ -31,7 +31,7 @@ def init(driver):
         timestamp=None,
         device_memory=device['deviceMemory'],
         hardware_concurrency=device['hardwareConcurrency'],
-        referrer=None,
+        referrer=values_getters.get_referrer(driver),
         time=None,
         performance=None,
         protect_canvas=None
