@@ -1,5 +1,7 @@
 from values_tested import TestedValues
+from values_canvas import EMPTY_CANVAS
 from web_browser_type import BrowserType
+
 
 ## Module contains definitions for expected values of default levels od JSR.
 #
@@ -46,7 +48,7 @@ level0 = TestedValues(
           'accuracy': 'EXACTLY'},
     performance={'value': 'REAL VALUE',
                  'accuracy': 'EXACTLY'},
-    protect_canvas=False
+    canvas='REAL VALUE'
 )
 
 ## Expected values for default level 1 of JSR.
@@ -85,7 +87,7 @@ level1 = TestedValues(
           'accuracy': 1.230},
     performance={'value': 'REAL VALUE',
                  'accuracy': 1230},
-    protect_canvas="off"
+    canvas='REAL VALUE'
 )
 
 ## Expected values for default level 2 of JSR.
@@ -125,7 +127,7 @@ level2 = TestedValues(
           'accuracy': 1.200},
     performance={'value': 'REAL VALUE',
                  'accuracy': 1200},
-    protect_canvas="on"
+    canvas=EMPTY_CANVAS
 )
 
 ## Expected values for default level 3 of JSR.
@@ -167,5 +169,5 @@ level3 = TestedValues(
           'accuracy': 1.000},
     performance={'value': 'REAL VALUE',
                  'accuracy': 1000},
-    protect_canvas="on"
+    canvas=EMPTY_CANVAS
 )

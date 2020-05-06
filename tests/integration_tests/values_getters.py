@@ -55,7 +55,7 @@ def get_device(driver):
 
 ## Get referrer - where the page was navigated from.
 #
-#  In this case webpage FIT VUT is opened through Google search and referrer on page FIT VUT is returned.
+#  In this case, webpage FIT VUT is opened through Google search and referrer on page FIT VUT is returned.
 def get_referrer(driver):
     driver.get('https://www.google.com/')
     search_input = driver.find_element_by_name('q')
@@ -69,3 +69,12 @@ def get_referrer(driver):
         ec.presence_of_element_located((By.ID, 'main'))
     )
     return driver.execute_script("return document.referrer")
+
+
+## Get canvas after painting.
+#
+#  In this case, geometric shapes are added to canvas and then encoded canvas data is loaded and returned.
+def get_canvas(driver):
+    driver.get('https://polcak.github.io/jsrestrictor/test/test.html')
+    driver.find_element_by_xpath("//button[text()='Add line to canvas']").click()
+    return driver.execute_script("return document.getElementById('canvas1').toDataURL()")
