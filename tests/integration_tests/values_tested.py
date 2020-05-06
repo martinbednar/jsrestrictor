@@ -1,3 +1,6 @@
+## Module define class which contains variables that are tested.
+
+
 ## Variables about navigator that are checked during testing.
 class Navigator:
     def __init__(self,
