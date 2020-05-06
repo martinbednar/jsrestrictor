@@ -8,6 +8,7 @@ import values_expected
 #
 #  Here is defined variables browser and expected that are given to tests as a parameter.
 
+
 ## browser provide shared browser to all tests
 @pytest.fixture(scope="session", autouse=True)
 def browser():
