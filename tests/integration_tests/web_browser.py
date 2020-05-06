@@ -1,3 +1,5 @@
+from time import sleep
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -19,7 +21,12 @@ from configuration import Config
 class Browser:
     ## Find URL of JSR option page after JSR was installed to browser.
     def find_options_jsr_page_url(self):
+        sleep(1)
+        # KNOWN ISSUE: Tab in browser is sometimes not switched by this command.
+        # And it leads to error and stopping execution of script. It is driver's issue.
+        # Workaround for this issue is wait a while before and after tabs switching.
         self.driver.switch_to.window(self.driver.window_handles[-1])
+        sleep(1)
         if self.type == BrowserType.FIREFOX:
             self.driver.get('about:memory')
             self.driver.find_element_by_id('measureButton').click()
