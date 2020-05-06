@@ -1,3 +1,4 @@
+## Variables about navigator that are checked during testing.
 class Navigator:
     def __init__(self,
                  user_agent,
@@ -20,6 +21,7 @@ class Navigator:
         self.oscpu = oscpu
 
 
+## Variables about geolocation that are checked during testing.
 class Geolocation:
     def __init__(self,
                  accuracy,
@@ -40,6 +42,7 @@ class Geolocation:
         self.timestamp = timestamp
 
 
+## Variables about device that are checked during testing.
 class Device:
     def __init__(self,
                  device_memory,
@@ -48,6 +51,7 @@ class Device:
         self.hardwareConcurrency = hardware_concurrency
 
 
+## All variables that are checked during testing.
 class TestedValues:
     def __init__(self,
                  user_agent,
@@ -60,7 +64,7 @@ class TestedValues:
                  cookie_enabled,
                  oscpu,
 
-                 accuracy,
+                 gps_accuracy,
                  altitude,
                  altitude_accurac,
                  heading,
@@ -73,8 +77,8 @@ class TestedValues:
                  hardware_concurrency,
 
                  referrer,
-                 accuracy_of_date,
-                 accuracy_performance,
+                 time,
+                 performance,
                  protect_canvas
                  ):
         self.navigator = Navigator(
@@ -89,7 +93,7 @@ class TestedValues:
             oscpu
         )
         self.geolocation = Geolocation(
-            accuracy,
+            gps_accuracy,
             altitude,
             altitude_accurac,
             heading,
@@ -103,6 +107,6 @@ class TestedValues:
             hardware_concurrency
         )
         self.referrer = referrer
-        self.accuracyOfDate = accuracy_of_date
-        self.accuracyPerformance = accuracy_performance
+        self.time = time
+        self.performance = performance
         self.protectCanvas = protect_canvas
