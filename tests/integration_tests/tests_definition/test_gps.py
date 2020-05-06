@@ -4,15 +4,21 @@ from time import time
 from values_getters import get_position
 from math_operations import is_in_accuracy
 
-
+## Setup method - it is run before gps tests execution starts.
+#
+#  This setup method initialize variable position that contains current data about position and
+#  this variable is provided to gps tests and values in position variable are compared with expected values.
 @pytest.fixture(scope='module', autouse=True)
 def position(browser):
     return get_position(browser.driver)
 
 
+## Test accuracy of gps.
 def test_accuracy(browser, position, expected):
     if expected.geolocation.accuracy['value'] == 'REAL VALUE':
         if expected.geolocation.accuracy['accuracy'] == 'EXACTLY':
+            # Values do not have to be strictly equal.
+            # A deviation of less than 20 is tolerated but only when accuracy should not be exactly 0.
             assert (abs(int(position['accuracy']) - int(browser.real.geolocation.accuracy)) < 20) and (
                     position['accuracy'] != '0')
         else:
@@ -21,6 +27,7 @@ def test_accuracy(browser, position, expected):
         assert position['accuracy'] == expected.geolocation.accuracy['value']
 
 
+## Test altitude.
 def test_altitude(browser, position, expected):
     if expected.geolocation.altitude['value'] == 'REAL VALUE':
         if expected.geolocation.altitude['accuracy'] == 'EXACTLY':
@@ -31,6 +38,7 @@ def test_altitude(browser, position, expected):
         assert position['altitude'] == expected.geolocation.altitude['value']
 
 
+## Test altitude accuracy.
 def test_altitudeaccurac(browser, position, expected):
     if expected.geolocation.altitudeAccurac['value'] == 'REAL VALUE':
         if expected.geolocation.altitudeAccurac['accuracy'] == 'EXACTLY':
@@ -42,6 +50,7 @@ def test_altitudeaccurac(browser, position, expected):
         assert position['altitudeaccurac'] == expected.geolocation.altitudeAccurac['value']
 
 
+## Test heading.
 def test_heading(browser, position, expected):
     if expected.geolocation.heading['value'] == 'REAL VALUE':
         if expected.geolocation.heading['accuracy'] == 'EXACTLY':
@@ -52,9 +61,11 @@ def test_heading(browser, position, expected):
         assert position['heading'] == expected.geolocation.heading['value']
 
 
+## Test latitude.
 def test_latitude(browser, position, expected):
     if expected.geolocation.latitude['value'] == 'REAL VALUE':
         if expected.geolocation.latitude['accuracy'] == 'EXACTLY':
+            # Values do not have to be strictly equal. Before comparsion, values are rounded to 1 decimal place.
             assert round(float(position['latitude']), 1) == round(float(browser.real.geolocation.latitude), 1)
         else:
             assert is_in_accuracy(round(float(position['latitude']), 3) * 1000,
@@ -63,9 +74,11 @@ def test_latitude(browser, position, expected):
         assert position['latitude'] == expected.geolocation.latitude['value']
 
 
+## Test longtitude.
 def test_longitude(browser, position, expected):
     if expected.geolocation.longitude['value'] == 'REAL VALUE':
         if expected.geolocation.longitude['accuracy'] == 'EXACTLY':
+            # Values do not have to be strictly equal. Before comparsion, values are rounded to 1 decimal place.
             assert round(float(position['longitude']), 1) == round(float(browser.real.geolocation.longitude), 1)
         else:
             assert is_in_accuracy(round(float(position['longitude']), 3) * 1000,
@@ -74,6 +87,7 @@ def test_longitude(browser, position, expected):
         assert position['longitude'] == expected.geolocation.longitude['value']
 
 
+## Test speed (velocity).
 def test_speed(browser, position, expected):
     if expected.geolocation.speed['value'] == 'REAL VALUE':
         if expected.geolocation.speed['accuracy'] == 'EXACTLY':
@@ -84,9 +98,12 @@ def test_speed(browser, position, expected):
         assert position['speed'] == expected.geolocation.speed['value']
 
 
+## Test timestamp.
 def test_timestamp(position, expected):
     if expected.geolocation.timestamp['value'] == 'REAL VALUE':
         if expected.geolocation.timestamp['accuracy'] == 'EXACTLY':
+            # Values do not have to be strictly equal because executing command takes some time.
+            # A deviation of less than 1 (in seconds) is tolerated.
             assert abs(time() - int(position['timestamp'])/1000) < 1
         else:
             assert is_in_accuracy(position['timestamp'], expected.geolocation.timestamp['accuracy'])
