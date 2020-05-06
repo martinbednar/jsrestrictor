@@ -62,6 +62,7 @@ class Browser:
         elif type == BrowserType.CHROME:
             driver_tmp = webdriver.Chrome(executable_path=Config.chrome_driver)
             self.real = values_real.init(driver_tmp)
+            sleep(1)
             driver_tmp.quit()
             options = Options()
             options.add_extension(Config.chrome_jsr_extension)
