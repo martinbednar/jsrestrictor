@@ -22,4 +22,5 @@ class Config:
     # Full path to JSR package for Chrome (crx package).
     chrome_jsr_extension = "D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome\\chrome_JSR_master.crx"
     # Support testing page - do not change without changing script values_getters.py
+    # DO NOT SET CUSTOM level of protection FOR THIS SITE. DEFAULT LEVEL TO THIS SITE HAS TO BE APPLIED:
     testing_page = "https://polcak.github.io/jsrestrictor/test/test.html"
