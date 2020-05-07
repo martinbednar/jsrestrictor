@@ -1,22 +1,10 @@
-import pytest
-
-from values_getters import get_canvas
-from values_canvas import EMPTY_CANVAS_LENGTH
-
-
-## Setup method - it is run before referrer test execution starts.
-#
-#  This setup method initialize variable referrer that contains current data about referrer and
-#  this variable is provided to referrer test and value in referrer variable is compared with expected values.
-@pytest.fixture(scope='module', autouse=True)
-def canvas(browser):
-    return get_canvas(browser.driver)
+from values_getters import is_canvas_spoofed
 
 
 ## Test referrer - where the page was navigated from.
-def test_canvas(browser, canvas, expected):
+def test_canvas(browser, expected):
     if expected.canvas == 'REAL VALUE':
-        assert len(canvas) > EMPTY_CANVAS_LENGTH[browser.type]
+        assert not is_canvas_spoofed(browser.driver)
     else:
-        # expected.canvas[browser.type] contains empty canvas of given browser type
-        assert canvas == expected.canvas[browser.type]
+        # browser.real.canvas contains empty canvas
+        assert is_canvas_spoofed(browser.driver)

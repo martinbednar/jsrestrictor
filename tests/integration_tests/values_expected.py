@@ -1,5 +1,4 @@
 from values_tested import TestedValues
-from values_canvas import EMPTY_CANVAS
 from web_browser_type import BrowserType
 
 
@@ -127,7 +126,7 @@ level2 = TestedValues(
           'accuracy': 1.200},
     performance={'value': 'REAL VALUE',
                  'accuracy': 1200},
-    canvas=EMPTY_CANVAS
+    canvas='EMPTY CANVAS'
 )
 
 ## Expected values for default level 3 of JSR.
@@ -169,5 +168,5 @@ level3 = TestedValues(
           'accuracy': 1.000},
     performance={'value': 'REAL VALUE',
                  'accuracy': 1000},
-    canvas=EMPTY_CANVAS
+    canvas='EMPTY CANVAS'
 )
