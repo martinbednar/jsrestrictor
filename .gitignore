@@ -2,8 +2,6 @@
 *.zip
 chrome_JSR/
 firefox_JSR/
-tests/integration_tests/__pycache__/
-tests/integration_tests/tests_definition/__pycache__/
 *.pem
 chrome/chrome_JSR_rewrite.crx
 firefox/firefox_JSR_rewrite.xpi
