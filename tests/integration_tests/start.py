@@ -19,9 +19,17 @@ for browser_type in Config.tested_browsers:
     set_shared_browser(my_browser)
     # for every browser from configuration.py run set of test.
     for jsr_level in Config.tested_jsr_levels:
+        print("--------------------------------------------------------------------------")
+        print("--------------------------------------------------------------------------")
+        print("TESTING <" + browser_type.name + ", JSR level = " + str(jsr_level) + "> STARTED")
+        print()
         # set jsr_level to given level
         my_browser.jsr_level = jsr_level
         # run set of tests
         pytest.main()
+        print()
+        print("TESTING <" + browser_type.name + ", JSR level = " + str(jsr_level) + "> FINISHED")
+        print("--------------------------------------------------------------------------")
+        print("--------------------------------------------------------------------------")
     # Close browser.
     my_browser.quit()
