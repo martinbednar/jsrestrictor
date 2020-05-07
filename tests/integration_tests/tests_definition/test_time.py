@@ -7,26 +7,14 @@ from math_operations import is_in_accuracy
 
 ## Test hours.
 #  Hours should be real value. Maximal deviation should be 1 (change hour during command execution or another timezone).
-def test_hours(browser):
-	js_hours = browser.driver.execute_script("let d = new Date(); return d.getHours()")
-	p_hours = datetime.now().hour
-	assert abs(js_hours - p_hours) < 2
-
-
-## Test minutes.
-#  Minutes should be real value. Maximal deviation should be 1 (change of minutes during command execution).
-def test_minutes(browser):
-	js_minutes = browser.driver.execute_script("let d = new Date(); return d.getMinutes()")
-	p_minutes = datetime.now().minute
-	assert abs(js_minutes - p_minutes) < 2
-
-
-## Test seconds.
-#  Seconds should be real value. Maximal deviation should be 1 (change of seconds during command execution).
-def test_seconds(browser):
-	js_seconds = browser.driver.execute_script("let d = new Date(); return d.getSeconds()")
-	p_seconds = datetime.now().second
-	assert abs(js_seconds - p_seconds) < 2
+def test_hours_minutes_seconds(browser):
+	js_time = browser.driver.execute_script("let d = new Date();"
+											"return d.getHours()*60*60 + d.getMinutes()*60 + d.getSeconds()")
+	p_now = datetime.now()
+	p_time = p_now.hour*60*60 + p_now.minute*60 + p_now.second
+	# Values do not have to be strictly equal.
+	# A deviation of less than 4 is tolerated.
+	assert abs(js_time - p_time) < 4
 
 
 ## Test miliseconds.
