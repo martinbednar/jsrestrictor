@@ -1,23 +1,23 @@
 Integration tests for web browser extension Javascript Restrictor automatically verify that
-requied JavaScript API are wrapped and conversely that non wrapped JavaScript API provide real values.
+required JavaScript API is wrapped and conversely, that non-wrapped JavaScript API provides real values.
 
 Integration tests run directly in selected browsers with installed JSR extension.
 
-It is necessary to manually setup testing environment before first tests running!
+It is necessary to manually set up a test environment before the first test run!
 
 
 
-# SETUP TEST ENVIRONMENT
+# SET UP TEST ENVIRONMENT
 
-It is recommended to run tests on Windows. It is able to run them on Linux, but with certain restrictions mentioned below.
+It is recommended to run tests on Windows. They can be run on Linux too, but not in the Chromium web browser.
 
-## Install required program and tools
+## Install required programs and tools
 
 These programs and tools are required to be installed:
 * [Python 3.5+](https://www.python.org/downloads/)
 * [Python package `pytest`](https://pypi.org/project/pytest/)
 * [Python package `selenium`](https://pypi.org/project/selenium/)
-* [Google Chrome](https://www.google.com/chrome/) only on Windows
+* [Google Chrome](https://www.google.com/chrome/) - Install really Chrome, Chromium is not recommended
 * [Mozilla Firefox ESR](https://www.mozilla.org/en-US/firefox/all/#product-desktop-esr) - Be careful, ESR (or Developer or Nightly edition) is required. But the ESR edition is preferred.
 
 If you have problems with installing Mozzila Firefox ESR on Linux, try this way:
@@ -28,8 +28,8 @@ sudo apt-get install firefox-esr
 ```
 
 No other versions of Google Chrome and especially Mozilla Firefox may be installed on the same machine.
-Web browser driver automatically select installed version of web browser so it is better to have installed only one correct version of each web browser.
-Web browsers may not have installed Javascript restrictor extension. Python script will install it itself before running tests.
+Web browser driver automatically selects the installed version of the web browser so it is better to have installed only one correct version of each web browser.
+Web browsers may not have installed JSR extension. Python script will install it itself before running tests.
 
 
 ## Setup web browsers
@@ -38,9 +38,9 @@ Open Mozilla Firefox ESR and change preference `xpinstall.signatures.required` t
 You can follow [official Mozilla support](https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox#w_what-are-my-options-if-i-want-to-use-an-unsigned-add-on-advanced-users).
 
 Open testing page [https://polcak.github.io/jsrestrictor/test/test.html](https://polcak.github.io/jsrestrictor/test/test.html) and click on button *Show GPS data*.
-Firefox will ask you if you want to enable page to access location. Check option *Remember this decision* and then click *Allow*.
+Firefox will ask you if you want to enable the page to access location. Check option *Remember this decision* and then click *Allow*.
 
-Google Chrome is already prepared in default state for testing web browser extensions, the Chorme settings do not need to be changed.
+Google Chrome is already prepared in default state for testing web browser extensions, the Chrome settings do not need to be changed.
 
 
 ## Update tests configuration
@@ -49,7 +49,7 @@ Open file *configuration.py* from folder *integration_tests* for editing and upd
 
 ### on Windows OS
 
-All occurrences of the character `\` in path have to be replaced with `\\`.
+All occurrences of the character `\` in the path have to be replaced with `\\`.
 
 * firefox_driver = path to gecko driver. Gecko driver is included in folder *common_files* or it is able to download it.
 * firefox_profile = path to folder of firefox profile of Mozilla Firefox ESR with enabled access to location. It is typically located in `C:\Users\<username>\AppData\Roaming\Mozilla\Firefox\Profiles\<profilename>.default-esr`
@@ -59,12 +59,13 @@ All occurrences of the character `\` in path have to be replaced with `\\`.
 
 ### on Linux OS
 
-On Linux it is not able to test JSR extension in Google Chrome browser, because Google Chromu is not supported on Linux. And Chromium cannot fully replace Google Chrome for testing purpose.
+Warning: Chromium cannot fully replace Google Chrome for testing purposes.
 
-* tested_browsers = `[BrowserType.FIREFOX]`  # Remove `BrowserType.CHROME` because Google Chrome is not supported on Linux and leave only `BrowserType.FIREFOX` in array.
 * firefox_driver = path to gecko driver. Gecko driver is included in folder *common_files* or it is able to download it.
 * firefox_profile = path to folder of firefox profile of Mozilla Firefox ESR with enabled access to location. It is typically located in `/home/<username>/.mozilla/firefox/<profilename>.default-esr`
 * firefox_jsr_extension = path to xpi package of JSR (package importable to Firefox). Xpi packages is included in folder *common_files* or it is able to create it from JSR source files.
+* chrome_driver = path to chrome driver. Chrome driver is included in folder *common_files* or it is able to download it.
+* chrome_jsr_extension = path to xcr package of JSR (package importable to Chrome). Xcr packages is included in folder *common_files* or it is able to create it from JSR source files.
 
 # RUN TESTS
 
