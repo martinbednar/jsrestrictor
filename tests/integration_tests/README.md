@@ -26,6 +26,9 @@ sudo add-apt-repository ppa:jonathonf/firefox-esr
 sudo apt-get update
 sudo apt-get install firefox-esr
 ```
+Or download archiv with Firefox ESR from [official page](https://www.mozilla.org/en-US/firefox/all/#product-desktop-esr), extract archiv to `/opt/firefox`
+and create a symbolic link `firefox` in `/usr/bin` pointing to the `/opt/firefox/firefox`.
+In case of problems with installing Firefox ESR, follow [this tutorial](https://libre-software.net/how-to-install-firefox-on-ubuntu-linux-mint/#a_install_firefox).
 
 No other versions of Google Chrome and especially Mozilla Firefox may be installed on the same machine.
 Web browser driver automatically selects the installed version of the web browser so it is better to have installed only one correct version of each web browser.
@@ -66,6 +69,8 @@ Warning: Chromium cannot fully replace Google Chrome for testing purposes.
 * firefox_jsr_extension = path to xpi package of JSR (package importable to Firefox). Xpi packages is included in folder *common_files* or it is able to create it from JSR source files.
 * chrome_driver = path to chrome driver. Chrome driver is included in folder *common_files* or it is able to download it.
 * chrome_jsr_extension = path to xcr package of JSR (package importable to Chrome). Xcr packages is included in folder *common_files* or it is able to create it from JSR source files.
+
+`chmod +x geckodriver chromedriver` may be needed before runnig tests.
 
 # RUN TESTS
 
