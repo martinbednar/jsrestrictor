@@ -43,7 +43,10 @@ You can follow [official Mozilla support](https://support.mozilla.org/en-US/kb/a
 Open testing page [https://polcak.github.io/jsrestrictor/test/test.html](https://polcak.github.io/jsrestrictor/test/test.html) and click on button *Show GPS data*.
 Firefox will ask you if you want to enable the page to access location. Check option *Remember this decision* and then click *Allow*.
 
-Google Chrome is already prepared in default state for testing web browser extensions, the Chrome settings do not need to be changed.
+Google Chrome is already almost prepared in default state for testing web browser extensions, the Chrome settings do not need to be changed.
+
+Finally, try to search "FIT VUT" with Google search engine [https://www.google.com/](https://www.google.com/) in both web browsers.
+You may be asked to confirm conditions of personal data protection and licence agreement. Confirm it manually. Tests are not prepared to automatically confirm mentioned agreements.
 
 
 ## Update tests configuration
