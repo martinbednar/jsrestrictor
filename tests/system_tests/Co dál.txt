@@ -1,0 +1,1 @@
+browser.get_screenshot_as_file( path + 'page_image.jpg' )
