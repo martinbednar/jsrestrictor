@@ -163,7 +163,7 @@ def test_timestamp(position, expected):
             assert abs(time() - int(position['timestamp'])/1000) < 2
         else:
             # Should be rounded real value in accuracy.
-            assert is_in_accuracy(position['timestamp'], expected.geolocation.timestamp['accuracy'])
+            assert is_in_accuracy(position['timestamp'], expected.geolocation.timestamp['accuracy']*1000)
     else:
         # Should be spoofed value.
         assert position['timestamp'] == expected.geolocation.timestamp['value']
