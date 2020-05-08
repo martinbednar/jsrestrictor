@@ -19,8 +19,8 @@ def print_testing_footer(browser_type, jsr_level):
     extra_dash = ''
     if browser_type == BrowserType.CHROME:
         extra_dash = '-'
-        print()
-        print("---------------  TESTING <" + browser_type.name + ", JSR level = " + str(jsr_level) + "> FINISHED  --------------" + extra_dash)
-        print("--------------------------------------------------------------------------")
-        print("--------------------------------------------------------------------------")
-        print()
+    print()
+    print("---------------  TESTING <" + browser_type.name + ", JSR level = " + str(jsr_level) + "> FINISHED  --------------" + extra_dash)
+    print("--------------------------------------------------------------------------")
+    print("--------------------------------------------------------------------------")
+    print()
