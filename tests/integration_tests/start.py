@@ -21,14 +21,14 @@ for browser_type in Config.tested_browsers:
     for jsr_level in Config.tested_jsr_levels:
         print("--------------------------------------------------------------------------")
         print("--------------------------------------------------------------------------")
-        print("TESTING <" + browser_type.name + ", JSR level = " + str(jsr_level) + "> STARTED")
+        print(">>>>>>>>>>>>>>>  TESTING <" + browser_type.name + ", JSR level = " + str(jsr_level) + "> STARTED   <<<<<<<<<<<<<<")
         print()
         # set jsr_level to given level
         my_browser.jsr_level = jsr_level
         # run set of tests
-        pytest.main()
+        pytest.main(['./tests_definition/test_gps.py', '-s'])
         print()
-        print("TESTING <" + browser_type.name + ", JSR level = " + str(jsr_level) + "> FINISHED")
+        print(">>>>>>>>>>>>>>>  TESTING <" + browser_type.name + ", JSR level = " + str(jsr_level) + "> FINISHED  <<<<<<<<<<<<<<")
         print("--------------------------------------------------------------------------")
         print("--------------------------------------------------------------------------")
     # Close browser.
