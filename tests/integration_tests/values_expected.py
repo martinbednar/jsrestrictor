@@ -47,7 +47,7 @@ level0 = TestedValues(
           'accuracy': 'EXACTLY'},
     performance={'value': 'REAL VALUE',
                  'accuracy': 'EXACTLY'},
-    canvas='REAL VALUE'
+    protect_canvas=False
 )
 
 ## Expected values for default level 1 of JSR.
@@ -60,8 +60,8 @@ level1 = TestedValues(
             BrowserType.CHROME: 'REAL VALUE'},
     language='REAL VALUE',
     languages='REAL VALUE',
-    do_not_track="1",
-    cookie_enabled=True,
+    do_not_track='REAL VALUE',
+    cookie_enabled='REAL VALUE',
     oscpu='REAL VALUE',
     gps_accuracy={'value': 'REAL VALUE',
                   'accuracy': 10},
@@ -86,23 +86,22 @@ level1 = TestedValues(
           'accuracy': 0.01},
     performance={'value': 'REAL VALUE',
                  'accuracy': 10},
-    canvas='REAL VALUE'
+    protect_canvas=False
 )
 
 ## Expected values for default level 2 of JSR.
 level2 = TestedValues(
-    user_agent={BrowserType.FIREFOX: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0",
-                BrowserType.CHROME: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                                    "Chrome/74.0.3729 Safari/537.36"},
-    app_version="5.0 (Windows)",
-    platform="Win32",
-    vendor={BrowserType.FIREFOX: "",
-            BrowserType.CHROME: "Google Inc."},
+    user_agent={BrowserType.FIREFOX: 'REAL VALUE',
+                BrowserType.CHROME: 'REAL VALUE'},
+    app_version='REAL VALUE',
+    platform='REAL VALUE',
+    vendor={BrowserType.FIREFOX: 'REAL VALUE',
+            BrowserType.CHROME: 'REAL VALUE'},
     language='REAL VALUE',
     languages='REAL VALUE',
-    do_not_track="1",
-    cookie_enabled=True,
-    oscpu=None,
+    do_not_track='REAL VALUE',
+    cookie_enabled='REAL VALUE',
+    oscpu='REAL VALUE',
     gps_accuracy={'value': 'REAL VALUE',
                   'accuracy': 100},
     altitude={'value': 'REAL VALUE',
@@ -121,30 +120,27 @@ level2 = TestedValues(
                'accuracy': 0.1},
     device_memory=4,
     hardware_concurrency=2,
-    referrer="",
+    referrer='REAL VALUE',
     time={'value': 'REAL VALUE',
           'accuracy': 0.1},
     performance={'value': 'REAL VALUE',
                  'accuracy': 100},
-    canvas='EMPTY CANVAS'
+    protect_canvas=True
 )
 
 ## Expected values for default level 3 of JSR.
 level3 = TestedValues(
-    user_agent={
-        BrowserType.FIREFOX: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                             "Chrome/74.0.3729 Safari/537.36",
-        BrowserType.CHROME: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                            "Chrome/74.0.3729 Safari/537.36"},
-    app_version="5.0 (Windows)",
-    platform="Win32",
-    vendor={BrowserType.FIREFOX: "Google Inc.",
-            BrowserType.CHROME: "Google Inc."},
-    language="en-US",
-    languages=["en-US", "en"],
-    do_not_track="1",
-    cookie_enabled=True,
-    oscpu=None,
+    user_agent={BrowserType.FIREFOX: 'REAL VALUE',
+                BrowserType.CHROME: 'REAL VALUE'},
+    app_version='REAL VALUE',
+    platform='REAL VALUE',
+    vendor={BrowserType.FIREFOX: 'REAL VALUE',
+            BrowserType.CHROME: 'REAL VALUE'},
+    language='REAL VALUE',
+    languages='REAL VALUE',
+    do_not_track='REAL VALUE',
+    cookie_enabled='REAL VALUE',
+    oscpu='REAL VALUE',
     gps_accuracy={'value': '0',
                   'accuracy': 'EXACTLY'},
     altitude={'value': '0',
@@ -163,10 +159,10 @@ level3 = TestedValues(
                'accuracy': 'EXACTLY'},
     device_memory=4,
     hardware_concurrency=2,
-    referrer="",
+    referrer='REAL VALUE',
     time={'value': 'REAL VALUE',
           'accuracy': 1.0},
     performance={'value': 'REAL VALUE',
                  'accuracy': 1000},
-    canvas='EMPTY CANVAS'
+    protect_canvas=True
 )
