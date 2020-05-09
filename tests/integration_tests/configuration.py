@@ -10,7 +10,7 @@ class Config:
     # Browsers in which tests will be run.
     tested_browsers = [BrowserType.FIREFOX]
     # Default levels of JSR which will be tested.
-    tested_jsr_levels = [0]
+    tested_jsr_levels = [1]
     # Full path to Firefox driver.
     firefox_driver = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\geckodriver.exe"
     # Full path to Firefox ESR (default) profile.
