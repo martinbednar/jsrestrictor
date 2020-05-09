@@ -24,7 +24,7 @@ def main():
             # set jsr_level to given level
             my_browser.jsr_level = jsr_level
             # run set of tests
-            pytest.main()
+            pytest.main(['--ignore=./tests_definition/test_performance.py'])
             output.print_testing_footer(browser_type, jsr_level)
         # Close browser.
         my_browser.quit()
