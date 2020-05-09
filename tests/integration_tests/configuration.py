@@ -8,15 +8,15 @@ from web_browser_type import BrowserType
 #  Follow README.md to get known how to edit this Config.
 class Config:
     # Browsers in which tests will be run.
-    tested_browsers = [BrowserType.CHROME, BrowserType.FIREFOX]
+    tested_browsers = [BrowserType.FIREFOX]
     # Default levels of JSR which will be tested.
-    tested_jsr_levels = [0, 1, 2, 3]
+    tested_jsr_levels = [0]
     # Full path to Firefox driver.
     firefox_driver = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\geckodriver.exe"
     # Full path to Firefox ESR (default) profile.
     firefox_profile = "C:\\Users\\Martin\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\voxsqf3a.default-esr"
     # Full path to JSR package for Firefox (xpi package).
-    firefox_jsr_extension = "D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\firefox\\firefox_JSR_master.xpi"
+    firefox_jsr_extension = "D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\firefox\\firefox_JSR_rewrite.xpi"
     # Full path to Chrome driver.
     chrome_driver = "D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\chromedriver.exe"
     # Full path to JSR package for Chrome (crx package).
