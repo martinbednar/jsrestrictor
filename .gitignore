@@ -9,4 +9,3 @@ chrome/chrome_JSR_rewrite.crx
 firefox/firefox_JSR_rewrite.xpi
 *.log
 *.pyc
-tests/unit_tests/node_modules/
