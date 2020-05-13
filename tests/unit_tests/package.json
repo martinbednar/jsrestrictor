@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec --file ./test/global_setup.js"
   },
   "author": "Martin Bednar (xbedna60)",
   "license": "ISC",

@@ -1,16 +1,9 @@
-const chai = require("chai");
-const asserttype = require('chai-asserttype');
-const rewire = require('rewire');
-
-chai.use(asserttype);
-const expect = chai.expect;
-
 const helpers = rewire('../../../common/helpers.js');
 const escape = helpers.__get__('escape');
 
 
-describe("Helpers", function() {
-	describe("Escape function", function() {
+describe("Helpers:", function() {
+	describe("escape function", function() {
 		it("should be defined",function() {
 			expect(escape).to.be.not.undefined;
 		});

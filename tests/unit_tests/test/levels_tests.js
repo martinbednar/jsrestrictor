@@ -1,17 +1,9 @@
-const chai = require("chai");
-const asserttype = require('chai-asserttype');
-const rewire = require('rewire');
-const { default: browserFake } = require('webextensions-api-fake');
-
-chai.use(asserttype);
-const expect = chai.expect;
-global.browser = browserFake();
-
 const levels = rewire('../../../common/levels.js');
 const getCurrentLevelJSON = levels.__get__('getCurrentLevelJSON');
 var default_level = levels.__get__('default_level');
 
-describe("Levels", function() {
+
+describe("Levels:", function() {
 	before(async () => {
 	
 	var ret = await browser.storage.sync.get(null);

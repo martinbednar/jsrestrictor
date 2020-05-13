@@ -1,16 +1,9 @@
-const chai = require("chai");
-const asserttype = require('chai-asserttype');
-const rewire = require('rewire');
-
-chai.use(asserttype);
-const expect = chai.expect;
-
 const browser = rewire('../../../common/browser.js');
 const running_in_firefox = browser.__get__('running_in_firefox');
 
 
-describe("Browser", function() {
-	describe("Running in Firefox function", function() {
+describe("Browser:", function() {
+	describe("running_in_firefox function", function() {
 		before(function() {
 			this.isFirefox = typeof InstallTrigger !== 'undefined';
 		});

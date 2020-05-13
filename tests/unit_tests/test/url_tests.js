@@ -1,16 +1,9 @@
-const chai = require("chai");
-const asserttype = require('chai-asserttype');
-const rewire = require('rewire');
-
-chai.use(asserttype);
-const expect = chai.expect;
-
 const url = rewire('../../../common/url.js');
 global.extractRootDomain = url.__get__('extractRootDomain');
 
 
-describe("URL", function() {
-	describe("Extract root domain function", function() {		
+describe("URL:", function() {
+	describe("extractRootDomain function", function() {		
 		it("should be defined",function() {
 			expect(extractRootDomain).to.be.not.undefined;
 		});
