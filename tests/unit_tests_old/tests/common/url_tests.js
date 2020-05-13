@@ -8,14 +8,14 @@ describe("URL", function() {
 		it("should return string",function() {
 			expect(extractRootDomain("")).toEqual(jasmine.any(String));
 		});
-		it("should return undefined when parametr is undefined",function() {
-			expect(function() {extractRootDomain(undefined);}).toThrowError();
+		it("should throw error when parametr is undefined",function() {
+			expect(function() {extractRootDomain(undefined)}).toThrowError();
 		});
 		it("should return empty string when parametr is empty string",function() {
 			expect(extractRootDomain("")).toBe("");
 		});
-		it("should return parametr when parametr is nonsense",function() {
-			expect(extractRootDomain("gsf14f56sdvds1,.-dfsv,§ú")).toBe("gsf14f56sdvds1,.-dfsv,§ú");
+		it("should return parametr when parametr is nonsense without dots",function() {
+			expect(extractRootDomain("gsf14f56sdvds1,-dfsv,§ú")).toBe("gsf14f56sdvds1,-dfsv,§ú");
 		});
 		it("should return root domain",function() {
 			expect(extractRootDomain("vutbr.cz")).toBe("vutbr.cz");
