@@ -26,6 +26,10 @@ describe("URL", function() {
 			expect(extractRootDomain("project.bigred.cornell.edu")).toBe("cornell.edu");
 			expect(extractRootDomain("test.eva.fit.vutbr.cz")).toBe("vutbr.cz");
 		});
+		// This and the previous test is in mutually exclusion relationship. This or previous test can pass, but not both.
+		// This test specify correct behavior (not only root domain should be extracted, but subdomains too).
+		// But previous test coresponds with name of the function. Name of the function should be changed and
+		// whole domain should be returned.
 		xit("should return root domain with subdomain for mutually independent sites on a single root domain",function() {
 			expect(extractRootDomain("sites.google.com")).toBe("sites.google.com");
 			expect(extractRootDomain("code.google.com")).toBe("code.google.com");
