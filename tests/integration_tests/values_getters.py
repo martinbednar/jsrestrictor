@@ -66,7 +66,7 @@ def get_referrer(driver):
     WebDriverWait(driver, 10).until(
         ec.presence_of_element_located((By.ID, 'res'))
     )
-    driver.find_elements_by_xpath('//a[@href="https://www.fit.vut.cz/"]')[0].click()
+    driver.find_elements_by_xpath('//a[contains(@href,"www.fit.vut.cz")]')[0].click()
     WebDriverWait(driver, 10).until(
         ec.presence_of_element_located((By.ID, 'main'))
     )
@@ -76,7 +76,7 @@ def get_referrer(driver):
 ## Check if canvas is spoofed.
 #
 #  Draw 3 elements to canvas and then get canvas data and test if data is spoofed.
-#  Spoofed canvas means that canvas is represented by array with only 255 values.
+#  Spoofed canvas means that canvas is represented by array with only 0 values.
 def is_canvas_spoofed(driver):
     driver.get(Config.testing_page)
     driver.find_element_by_xpath("//button[text()='Add line to canvas']").click()
@@ -84,4 +84,4 @@ def is_canvas_spoofed(driver):
     driver.find_element_by_xpath("//button[text()='Add text to canvas']").click()
     driver.find_element_by_xpath("//button[text()='Get data and show image in canvas frame']").click()
     return driver.execute_script("var canvas = document.getElementById('canvas1'); return !canvas.getContext('2d')"
-                                 ".getImageData(0, 0, canvas.width, canvas.height).data.some(channel => channel !== 0)")
+                                 ".getImageData(0, 0, canvas.width, canvas.height).data.some(channel => channel !== 20)")
