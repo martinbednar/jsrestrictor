@@ -1,46 +1,3 @@
-#!/bin/bash
-
-#
-#  JavaScript Restrictor is a browser extension which increases level
-#  of security, anonymity and privacy of the user while browsing the
-#  internet.
-#
-#  Copyright (C) 2020  Martin Bednar
-#
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-
-# Handle errors.
-# Function called by trap before exit caused by error.
-function beforeExit {
-	echo "$confBackup" > "./testing/configuration.py"
-	retVal=$?
-	if [ $retVal -ne 0 ]; then
-		echo "\"${last_command}\" command failed with exit code $?."
-		echo
-		echo "An error noticed during setup the test environment. Integration testing can not be started. Look at the README file and follow instructions to run the setup again."
-	fi
-	exit $retVal
-}
-# exit when any command fails
-set -euo pipefail
-# Call function before exit caused by error.
-trap beforeExit EXIT
-
-# Backup configuration.py file if error happen.
-confBackup=$(<./testing/configuration.py)
-
 # Go to common scripts directory.
 cd ../common_files/scripts
 
@@ -63,15 +20,12 @@ cd ./tests/integration_tests
 sed -i "s@<<JSR_project_root_directory_path>>@${JSRPath}@g" ./testing/configuration.py
 
 # Get path to Firefox ESR default profile.
-FFProfiles=$(realpath ~/.mozilla/firefox)
-set +euo pipefail
-FFProfilesItemsNumber=$(ls -dq ${FFProfiles}/*default-esr* | wc -l)
-set -euo pipefail
+FFProfiles=realpath ~/.mozilla/firefox
+FFProfilesItemsNumber=ls -dq *default-esr* | wc -l
 if [ $FFProfilesItemsNumber == 1 ]; then
-	FFProfile=$(ls -dq ${FFProfiles}/*default-esr*)
+	FFProfile={ echo $FFProfiles/; ls -dq *default-esr*; } | tr -d "\n" | tr -d " "
 else
 	read -p 'Enter path into Firefox ESR default profile directory. It is typically /home/<username>/.mozilla/firefox/<profilename>.default-esr: ' FFProfile
-	ls -dq ${FFProfile}
 fi
 
 # Set JSR project root directory path in configuration.py.
@@ -81,8 +35,12 @@ sed -i "s@<<Firefox_ESR_default_profile>>@${FFProfile}@g" ./testing/configuratio
 sed -i "s@.exe@@g" ./testing/configuration.py
 
 # Start testing if everything ok.
-# Stop handling errors.
-set +euo pipefail
+read -p "Can you confirm that no error happened during setup? [y/n]: " -n 1 -r
 echo
-echo "No error noticed during setup the test environment. Integration testing is starting..."
-python3 ./testing/start.py
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    echo "You confirmed that an error happened. Integration testing can not be started. Look at the README file and follow instructions to run the setup again."
+else
+	echo "You confirmed that no error happened. Integration testing is starting..."
+	python3 ./testing/start.py
+fi
