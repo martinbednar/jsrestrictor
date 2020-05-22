@@ -1,24 +1,3 @@
-#
-#  JavaScript Restrictor is a browser extension which increases level
-#  of security, anonymity and privacy of the user while browsing the
-#  internet.
-#
-#  Copyright (C) 2020  Martin Bednar
-#
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-
 from time import sleep
 
 from selenium import webdriver
@@ -100,7 +79,10 @@ class Browser:
     # To set JSR level is needed to go to JSR option page and select given default level.
     @jsr_level.setter
     def jsr_level(self, level):
-        self.driver.get(self._jsr_options_page)
+        if self.type == BrowserType.CHROME:
+            self.driver.get(self._jsr_options_page)
+        elif self.type == BrowserType.FIREFOX:
+            self.driver.get(self._jsr_options_page)
         self.driver.find_element_by_id('level-' + str(level)).click()
         self.__jsr_level = level
         self.driver.get(get_config("testing_page"))
