@@ -10,5 +10,6 @@ doxygen/
 *.crx
 *.xpi
 *.pyc
+*.log
 tests/common_files/webbrowser_drivers/chromedriver*
 tests/common_files/webbrowser_drivers/geckodriver*

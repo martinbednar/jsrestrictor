@@ -1,0 +1,20 @@
+{
+  "name": "unit_tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec --file ./test/global_setup.js"
+  },
+  "author": "Martin Bednar (xbedna60)",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-asserttype": "^1.0.5",
+    "mocha": "^7.1.2",
+    "rewire": "^5.0.0",
+    "sinon": "^9.0.2",
+    "webextensions-api-fake": "^1.2.0"
+  }
+}

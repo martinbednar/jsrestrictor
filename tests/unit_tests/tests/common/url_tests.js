@@ -8,14 +8,14 @@ describe("URL", function() {
 		it("should return string",function() {
 			expect(extractRootDomain("")).toEqual(jasmine.any(String));
 		});
-		it("should return undefined when parametr is undefined",function() {
-			expect(function() {extractRootDomain(undefined);}).toThrowError();
+		it("should throw error when parametr is undefined",function() {
+			expect(function() {extractRootDomain(undefined)}).toThrowError();
 		});
 		it("should return empty string when parametr is empty string",function() {
 			expect(extractRootDomain("")).toBe("");
 		});
-		it("should return parametr when parametr is nonsense",function() {
-			expect(extractRootDomain("gsf14f56sdvds1,.-dfsv,§ú")).toBe("gsf14f56sdvds1,.-dfsv,§ú");
+		it("should return parametr when parametr is nonsense without dots",function() {
+			expect(extractRootDomain("gsf14f56sdvds1,-dfsv,§ú")).toBe("gsf14f56sdvds1,-dfsv,§ú");
 		});
 		it("should return root domain",function() {
 			expect(extractRootDomain("vutbr.cz")).toBe("vutbr.cz");
@@ -36,7 +36,9 @@ describe("URL", function() {
 			expect(extractRootDomain("docs.google.com")).toBe("docs.google.com");
 			expect(extractRootDomain("support.google.com")).toBe("support.google.com");
 			expect(extractRootDomain("polcak.github.io")).toBe("polcak.github.io");
-			expect(extractRootDomain("martinbednar.github.io")).toBe("polcak.github.io");
+			expect(extractRootDomain("martinbednar.github.io")).toBe("martinbednar.github.io");
+			expect(extractRootDomain("swatblog.rtgp.xyz")).toBe("swatblog.rtgp.xyz");
+			expect(extractRootDomain("thenetworg.crm4.dynamics.com")).toBe("thenetworg.crm4.dynamics.com");
 		});
 		xit("should return IP address for IP address (no domainname) - example URL: http://89.45.196.133/paneln/Login.aspx)",function() {
 			//example web page: http://89.45.196.133/paneln/Login.aspx

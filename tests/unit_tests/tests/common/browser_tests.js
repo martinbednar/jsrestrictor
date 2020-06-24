@@ -12,7 +12,7 @@ describe("Browser", function() {
 		it("should return boolean",function() {
 			expect(running_in_firefox()).toEqual(jasmine.any(Boolean));
 		});
-		it("should return true in Firefox and false in other web browsers",function() {
+		xit("should return true in Firefox and false in other web browsers",function() {
 			expect(running_in_firefox()).toBe(this.isFirefox);
 		});
 	});
