@@ -50,6 +50,8 @@ You may be asked to confirm conditions of personal data protection and licence a
 
 ## Download web browser drivers
 
+Download web browser drivers needed for controlling web browsers by tests. Download drivers for both web browsers - Google Chrome and Mozilla Firefox - and for both platform - Windows and Linux.
+
 For Google Chrome download the ChromeDriver from [download page](https://chromedriver.chromium.org/downloads).
 Select the version coresponding to the version of your Google Chrome web browser. If you download an incompatible version, you will see an error during starting tests.
 Download the correct ChromeDriver to folder `../common_files/webbrowser_drivers` with name `chromedriver.exe` (for Windows) or `chromedriver` (for Linux).
