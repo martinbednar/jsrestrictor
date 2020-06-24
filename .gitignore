@@ -7,3 +7,8 @@ common/ipv4.dat
 ipv6.csv
 common/ipv6.dat
 doxygen/
+*.crx
+*.xpi
+*.pyc
+tests/common_files/webbrowser_drivers/chromedriver*
+tests/common_files/webbrowser_drivers/geckodriver*
