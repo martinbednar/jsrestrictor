@@ -93,4 +93,4 @@ If script does not find needed files into default location, it will prompts you 
 
 ## Integration tests configuration
 
-You can change selected browsers, which integration tests run in, and you can change JSR levels, which are tested, by modifing the file ./testing/configuration.py.
+You can change selected browsers, which integration tests run in, and you can change JSR levels, which are tested, by modifing the file `./testing/configuration.py`.
