@@ -3,6 +3,9 @@
 # Go to root directory of JSR project.
 cd ../../../
 
+# Set executable permission.
+chmod +x ./fix_manifest.sh
+
 # Clean previous build.
 make clean
 
