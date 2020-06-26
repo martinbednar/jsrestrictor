@@ -77,11 +77,11 @@ def get_page_logs(driver, top_site):
 
 def main():
     driver = create_driver()
+    
+    logs = get_page_logs(driver, sys.argv[1])
 
-    logs = []
     f = open('logs_without_jsr.csv', 'a', newline='')
     logs_writer = csv.writer(f)
-    logs = get_page_logs(driver, sys.argv[1])
     logs_writer.writerows(logs)
     f.close()
 

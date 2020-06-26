@@ -46,7 +46,7 @@ try:
 ###################################
 
 finally:
-    time.sleep( 10 )
+    time.sleep( 2 )
 
     node1.kill()
     node2.kill()
