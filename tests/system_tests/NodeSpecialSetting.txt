@@ -1,0 +1,2 @@
+, '-browser', 'browserName=chrome,maxinstance=5,platform=WINDOWS'
+, '-browser', 'browserName=firefox,maxinstance=5,platform=WINDOWS'
