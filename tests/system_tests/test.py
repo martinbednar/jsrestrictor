@@ -4,6 +4,7 @@ import time
 import os
 
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
@@ -48,9 +49,14 @@ def create_driver():
     d['loggingPreferences'] = {'browser': 'ALL'}
     #d['loggingPrefs'] = {'browser': 'ALL'}
 
+    o = Options()
+    o.add_extension('D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome_JSR.crx')
+    #options.add_argument("user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
+
     driver = webdriver.Remote(
         command_executor='http://localhost:4444/wd/hub',
-        desired_capabilities=d)
+        desired_capabilities=d,
+        options=o)
     return driver
 
 
