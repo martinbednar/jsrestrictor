@@ -50,7 +50,7 @@ def create_driver():
     #d['loggingPrefs'] = {'browser': 'ALL'}
 
     o = Options()
-    o.add_extension('D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome_JSR.crx')
+    #o.add_extension('D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome_JSR.crx')
     #options.add_argument("user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
 
     driver = webdriver.Remote(
@@ -73,7 +73,7 @@ def get_page_logs(driver, top_site):
         logs = []
         print("Getting logs started.")
         driver_logs = driver.get_log('browser')
-        print(driver_logs)
+        #print(driver_logs)
         for log in driver_logs:
             logs.append(Log(top_site, log['level'], log['message'], log['source'], log['timestamp']))
             print("Log.")
@@ -81,10 +81,10 @@ def get_page_logs(driver, top_site):
     return logs
 
 
-def main():
+def main(domain):
     driver = create_driver()
     
-    logs = get_page_logs(driver, sys.argv[1])
+    logs = get_page_logs(driver, domain)
 
     f = open('logs_without_jsr.csv', 'a', newline='')
     logs_writer = csv.writer(f)

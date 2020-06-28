@@ -1,7 +1,10 @@
 from subprocess import Popen
+from _thread import start_new_thread
 import time
 import csv
 import numpy as np
+
+from test import main
 
 
 def read_n_top_sites_csv(n):
@@ -10,6 +13,9 @@ def read_n_top_sites_csv(n):
 
     return data[0:n, 1]
 
+
+def start_test(name, domain):
+    main(domain)
 
 
 start_server = ['java', '-jar', 'selenium-server-standalone-3.141.59.jar', '-role', 'hub']
@@ -31,17 +37,19 @@ time.sleep( 7 )
 
 ####################################
 try:
-    processes = []
-
+    #processes = []
+    i = 0
     for top_site in read_n_top_sites_csv(n=3):
-        run_test = ['python', 'test.py', top_site]
-        processes.append(Popen(run_test, shell=True))
+        #run_test = ['python', 'test.py', top_site]
+        #processes.append(Popen(run_test, shell=True))
+        start_new_thread(start_test, ("Thread-1", top_site))
+        i += 1
         time.sleep(5)
 
-    i = 0
-    for process in processes:
-        processes[i].wait()
-        i+=1
+    #i = 0
+    #for process in processes:
+    #    processes[i].wait()
+    #    i+=1
 
 ###################################
 
