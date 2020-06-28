@@ -1,11 +1,4 @@
-import sys
-import csv
 import time
-import os
-
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class Log:
@@ -42,32 +35,15 @@ timestamp: %s }""" % (self.web_page, self.level, self.message, self.source, self
         return iter([self.web_page, self.level, self.message, self.source, self.timestamp])
 
 
-def create_driver():
-    d = DesiredCapabilities.CHROME
-    d['browserName'] = 'chrome'
-    d['javascriptEnabled'] = True
-    d['loggingPreferences'] = {'browser': 'ALL'}
-    #d['loggingPrefs'] = {'browser': 'ALL'}
-
-    o = Options()
-    #o.add_extension('D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome_JSR.crx')
-    #options.add_argument("user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
-
-    driver = webdriver.Remote(
-        command_executor='http://localhost:4444/wd/hub',
-        desired_capabilities=d,
-        options=o)
-    return driver
-
-
 def get_page_logs(driver, top_site):
     try:
         print("Getting page started.")
         driver.get('http://www.' + top_site)
         print("Getting page finished.")
         time.sleep(5)
-    except:
+    except e:
         print("An exception occurred while loading page: " + top_site)
+        print(e)
         logs = [Log(top_site, 'ERROR', 'ERROR_WHILE_LOADING_PAGE', '', '')]
     else:
         logs = []
@@ -79,20 +55,3 @@ def get_page_logs(driver, top_site):
             print("Log.")
         print("Getting logs finished.")
     return logs
-
-
-def main(domain):
-    driver = create_driver()
-    
-    logs = get_page_logs(driver, domain)
-
-    f = open('logs_without_jsr.csv', 'a', newline='')
-    logs_writer = csv.writer(f)
-    logs_writer.writerows(logs)
-    f.close()
-
-    driver.close()
-
-
-if __name__ == "__main__":
-    main()
