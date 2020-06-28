@@ -1,5 +1,5 @@
 from subprocess import Popen
-from _thread import start_new_thread
+import threading
 import time
 import csv
 import numpy as np
@@ -14,7 +14,7 @@ def read_n_top_sites_csv(n):
     return data[0:n, 1]
 
 
-def start_test(name, domain):
+def start_test(domain):
     main(domain)
 
 
@@ -37,25 +37,22 @@ time.sleep( 7 )
 
 ####################################
 try:
-    #processes = []
-    i = 0
+    threads = []
+
     for top_site in read_n_top_sites_csv(n=3):
         #run_test = ['python', 'test.py', top_site]
         #processes.append(Popen(run_test, shell=True))
-        start_new_thread(start_test, ("Thread-1", top_site))
-        i += 1
-        time.sleep(5)
+        x = threading.Thread(target=start_test, args=(top_site,))
+        threads.append(x)
+        x.start()
+        time.sleep(2)
 
-    #i = 0
-    #for process in processes:
-    #    processes[i].wait()
-    #    i+=1
+    for thread in threads:
+        thread.join()
 
 ###################################
 
 finally:
-    time.sleep( 2 )
-
     node1.kill()
     node2.kill()
 
