@@ -29,7 +29,12 @@ for node_number in range(Config.number_of_grid_nodes):
 ####################################
 if os.path.exists("../data/logs/logs_without_jsr.json"):
     os.remove("../data/logs/logs_without_jsr.json")
+if os.path.exists("../data/logs/logs_with_jsr.json"):
+    os.remove("../data/logs/logs_with_jsr.json")
 f = open('../data/logs/logs_without_jsr.json', 'a', newline='')
+f.write('[')
+f.close()
+f = open('../data/logs/logs_with_jsr.json', 'a', newline='')
 f.write('[')
 f.close()
 
@@ -56,5 +61,8 @@ finally:
     server.kill()
 
 f = open('../data/logs/logs_without_jsr.json', 'a', newline='')
+f.write(']')
+f.close()
+f = open('../data/logs/logs_with_jsr.json', 'a', newline='')
 f.write(']')
 f.close()

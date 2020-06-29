@@ -13,3 +13,4 @@ doxygen/
 *.log
 tests/common_files/webbrowser_drivers/chromedriver*
 tests/common_files/webbrowser_drivers/geckodriver*
+tests/system_tests/data/

@@ -9,7 +9,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from testing_logs import get_page_logs
 
 
-def create_driver():
+def create_driver(with_jsr):
     d = DesiredCapabilities.CHROME
     d['browserName'] = 'chrome'
     d['javascriptEnabled'] = True
@@ -17,8 +17,8 @@ def create_driver():
     #d['loggingPrefs'] = {'browser': 'ALL'}
 
     o = Options()
-    #o.add_extension('D:\\Development\\jsrestrictor\\tests\\common_files\\JSR\\chrome_JSR.crx')
-    #options.add_argument("user-data-dir=C:\\Users\\Martin\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1")
+    if with_jsr:
+        o.add_extension('../../common_files/JSR/chrome_JSR.crx')
 
     driver = webdriver.Remote(
         command_executor='http://localhost:4444/wd/hub',
@@ -29,13 +29,18 @@ def create_driver():
 
 
 def start_test(top_sites):
-    driver = create_driver()
-
+    driver = create_driver(with_jsr=False)
     for top_site in top_sites:
         logs = get_page_logs(driver, top_site)
-
         f = open('../data/logs/logs_without_jsr.json', 'a', newline='')
         f.write(logs.to_json() + ',')
         f.close()
+    driver.close()
 
+    driver = create_driver(with_jsr=True)
+    for top_site in top_sites:
+        logs = get_page_logs(driver, top_site)
+        f = open('../data/logs/logs_with_jsr.json', 'a', newline='')
+        f.write(logs.to_json() + ',')
+        f.close()
     driver.close()
