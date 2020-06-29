@@ -16,7 +16,7 @@ def read_n_top_sites_csv(n):
 
 
 start_server_command = ['java', '-jar', 'selenium-server-standalone-3.141.59.jar', '-role', 'hub']
-start_node_command = ['java', '-Dwebdriver.gecko.driver=D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\geckodriver.exe', '-Dwebdriver.chrome.driver=D:\\Development\\jsrestrictor\\tests\\common_files\\webbrowser_drivers\\chromedriver.exe', '-jar', 'selenium-server-standalone-3.141.59.jar', '-role', 'node', '-hub', 'https://localhost:4444/grid/register/']
+start_node_command = ['java', '-Dwebdriver.gecko.driver=../../common_files/webbrowser_drivers/geckodriver.exe', '-Dwebdriver.chrome.driver=../../common_files/webbrowser_drivers/chromedriver.exe', '-jar', 'selenium-server-standalone-3.141.59.jar', '-role', 'node', '-hub', 'https://localhost:4444/grid/register/']
 
 server = Popen(start_server_command)
 time.sleep( 5 )
@@ -27,9 +27,9 @@ for node_number in range(Config.number_of_grid_nodes):
     time.sleep( 7 )
 
 ####################################
-if os.path.exists("logs_without_jsr.json"):
-    os.remove("logs_without_jsr.json")
-f = open('logs_without_jsr.json', 'a', newline='')
+if os.path.exists("../data/logs/logs_without_jsr.json"):
+    os.remove("../data/logs/logs_without_jsr.json")
+f = open('../data/logs/logs_without_jsr.json', 'a', newline='')
 f.write('[')
 f.close()
 
@@ -55,6 +55,6 @@ finally:
 
     server.kill()
 
-f = open('logs_without_jsr.json', 'a', newline='')
+f = open('../data/logs/logs_without_jsr.json', 'a', newline='')
 f.write(']')
 f.close()

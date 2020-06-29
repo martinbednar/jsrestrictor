@@ -34,7 +34,7 @@ def start_test(top_sites):
     for top_site in top_sites:
         logs = get_page_logs(driver, top_site)
 
-        f = open('logs_without_jsr.json', 'a', newline='')
+        f = open('../data/logs/logs_without_jsr.json', 'a', newline='')
         f.write(logs.to_json() + ',')
         f.close()
 
