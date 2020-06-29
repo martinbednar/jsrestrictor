@@ -1,0 +1,31 @@
+17:56:39.761 WARN [SessionCleanup.null] - session ext. key 28e08cdabe54360c7f4a0d2dde714814 has TIMED OUT due to client inactivity and will be released.
+Getting logs finished.
+Getting page started.
+[1593446211.340][SEVERE]: Timed out receiving message from renderer: 297.007
+[1593446211.359][SEVERE]: Timed out receiving message from renderer: 297.007
+Exception in thread Thread-5:
+Traceback (most recent call last):
+  File ".\get_logs.py", line 40, in get_page_logs
+    my_driver.get('http://www.' + top_site)
+  File "C:\Users\bedna\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 333, in get
+    self.execute(Command.GET, {'url': url})
+  File "C:\Users\bedna\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\bedna\AppData\Local\Programs\Python\Python38\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: timeout: Timed out receiving message from renderer: 297.007
+  (Session info: chrome=83.0.4103.116)
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bedna\AppData\Local\Programs\Python\Python38\lib\threading.py", line 932, in _bootstrap_inner
+    self.run()
+  File "C:\Users\bedna\AppData\Local\Programs\Python\Python38\lib\threading.py", line 870, in run
+    self._target(*self._args, **self._kwargs)
+  File ".\get_logs.py", line 57, in get_logs_thread
+    logs = get_page_logs(my_driver, top_site)
+  File ".\get_logs.py", line 43, in get_page_logs
+    except e:
+NameError: name 'e' is not defined

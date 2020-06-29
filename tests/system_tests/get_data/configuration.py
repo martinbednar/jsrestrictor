@@ -11,7 +11,7 @@
 
 
 class Config(metaclass=MetaConfig):
-    _number_of_sites_for_testing = 10
+    _number_of_sites_for_testing = 400
     _number_of_grid_nodes = 2
     #max is number_of_grid_nodes * 5
-    _number_of_browser_instances = 2
+    _number_of_browser_instances = 3
