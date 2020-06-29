@@ -22,18 +22,24 @@ server = Popen(start_server_command)
 time.sleep( 5 )
 
 nodes = []
-for node_number in range(0,Config.number_of_grid_nodes-1):
+for node_number in range(Config.number_of_grid_nodes):
     nodes.append(Popen(start_node_command))
     time.sleep( 7 )
 
 ####################################
-if os.path.exists("logs_without_jsr.csv"):
-    os.remove("logs_without_jsr.csv")
+if os.path.exists("logs_without_jsr.json"):
+    os.remove("logs_without_jsr.json")
+f = open('logs_without_jsr.json', 'a', newline='')
+f.write('[')
+f.close()
 
 try:
+    top_sites = read_n_top_sites_csv(n=Config.number_of_sites_for_testing)
+    
+    browser_jobs = np.array_split(top_sites, Config.number_of_one_browser_instances)
     testing_threads = []
-    for top_site in read_n_top_sites_csv(n=Config.number_of_sites_for_testing):
-        new_thread = Thread(target=start_test, args=(top_site,))
+    for browser_job in browser_jobs:
+        new_thread = Thread(target=start_test, args=(browser_job,))
         testing_threads.append(new_thread)
         new_thread.start()
         time.sleep(2)
@@ -48,3 +54,7 @@ finally:
         node.kill()
 
     server.kill()
+
+f = open('logs_without_jsr.json', 'a', newline='')
+f.write(']')
+f.close()

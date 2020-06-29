@@ -1,4 +1,17 @@
 import time
+import json
+
+
+class Site_logs:
+    site = ''
+    logs = []
+
+    def __init__(self, site, logs):
+        self.site = site
+        self.logs = logs
+
+    def to_json(self):
+        return '{"site": "' + self.site + '", "logs": ' + json.dumps(self.logs) + '}'
 
 
 class Log:
@@ -46,11 +59,11 @@ def get_page_logs(driver, top_site):
         print(e)
         logs = [Log(top_site, 'ERROR', 'ERROR_WHILE_LOADING_PAGE', '', '')]
     else:
-        logs = []
         print("Getting logs started.")
-        driver_logs = driver.get_log('browser')
+        return Site_logs(top_site, driver.get_log('browser'))
         #print(driver_logs)
         for log in driver_logs:
+            print(log)
             logs.append(Log(top_site, log['level'], log['message'], log['source'], log['timestamp']))
             print("Log.")
         print("Getting logs finished.")

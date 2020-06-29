@@ -1,5 +1,4 @@
 import sys
-import csv
 import time
 import os
 
@@ -29,14 +28,16 @@ def create_driver():
 
 
 
-def start_test(domain):
+def start_test(top_sites):
     driver = create_driver()
-    
-    logs = get_page_logs(driver, domain)
 
-    f = open('logs_without_jsr.csv', 'a', newline='')
-    logs_writer = csv.writer(f)
-    logs_writer.writerows(logs)
-    f.close()
+    for top_site in top_sites:
+        logs = get_page_logs(driver, top_site)
+        print(logs)
+        f = open('logs_without_jsr.json', 'a', newline='')
+        #for log in logs:
+        json_str = logs.to_json()
+        f.write(json_str + ',')
+        f.close()
 
     driver.close()
