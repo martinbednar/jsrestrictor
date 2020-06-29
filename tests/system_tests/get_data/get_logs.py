@@ -3,7 +3,7 @@ import json
 import numpy as np
 from threading import Thread
 
-import my_io
+import io_funcs as io
 import grid
 import driver
 from configuration import Config
@@ -19,6 +19,19 @@ class Site_logs:
 
     def to_json(self):
         return '{"site": "' + self.site + '", "logs": ' + json.dumps(self.logs) + '}'
+
+
+def init_output_files():
+        io.create_folder_structure("../data/logs")
+        io.delete_file_if_exists("../data/logs/logs_without_jsr.json")
+        io.delete_file_if_exists("../data/logs/logs_with_jsr.json")
+        io.append_file("../data/logs/logs_without_jsr.json","[")
+        io.append_file("../data/logs/logs_with_jsr.json","[")
+
+
+def finish_output_files():
+        io.append_file("../data/logs/logs_without_jsr.json","]")
+        io.append_file("../data/logs/logs_with_jsr.json","]")
 
 
 def get_page_logs(my_driver, top_site):
@@ -38,7 +51,7 @@ def get_page_logs(my_driver, top_site):
     return logs
 
 
-def start_test(top_sites):
+def get_logs_thread(top_sites):
     my_driver = driver.create_driver(with_jsr=False)
     for top_site in top_sites:
         logs = get_page_logs(my_driver, top_site)
@@ -56,46 +69,32 @@ def start_test(top_sites):
     my_driver.close()
 
 
+def run_getting_logs_threads():
+    top_sites = io.read_n_top_rows_csv(n=Config.number_of_sites_for_testing)
+    browser_jobs = np.array_split(top_sites, Config.number_of_browser_instances)
+    testing_threads = []
+    for browser_job in browser_jobs:
+        new_thread = Thread(target=get_logs_thread, args=(browser_job,))
+        testing_threads.append(new_thread)
+        new_thread.start()
+        time.sleep(2)
+
+    for thread in testing_threads:
+        thread.join()
+
+
 def main():
     server = grid.start_server()
     nodes = grid.start_nodes()
 
     try:
-        ####################################
-        my_io.delete_file_if_exists("../data/logs/logs_without_jsr.json")
-        my_io.delete_file_if_exists("../data/logs/logs_with_jsr.json")
-        f = open('../data/logs/logs_without_jsr.json', 'a', newline='')
-        f.write('[')
-        f.close()
-        f = open('../data/logs/logs_with_jsr.json', 'a', newline='')
-        f.write('[')
-        f.close()
-        #######################################
-
-        top_sites = my_io.read_n_top_rows_csv(n=Config.number_of_sites_for_testing)
-
-        browser_jobs = np.array_split(top_sites, Config.number_of_one_browser_instances)
-        testing_threads = []
-        for browser_job in browser_jobs:
-            new_thread = Thread(target=start_test, args=(browser_job,))
-            testing_threads.append(new_thread)
-            new_thread.start()
-            time.sleep(2)
-
-        for thread in testing_threads:
-            thread.join()
-        #########################################
-        f = open('../data/logs/logs_without_jsr.json', 'a', newline='')
-        f.write(']')
-        f.close()
-        f = open('../data/logs/logs_with_jsr.json', 'a', newline='')
-        f.write(']')
-        f.close()
-        #############################################
-
+        init_output_files()
+        run_getting_logs_threads()
+        finish_output_files()
     finally:
         grid.end_nodes(nodes)
         grid.end_server(server)
+
 
 if __name__ == "__main__":
     main()
