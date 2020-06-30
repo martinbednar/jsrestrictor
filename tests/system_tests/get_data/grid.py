@@ -7,7 +7,7 @@ from configuration import Config
 def start_server():
     start_server_command = ['java', '-jar', 'selenium-server-standalone-3.141.59.jar', '-role', 'hub']
     server = Popen(start_server_command)
-    time.sleep(5)
+    time.sleep(6)
     return server
 
 
@@ -16,7 +16,7 @@ def start_nodes():
     nodes = []
     for node_number in range(Config.number_of_grid_nodes):
         nodes.append(Popen(start_node_command))
-        time.sleep(5)
+        time.sleep(7)
     return nodes
 
 
