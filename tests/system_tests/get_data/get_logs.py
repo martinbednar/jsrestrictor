@@ -35,7 +35,7 @@ def finish_output_files():
         io.append_file("../data/logs/logs.json","]")
 
 
-def get_page_logs_thread(my_driver, site, ret_logs):
+def get_page_logs_thread(my_driver, site, logs_ready, ret_logs):
     logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
     try:
         my_driver.get('http://www.' + site)
@@ -51,6 +51,7 @@ def get_page_logs_thread(my_driver, site, ret_logs):
             logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
     finally:
         print("before send logs")
+        logs_ready.value = 1
         ret_logs.send(logs)
         print("after_send_logs")
 
@@ -62,6 +63,9 @@ def get_logs_thread(thread_mark, top_sites):
     receive_logs_without_jsr_pipe, send_logs_without_jsr_pipe = multiprocessing.Pipe(False)
     receive_logs_with_jsr_pipe, send_logs_with_jsr_pipe = multiprocessing.Pipe(False)
 
+    send_logs_without_jsr_pipe_ready = multiprocessing.Value('i', 0)
+    send_logs_with_jsr_pipe_ready = multiprocessing.Value('i', 0)
+
     i = 1
     for top_site in top_sites:
         print("Thread " + thread_mark + ": Page " + str(i) + " of " + str(len(top_sites)) + ": " + top_site)
@@ -69,39 +73,52 @@ def get_logs_thread(thread_mark, top_sites):
         logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
         logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
 
-        get_logs_without_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_without_jsr, top_site, send_logs_without_jsr_pipe))
+        send_logs_without_jsr_pipe_ready.value = 0
+        send_logs_with_jsr_pipe_ready.value = 0
+
+        get_logs_without_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_without_jsr, top_site, send_logs_without_jsr_pipe_ready, send_logs_without_jsr_pipe))
         get_logs_without_jsr_thread.start()
 
-        get_logs_with_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_with_jsr, top_site, send_logs_with_jsr_pipe))
+        get_logs_with_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_with_jsr, top_site, send_logs_with_jsr_pipe_ready, send_logs_with_jsr_pipe))
         get_logs_with_jsr_thread.start()
 
-        logs_without_jsr = receive_logs_without_jsr_pipe.recv()
-        logs_with_jsr = receive_logs_with_jsr_pipe.recv()
+        for j in range(12):
+            time.sleep(5)
 
-        print("before join")
-        get_logs_without_jsr_thread.join(60)
-        print("Joined 1.")
-        get_logs_with_jsr_thread.join(30)
-        print("Joined 2.")
+            if send_logs_without_jsr_pipe_ready.value == 1 and send_logs_with_jsr_pipe_ready.value == 1:
+                print("breaked")
+                break
 
-
-        if get_logs_without_jsr_thread.is_alive():
-            print("running... let's kill it...")
-            # Terminate
-            get_logs_without_jsr_thread.terminate()
-            print("terminated")
-            get_logs_without_jsr_thread.join()
-            print("joined after terminated")
+        if send_logs_without_jsr_pipe_ready.value == 1:
+            logs_without_jsr = receive_logs_without_jsr_pipe.recv()
+            get_logs_without_jsr_thread.join(10)
+            if get_logs_without_jsr_thread.is_alive():
+                get_logs_without_jsr_thread.terminate()
+                get_logs_without_jsr_thread.join()
+                logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+        else:
             logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+            if get_logs_without_jsr_thread.is_alive():
+                get_logs_without_jsr_thread.terminate()
+                get_logs_without_jsr_thread.join()
+
+        if send_logs_with_jsr_pipe_ready.value == 1:
+            logs_with_jsr = receive_logs_with_jsr_pipe.recv()
+            get_logs_with_jsr_thread.join(10)
+            if get_logs_with_jsr_thread.is_alive():
+                get_logs_with_jsr_thread.terminate()
+                get_logs_with_jsr_thread.join()
+                logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+        else:
+            logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+            if get_logs_with_jsr_thread.is_alive():
+                get_logs_with_jsr_thread.terminate()
+                get_logs_with_jsr_thread.join()
+
+
         if logs_without_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE" or logs_without_jsr == "":
             driver_without_jsr = driver.create_driver(with_jsr=False)
 
-        if get_logs_with_jsr_thread.is_alive():
-            print("running... let's kill it... with jsr")
-            # Terminate
-            get_logs_with_jsr_thread.terminate()
-            get_logs_with_jsr_thread.join()
-            logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
         if logs_with_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE" or logs_without_jsr == "":
             driver_with_jsr = driver.create_driver(with_jsr=True)
 
