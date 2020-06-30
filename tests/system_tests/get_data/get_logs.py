@@ -36,6 +36,7 @@ def finish_output_files():
 
 
 def get_page_logs_thread(my_driver, site, ret_logs):
+    logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
     try:
         my_driver.get('http://www.' + site)
         time.sleep(5)
@@ -48,12 +49,18 @@ def get_page_logs_thread(my_driver, site, ret_logs):
         except:
             print("An exception occurred while getting page logs: " + top_site)
             logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
-    ret_logs.send(logs)
+    finally:
+        print("before send logs")
+        ret_logs.send(logs)
+        print("after_send_logs")
 
 
 def get_logs_thread(thread_mark, top_sites):
     driver_without_jsr = driver.create_driver(with_jsr=False)
     driver_with_jsr = driver.create_driver(with_jsr=True)
+
+    receive_logs_without_jsr_pipe, send_logs_without_jsr_pipe = multiprocessing.Pipe(False)
+    receive_logs_with_jsr_pipe, send_logs_with_jsr_pipe = multiprocessing.Pipe(False)
 
     i = 1
     for top_site in top_sites:
@@ -62,18 +69,19 @@ def get_logs_thread(thread_mark, top_sites):
         logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
         logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
 
-        receive_logs_without_jsr_pipe, send_logs_without_jsr_pipe = multiprocessing.Pipe(False)
-        receive_logs_with_jsr_pipe, send_logs_with_jsr_pipe = multiprocessing.Pipe(False)
-
         get_logs_without_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_without_jsr, top_site, send_logs_without_jsr_pipe))
         get_logs_without_jsr_thread.start()
 
         get_logs_with_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_with_jsr, top_site, send_logs_with_jsr_pipe))
         get_logs_with_jsr_thread.start()
 
-        get_logs_without_jsr_thread.join(240)
+        logs_without_jsr = receive_logs_without_jsr_pipe.recv()
+        logs_with_jsr = receive_logs_with_jsr_pipe.recv()
+
+        print("before join")
+        get_logs_without_jsr_thread.join(60)
         print("Joined 1.")
-        get_logs_with_jsr_thread.join(60)
+        get_logs_with_jsr_thread.join(30)
         print("Joined 2.")
 
 
@@ -85,12 +93,8 @@ def get_logs_thread(thread_mark, top_sites):
             get_logs_without_jsr_thread.join()
             print("joined after terminated")
             logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+        if logs_without_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE" or logs_without_jsr == "":
             driver_without_jsr = driver.create_driver(with_jsr=False)
-        else:
-            #if not queue_without_jsr.empty():
-            #    logs_without_jsr = queue_without_jsr.get()
-            #else:
-            logs_without_jsr = receive_logs_without_jsr_pipe.recv()
 
         if get_logs_with_jsr_thread.is_alive():
             print("running... let's kill it... with jsr")
@@ -98,14 +102,8 @@ def get_logs_thread(thread_mark, top_sites):
             get_logs_with_jsr_thread.terminate()
             get_logs_with_jsr_thread.join()
             logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+        if logs_with_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE" or logs_without_jsr == "":
             driver_with_jsr = driver.create_driver(with_jsr=True)
-        else:
-            #if not queue_with_jsr.empty():
-            #    logs_with_jsr = queue_with_jsr.get()
-            #else:
-            logs_with_jsr = receive_logs_with_jsr_pipe.recv()
-
-        print("terminating finished")
 
         #print("Thread " + thread_mark + ": Page " + str(i) + " of " + str(len(top_sites)) + ": " + top_site + ": logs_with_jsr")
         page_logs = Site_logs(top_site, logs_without_jsr, logs_with_jsr)
@@ -113,6 +111,11 @@ def get_logs_thread(thread_mark, top_sites):
         io.append_file("../data/logs/logs.json",page_logs.to_json() + ',')
         #print("Thread " + thread_mark + ": Page " + str(i) + " of " + str(len(top_sites)) + ": " + top_site + ": append_file")
         i += 1
+    receive_logs_without_jsr_pipe.close()
+    send_logs_without_jsr_pipe.close()
+    receive_logs_with_jsr_pipe.close()
+    send_logs_with_jsr_pipe.close()
+
     driver_without_jsr.quit()
     driver_with_jsr.quit()
 
