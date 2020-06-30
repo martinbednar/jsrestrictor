@@ -35,61 +35,45 @@ def finish_output_files():
         io.append_file("../data/logs/logs.json","]")
 
 
-def get_page_logs_thread(my_driver, top_site, q):
+def get_page_logs_thread(my_driver, site, ret_logs):
     try:
-        my_driver.execute_script("console.clear()")
-        print("Getting page " + top_site + " started.")
-        my_driver.get('http://www.' + top_site)
-        print("Getting page " + top_site + " finished.")
-        print("Sleeping page " + top_site + " started.")
+        my_driver.get('http://www.' + site)
         time.sleep(5)
-        print("Sleeping page " + top_site + " finished.")
     except:
         print("An exception occurred while loading page: " + top_site)
         logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
     else:
         try:
-            print("Getting log " + top_site + " started.")
             logs = my_driver.get_log('browser')
-            print(logs)
-            print("Getting log " + top_site + " finished.")
         except:
             print("An exception occurred while getting page logs: " + top_site)
             logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
-    q.put(logs)
-    return
+    ret_logs.send(logs)
 
 
 def get_logs_thread(thread_mark, top_sites):
     driver_without_jsr = driver.create_driver(with_jsr=False)
     driver_with_jsr = driver.create_driver(with_jsr=True)
 
-    queue_without_jsr = multiprocessing.Queue()
-    queue_with_jsr = multiprocessing.Queue()
-
     i = 1
     for top_site in top_sites:
         print("Thread " + thread_mark + ": Page " + str(i) + " of " + str(len(top_sites)) + ": " + top_site)
 
-        #Clear queues
-        while not queue_without_jsr.empty():
-            queue_without_jsr.get()
-        while not queue_with_jsr.empty():
-            queue_with_jsr.get()
-
         logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
         logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
 
-        get_logs_without_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_without_jsr, top_site, queue_without_jsr))
+        receive_logs_without_jsr_pipe, send_logs_without_jsr_pipe = multiprocessing.Pipe(False)
+        receive_logs_with_jsr_pipe, send_logs_with_jsr_pipe = multiprocessing.Pipe(False)
+
+        get_logs_without_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_without_jsr, top_site, send_logs_without_jsr_pipe))
         get_logs_without_jsr_thread.start()
 
-        get_logs_with_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_with_jsr, top_site, queue_with_jsr))
+        get_logs_with_jsr_thread = multiprocessing.Process(target=get_page_logs_thread, args=(driver_with_jsr, top_site, send_logs_with_jsr_pipe))
         get_logs_with_jsr_thread.start()
 
-        print("Waiting to join.")
-        get_logs_without_jsr_thread.join(30)
+        get_logs_without_jsr_thread.join(240)
         print("Joined 1.")
-        get_logs_with_jsr_thread.join(30)
+        get_logs_with_jsr_thread.join(60)
         print("Joined 2.")
 
 
@@ -101,11 +85,12 @@ def get_logs_thread(thread_mark, top_sites):
             get_logs_without_jsr_thread.join()
             print("joined after terminated")
             logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+            driver_without_jsr = driver.create_driver(with_jsr=False)
         else:
-            if not queue_without_jsr.empty():
-                logs_without_jsr = queue_without_jsr.get()
-            else:
-                logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+            #if not queue_without_jsr.empty():
+            #    logs_without_jsr = queue_without_jsr.get()
+            #else:
+            logs_without_jsr = receive_logs_without_jsr_pipe.recv()
 
         if get_logs_with_jsr_thread.is_alive():
             print("running... let's kill it... with jsr")
@@ -113,28 +98,14 @@ def get_logs_thread(thread_mark, top_sites):
             get_logs_with_jsr_thread.terminate()
             get_logs_with_jsr_thread.join()
             logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+            driver_with_jsr = driver.create_driver(with_jsr=True)
         else:
-            if not queue_with_jsr.empty():
-                logs_with_jsr = queue_with_jsr.get()
-            else:
-                logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
-
+            #if not queue_with_jsr.empty():
+            #    logs_with_jsr = queue_with_jsr.get()
+            #else:
+            logs_with_jsr = receive_logs_with_jsr_pipe.recv()
 
         print("terminating finished")
-        if logs_without_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE":
-            print("before driver close")
-            #os.system("taskkill /f /im chromedriver.exe")
-            #driver_without_jsr.service.process.kill()
-            #driver_with_jsr.service.process.kill()
-            driver_without_jsr = driver.create_driver(with_jsr=False)
-            print("after driver close")
-        if logs_with_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE":
-            print("before driver close")
-            #os.system("taskkill /f /im chromedriver.exe")
-            #driver_without_jsr.service.process.kill()
-            #driver_with_jsr.service.process.kill()
-            driver_with_jsr = driver.create_driver(with_jsr=True)
-            print("after driver close")
 
         #print("Thread " + thread_mark + ": Page " + str(i) + " of " + str(len(top_sites)) + ": " + top_site + ": logs_with_jsr")
         page_logs = Site_logs(top_site, logs_without_jsr, logs_with_jsr)
@@ -170,6 +141,7 @@ def main():
         run_getting_logs_threads()
         finish_output_files()
     finally:
+        time.sleep(5)
         os.system("taskkill /f /im chromedriver.exe")
         os.system("taskkill /f /im chrome.exe")
         grid.end_nodes(nodes)
