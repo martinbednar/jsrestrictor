@@ -70,8 +70,8 @@ def get_logs_thread(thread_mark, top_sites):
         get_logs_with_jsr_thread = Process(target=get_page_logs_thread, args=(driver_with_jsr, top_site, send_logs_with_jsr_pipe_ready, send_logs_with_jsr_pipe))
         get_logs_with_jsr_thread.start()
 
-        for _ in range(24):
-            sleep(5)
+        for _ in range(int(Config.get_page_logs_timeout/Config.wait_between_checks_if_logs_loaded)):
+            sleep(Config.wait_between_checks_if_logs_loaded)
             if send_logs_without_jsr_pipe_ready.value == 1 and send_logs_with_jsr_pipe_ready.value == 1:
                 break
 
