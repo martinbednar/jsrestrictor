@@ -9,6 +9,22 @@ import grid
 import driver
 
 
+def receive_logs(send_logs_pipe_ready, receive_logs_pipe, get_logs_thread):
+    if send_logs_pipe_ready.value == 1:
+        logs = receive_logs_pipe.recv()
+        get_logs_thread.join(10)
+        if get_logs_thread.is_alive():
+            get_logs_thread.terminate()
+            get_logs_thread.join()
+            logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+    else:
+        logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+        if get_logs_thread.is_alive():
+            get_logs_thread.terminate()
+            get_logs_thread.join()
+    return logs
+
+
 def get_page_logs_thread(my_driver, site, logs_ready, ret_logs):
     logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
     try:
@@ -38,9 +54,9 @@ def get_logs_thread(thread_mark, top_sites):
     send_logs_without_jsr_pipe_ready = Value('i', 0)
     send_logs_with_jsr_pipe_ready = Value('i', 0)
 
-    i = 1
+    site_number = 1
     for top_site in top_sites:
-        print("Thread " + thread_mark + ": Page " + str(i) + " of " + str(len(top_sites)) + ": " + top_site)
+        print("Thread " + thread_mark + ": Page " + str(site_number) + " of " + str(len(top_sites)) + ": " + top_site)
 
         logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
         logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
@@ -54,38 +70,13 @@ def get_logs_thread(thread_mark, top_sites):
         get_logs_with_jsr_thread = Process(target=get_page_logs_thread, args=(driver_with_jsr, top_site, send_logs_with_jsr_pipe_ready, send_logs_with_jsr_pipe))
         get_logs_with_jsr_thread.start()
 
-        for j in range(12):
+        for _ in range(24):
             sleep(5)
-
             if send_logs_without_jsr_pipe_ready.value == 1 and send_logs_with_jsr_pipe_ready.value == 1:
                 break
 
-        if send_logs_without_jsr_pipe_ready.value == 1:
-            logs_without_jsr = receive_logs_without_jsr_pipe.recv()
-            get_logs_without_jsr_thread.join(10)
-            if get_logs_without_jsr_thread.is_alive():
-                get_logs_without_jsr_thread.terminate()
-                get_logs_without_jsr_thread.join()
-                logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
-        else:
-            logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
-            if get_logs_without_jsr_thread.is_alive():
-                get_logs_without_jsr_thread.terminate()
-                get_logs_without_jsr_thread.join()
-
-        if send_logs_with_jsr_pipe_ready.value == 1:
-            logs_with_jsr = receive_logs_with_jsr_pipe.recv()
-            get_logs_with_jsr_thread.join(10)
-            if get_logs_with_jsr_thread.is_alive():
-                get_logs_with_jsr_thread.terminate()
-                get_logs_with_jsr_thread.join()
-                logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
-        else:
-            logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
-            if get_logs_with_jsr_thread.is_alive():
-                get_logs_with_jsr_thread.terminate()
-                get_logs_with_jsr_thread.join()
-
+        logs_without_jsr = receive_logs(send_logs_without_jsr_pipe_ready, receive_logs_without_jsr_pipe, get_logs_without_jsr_thread)
+        logs_with_jsr = receive_logs(send_logs_with_jsr_pipe_ready, receive_logs_with_jsr_pipe, get_logs_with_jsr_thread)
 
         if logs_without_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE" or logs_without_jsr == "":
             driver_without_jsr = driver.create_driver(with_jsr=False)
@@ -95,7 +86,8 @@ def get_logs_thread(thread_mark, top_sites):
 
         page_logs = Logs(top_site, logs_without_jsr, logs_with_jsr)
         io.append_file("../data/logs/logs.json",page_logs.to_json() + ',')
-        i += 1
+        site_number += 1
+
     receive_logs_without_jsr_pipe.close()
     send_logs_without_jsr_pipe.close()
     receive_logs_with_jsr_pipe.close()
