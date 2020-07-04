@@ -85,7 +85,7 @@ def get_logs_thread(thread_mark, top_sites):
             driver_with_jsr = driver.create_driver(with_jsr=True)
 
         page_logs = Logs(top_site, logs_without_jsr, logs_with_jsr)
-        io.append_file("../data/logs/logs.json",page_logs.to_json() + ',')
+        io.append_file("../data/logs/logs_part_" + thread_mark + ".json", page_logs.to_json() + ',')
         site_number += 1
 
     receive_logs_without_jsr_pipe.close()
