@@ -34,7 +34,6 @@ def init_output_files():
 
 def finish_output_files():
     logs_parts = list(Path("../data/logs").glob("logs_part_*.json"))
-    print(logs_parts)
 
     f = open("../data/logs/logs.json", 'a', newline='')
     f.write("[")
