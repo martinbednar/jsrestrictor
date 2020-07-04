@@ -2,6 +2,7 @@ import os
 import csv
 import numpy as np
 from pathlib import Path
+from os import system
 
 
 def read_n_top_rows_csv(n):
@@ -21,3 +22,18 @@ def append_file(path,text):
     f = open(path, 'a', newline='')
     f.write(text)
     f.close()
+
+
+def init_output_files():
+        create_folder_structure("../data/logs")
+        delete_file_if_exists("../data/logs/logs.json")
+        append_file("../data/logs/logs.json","[")
+
+
+def finish_output_files():
+        append_file("../data/logs/logs.json","]")
+
+
+def terminate_zombie_processes():
+    system("taskkill /f /im chromedriver.exe")
+    system("taskkill /f /im chrome.exe")
