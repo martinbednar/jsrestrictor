@@ -1,8 +1,7 @@
-import os
+from os import system, remove
 import csv
 import numpy as np
 from pathlib import Path
-from os import system
 import glob
 
 
@@ -14,7 +13,7 @@ def read_n_top_rows_csv(n):
 
 def delete_files_if_exist(dir, files_regex):
     for path in Path(dir).glob(files_regex):
-        os.remove(path)
+        remove(path)
 
 
 def create_folder_structure(path):
@@ -41,12 +40,12 @@ def finish_output_files():
         g = open(path, 'r', newline='')
         f.write(g.read())
         g.close()
-        os.remove(path)
+        remove(path)
     with logs_parts[-1] as path:
         g = open(path, 'r', newline='')
         f.write(g.read()[:-1])
         g.close()
-        os.remove(path)
+        remove(path)
     f.write("]")
     f.close()
 

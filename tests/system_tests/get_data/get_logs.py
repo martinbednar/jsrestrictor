@@ -55,8 +55,9 @@ def get_logs_thread(thread_mark, top_sites):
     send_logs_with_jsr_pipe_ready = Value('i', 0)
 
     site_number = 1
+    top_sites_number = len(top_sites)
     for top_site in top_sites:
-        print("Thread " + thread_mark + ": Page " + str(site_number) + " of " + str(len(top_sites)) + ": " + top_site)
+        print("Thread " + thread_mark + ": Page " + str(site_number) + " of " + str(top_sites_number) + ": " + top_site)
 
         logs_without_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
         logs_with_jsr = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
