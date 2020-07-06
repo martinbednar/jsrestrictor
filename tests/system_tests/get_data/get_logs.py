@@ -25,7 +25,7 @@ def receive_logs(send_logs_pipe_ready, receive_logs_pipe, get_logs_thread):
     return logs
 
 
-def get_page_logs_thread(my_driver, site, logs_ready, ret_logs):
+def get_page_logs_thread(my_driver, with_jsr, site, site_number, logs_ready, ret_logs):
     logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
     try:
         my_driver.get('http://www.' + site)
@@ -39,12 +39,21 @@ def get_page_logs_thread(my_driver, site, logs_ready, ret_logs):
         except:
             print("An exception occurred while getting page logs: " + top_site)
             logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
+
+        try:
+            jsr = "without"
+            if with_jsr:
+                jsr = "with"
+            io.create_folder_structure("../data/screenshots/" + str(site_number) + "_" + site)
+            my_driver.save_screenshot("../data/screenshots/" + str(site_number) + "_" + site + "/" + jsr + "_jsr" + ".png")
+        except:
+            print("An exception occurred while getting page screenshot: " + top_site)
     finally:
         logs_ready.value = 1
         ret_logs.send(logs)
 
 
-def get_logs_thread(thread_mark, top_sites):
+def get_logs_thread(thread_mark, top_sites, sites_offset):
     driver_without_jsr = driver.create_driver(with_jsr=False)
     driver_with_jsr = driver.create_driver(with_jsr=True)
 
@@ -65,10 +74,10 @@ def get_logs_thread(thread_mark, top_sites):
         send_logs_without_jsr_pipe_ready.value = 0
         send_logs_with_jsr_pipe_ready.value = 0
 
-        get_logs_without_jsr_thread = Process(target=get_page_logs_thread, args=(driver_without_jsr, top_site, send_logs_without_jsr_pipe_ready, send_logs_without_jsr_pipe))
+        get_logs_without_jsr_thread = Process(target=get_page_logs_thread, args=(driver_without_jsr, False, top_site, sites_offset + site_number, send_logs_without_jsr_pipe_ready, send_logs_without_jsr_pipe))
         get_logs_without_jsr_thread.start()
 
-        get_logs_with_jsr_thread = Process(target=get_page_logs_thread, args=(driver_with_jsr, top_site, send_logs_with_jsr_pipe_ready, send_logs_with_jsr_pipe))
+        get_logs_with_jsr_thread = Process(target=get_page_logs_thread, args=(driver_with_jsr, True, top_site, sites_offset + site_number, send_logs_with_jsr_pipe_ready, send_logs_with_jsr_pipe))
         get_logs_with_jsr_thread.start()
 
         for _ in range(int(Config.get_page_logs_timeout/Config.wait_between_checks_if_logs_loaded)):
@@ -103,11 +112,13 @@ def run_getting_logs_threads():
     browser_jobs = array_split(top_sites, Config.number_of_browser_instances)
     testing_threads = []
     thread_mark = 'A'
+    sites_offset = 0
     for browser_job in browser_jobs:
-        new_thread = Process(target=get_logs_thread, args=(thread_mark,browser_job))
+        new_thread = Process(target=get_logs_thread, args=(thread_mark, browser_job, sites_offset))
         testing_threads.append(new_thread)
         new_thread.start()
         thread_mark = chr(ord(thread_mark) + 1)
+        sites_offset += len(browser_job)
 
     for thread in testing_threads:
         thread.join()
