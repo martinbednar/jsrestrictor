@@ -22,24 +22,3 @@ def get_json_file_content(path):
 def write_file(path, content):
     with open(path, 'w', newline='') as f:
         f.write(content)
-
-
-def html_header():
-    return "<html>" \
-           "<head><title>Logs comparsion</title>" \
-           "<style>" \
-           "body {background-color: white} " \
-           "table {width: 100%; border-collapse: collapse; table-layout: fixed;} " \
-           ".added-log {background-color: LightPink} " \
-           "th, td {width: 50%; border: 1px solid black; word-wrap: break-word; padding: 5px;} " \
-           ".colored-results-table-visible td {width: 33%; border: none; padding: 5px; color: white; text-align: center;} " \
-           ".colored-results-table-visible .method {background-color: red;} " \
-           ".colored-results-table {display: none;} " \
-           ".colored-results-table-visible {display: table; margin-bottom: 5px} " \
-           "</style>" \
-           "</head>" \
-           "<body><h1>Logs comparsion</h1>"
-
-
-def html_footer():
-    return "<br><br></body></html>"

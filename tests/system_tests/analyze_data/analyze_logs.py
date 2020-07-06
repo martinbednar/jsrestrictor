@@ -4,8 +4,29 @@ import simple_comparsion as simple
 import io_funcs as io
 
 
+def html_header():
+    return "<html>" \
+           "<head><title>Logs comparsion</title>" \
+           "<style>" \
+           "body {background-color: white} " \
+           "table {width: 100%; border-collapse: collapse; table-layout: fixed;} " \
+           ".added-log {background-color: LightPink} " \
+           "th, td {width: 50%; border: 1px solid black; word-wrap: break-word; padding: 5px;} " \
+           ".colored-results-table-visible td {width: 33%; border: none; padding: 5px; color: white; text-align: center;} " \
+           ".colored-results-table-visible .method {background-color: red;} " \
+           ".colored-results-table {display: none;} " \
+           ".colored-results-table-visible {display: table; margin-bottom: 5px} " \
+           "</style>" \
+           "</head>" \
+           "<body><h1>Logs comparsion</h1>"
+
+
+def html_footer():
+    return "<br><br></body></html>"
+
+
 def build_site_logs_table(site):
-    output = "<br><h2>" + site['site'] + '</h2><table><tr><th>Without JSR</th><th>With JSR</th></tr>'
+    output = "<br><h2>" + site['site'] + "</h2><table><tr><th>Without JSR</th><th>With JSR</th></tr>"
     i = 0
     while i < max(len(site['logs_without_jsr']), len(site['logs_with_jsr'])):
         output += "<tr><td>"
@@ -53,14 +74,14 @@ def main():
 
     sites_logs = io.get_json_file_content("../data/logs/logs.json")
 
-    output = io.html_header()
+    output = html_header()
     j = 1
     sites_number = len(sites_logs)
     for site in sites_logs:
         print("Site " + str(j) + " of " + str(sites_number) + ": " + site['site'])
         output += build_site_logs_table(site)
         j += 1
-    output += io.html_footer()
+    output += html_footer()
 
     io.write_file("../data/logs/logs_comparsion.html", output)
 
