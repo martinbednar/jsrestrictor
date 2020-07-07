@@ -25,8 +25,8 @@ def html_footer():
     return "<br><br></body></html>"
 
 
-def build_site_logs_table(site):
-    output = "<br><h2>" + site['site'] + "</h2><table><tr><th>Without JSR</th><th>With JSR</th></tr>"
+def build_site_logs_table(site, site_number):
+    output = "<br><h2>" + str(site_number) + ") " + site['site'] + "</h2><table><tr><th>Without JSR</th><th>With JSR</th></tr>"
     i = 0
     while i < max(len(site['logs_without_jsr']), len(site['logs_with_jsr'])):
         output += "<tr><td>"
@@ -79,7 +79,7 @@ def main():
     sites_number = len(sites_logs)
     for site in sites_logs:
         print("Site " + str(j) + " of " + str(sites_number) + ": " + site['site'])
-        output += build_site_logs_table(site)
+        output += build_site_logs_table(site, j)
         j += 1
     output += html_footer()
 
