@@ -7,6 +7,17 @@ from website import Logs
 import io_funcs as io
 import grid
 import driver
+from selenium.webdriver.support import expected_conditions as ec
+
+
+def confirm_alerts_if_open(my_driver):
+    try:
+        my_driver.switch_to.alert.accept()
+    except:
+        return
+    else:
+        sleep(1)
+        confirm_alerts_if_open(my_driver)
 
 
 def receive_logs(send_logs_pipe_ready, receive_logs_pipe, get_logs_thread):
@@ -28,34 +39,39 @@ def receive_logs(send_logs_pipe_ready, receive_logs_pipe, get_logs_thread):
 def get_page_logs_thread(my_driver, with_jsr, site, site_number, logs_ready, ret_logs):
     logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
     try:
+        confirm_alerts_if_open(my_driver)
         my_driver.get('http://www.' + site)
         sleep(5)
+        confirm_alerts_if_open(my_driver)
     except:
-        print("An exception occurred while loading page: " + top_site)
+        print("An exception occurred while loading page: " + site)
         logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
     else:
         try:
+            confirm_alerts_if_open(my_driver)
             logs = my_driver.get_log('browser')
+            confirm_alerts_if_open(my_driver)
         except:
-            print("An exception occurred while getting page logs: " + top_site)
+            print("An exception occurred while getting page logs: " + site)
             logs = "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
-
         try:
             jsr = "without"
             if with_jsr:
                 jsr = "with"
             io.create_folder_structure("../data/screenshots/" + str(site_number) + "_" + site)
+            confirm_alerts_if_open(my_driver)
             my_driver.save_screenshot("../data/screenshots/" + str(site_number) + "_" + site + "/" + jsr + "_jsr" + ".png")
         except:
-            print("An exception occurred while getting page screenshot: " + top_site)
+            print("An exception occurred while getting page screenshot: " + site)
     finally:
+        confirm_alerts_if_open(my_driver)
         logs_ready.value = 1
         ret_logs.send(logs)
 
 
 def get_logs_thread(thread_mark, top_sites, sites_offset):
-    driver_without_jsr = driver.create_driver(with_jsr=False)
-    driver_with_jsr = driver.create_driver(with_jsr=True)
+    driver_without_jsr = driver.create_driver(with_jsr=False, jsr_level=None)
+    driver_with_jsr = driver.create_driver(with_jsr=True, jsr_level=Config.jsr_level)
 
     receive_logs_without_jsr_pipe, send_logs_without_jsr_pipe = Pipe(False)
     receive_logs_with_jsr_pipe, send_logs_with_jsr_pipe = Pipe(False)
@@ -89,10 +105,10 @@ def get_logs_thread(thread_mark, top_sites, sites_offset):
         logs_with_jsr = receive_logs(send_logs_with_jsr_pipe_ready, receive_logs_with_jsr_pipe, get_logs_with_jsr_thread)
 
         if logs_without_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE" or logs_without_jsr == "":
-            driver_without_jsr = driver.create_driver(with_jsr=False)
+            driver_without_jsr = driver.create_driver(with_jsr=False, jsr_level=None)
 
         if logs_with_jsr == "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE" or logs_without_jsr == "":
-            driver_with_jsr = driver.create_driver(with_jsr=True)
+            driver_with_jsr = driver.create_driver(with_jsr=True, jsr_level=Config.jsr_level)
 
         page_logs = Logs(top_site, logs_without_jsr, logs_with_jsr)
         io.append_file("../data/logs/logs_part_" + thread_mark + ".json", page_logs.to_json() + ',')

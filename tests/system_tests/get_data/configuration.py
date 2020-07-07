@@ -1,5 +1,8 @@
 ﻿class MetaConfig(type):
     @property
+    def jsr_level(self):
+        return self._jsr_level
+    @property
     def number_of_sites_for_testing(self):
         return self._number_of_sites_for_testing
     @property
@@ -17,10 +20,11 @@
 
 
 class Config(metaclass=MetaConfig):
-    _number_of_sites_for_testing = 100
-    _number_of_grid_nodes = 2
+    _jsr_level = 3
+    _number_of_sites_for_testing = 10
+    _number_of_grid_nodes = 1
     #max is number_of_grid_nodes * 5
-    _number_of_browser_instances = 2
+    _number_of_browser_instances = 1
     # in seconds
     _get_page_logs_timeout = 180
     #in seconds
