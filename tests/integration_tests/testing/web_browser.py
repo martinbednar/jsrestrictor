@@ -79,10 +79,7 @@ class Browser:
     # To set JSR level is needed to go to JSR option page and select given default level.
     @jsr_level.setter
     def jsr_level(self, level):
-        if self.type == BrowserType.CHROME:
-            self.driver.get(self._jsr_options_page)
-        elif self.type == BrowserType.FIREFOX:
-            self.driver.get(self._jsr_options_page)
+        self.driver.get(self._jsr_options_page)
         self.driver.find_element_by_id('level-' + str(level)).click()
         self.__jsr_level = level
         self.driver.get(get_config("testing_page"))
