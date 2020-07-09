@@ -44,9 +44,6 @@ Firefox will ask you if you want to enable the page to access location. Check op
 
 Google Chrome is already prepared in default state for testing JSR, the Chrome settings do not need to be changed.
 
-Finally, try to search "FIT VUT" with [Google search engine](https://www.google.com/) in both web browsers.
-You may be asked to confirm conditions of personal data protection and licence agreement. Confirm it manually. Tests are not prepared to automatically confirm mentioned agreements.
-
 
 ## Download web browser drivers
 
