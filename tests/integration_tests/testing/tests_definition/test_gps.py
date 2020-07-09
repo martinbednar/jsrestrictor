@@ -10,7 +10,21 @@ from math_operations import is_in_accuracy
 #  this variable is provided to gps tests and values in position variable are compared with expected values.
 @pytest.fixture(scope='module', autouse=True)
 def position(browser):
-    return get_position(browser.driver)
+    position = {
+        'accuracy'        : "null",
+        'altitude'        : "null",
+        'altitudeaccurac' : "null",
+        'heading'         : "null",
+        'latitude'        : "null",
+        'longitude'       : "null",
+        'speed'           : "null",
+        'timestamp'       : "null"
+    }
+    try:
+        position = get_position(browser.driver)
+    except:
+        print("\nCan not read GPS data.")
+    return position
 
 
 ## Test accuracy of the latitude and longitude properties in meters.
