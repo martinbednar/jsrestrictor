@@ -14,10 +14,10 @@ def device(browser):
 
 ## Test device memory.
 def test_device_memory(browser, device, expected):
-	if expected.device.deviceMemory == 'REAL VALUE':
+	if expected.device.deviceMemory[browser.type] == 'REAL VALUE':
 		assert device['deviceMemory'] == browser.real.device.deviceMemory
 	else:
-		assert device['deviceMemory'] == expected.device.deviceMemory
+		assert device['deviceMemory'] == expected.device.deviceMemory[browser.type]
 
 
 ## Test hardware concurrency.
