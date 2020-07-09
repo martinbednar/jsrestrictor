@@ -17,8 +17,8 @@ def confirm_alerts_if_open(my_driver, with_jsr, time):
         i=0
         while i<time:
             try:
-                my_driver.switch_to.alert.accept()
                 sleep(0.1)
+                my_driver.switch_to.alert.accept()
             except:
                 pass
             finally:
