@@ -71,7 +71,7 @@ def get_referrer(driver):
     actions = ActionChains(driver)
     actions.send_keys(Keys.RETURN)
     actions.perform()
-    sleep(2)
+    sleep(4)
     return driver.execute_script("return document.referrer")
 
 
