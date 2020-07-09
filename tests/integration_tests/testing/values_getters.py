@@ -24,7 +24,6 @@ def get_position(driver):
     WebDriverWait(driver, 10).until(
         ec.presence_of_element_located((By.ID, 'mapnavi'))
     )
-    sleep(10)
     location = driver.find_element_by_id('placeToWriteGPSDetails').text
     location = location.replace(" ", "").split()
     position = {}
