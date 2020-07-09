@@ -63,7 +63,6 @@ def get_device(driver):
 #  In this case, webpage amiunique.org is opened through test page and referrer on page amiunique.org is returned.
 def get_referrer(driver):
     driver.get(get_config("testing_page"))
-    sleep(2)
     actions = ActionChains(driver)
     actions.send_keys(Keys.TAB)
     actions.perform()
@@ -87,7 +86,7 @@ def is_canvas_spoofed(driver):
         driver.find_element_by_xpath("//button[text()='Add text to canvas']").click()
         driver.find_element_by_xpath("//button[text()='Get data and show image in canvas frame']").click()
         is_spoofed = driver.execute_script("var canvas = document.getElementById('canvas1'); return !canvas.getContext('2d')"
-                                     ".getImageData(0, 0, canvas.width, canvas.height).data.some(channel => channel !== 20)")
+                                     ".getImageData(0, 0, canvas.width, canvas.height).data.some(channel => channel !== 0)")
     except:
         return "ERROR"
     else:
