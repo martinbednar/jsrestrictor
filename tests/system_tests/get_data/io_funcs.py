@@ -1,19 +1,25 @@
-from os import system, remove
+from os import system, remove, path
+from shutil import rmtree
 import csv
 import numpy as np
 from pathlib import Path
 import glob
 
+from configuration import Config
+
 
 def read_n_top_rows_csv(n):
-    with open('tranco.csv', 'r') as csvTopSites:
+    with open(Config.sites_to_test_csv_path, 'r') as csvTopSites:
         data = np.array(list(csv.reader(csvTopSites)))
     return data[0:n, 1]
 
 
 def delete_files_if_exist(dir, files_regex):
-    for path in Path(dir).glob(files_regex):
-        remove(path)
+    for file_path in Path(dir).glob(files_regex):
+        if path.isdir(file_path):
+            rmtree(file_path)
+        elif path.isfile(file_path) or path.islink(file_path):
+            remove(file_path)
 
 
 def create_folder_structure(path):
@@ -28,7 +34,9 @@ def append_file(path, text):
 
 def init_output_files():
     create_folder_structure("../data/logs")
-    delete_files_if_exist("../data/logs", "logs*.json")
+    create_folder_structure("../data/screenshots")
+    delete_files_if_exist("../data/logs", "*")
+    delete_files_if_exist("../data/screenshots", "*")
 
 
 def finish_output_files():

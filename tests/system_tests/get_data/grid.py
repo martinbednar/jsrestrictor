@@ -1,22 +1,22 @@
 from subprocess import Popen
-import time
+from time import sleep
 
 from configuration import Config
 
 
 def start_server():
-    start_server_command = ['java', '-jar', 'selenium-server-standalone-3.141.59.jar', '-role', 'hub']
+    start_server_command = ['java', '-jar', Config.selenium_server_jar_path, '-role', 'hub']
     server = Popen(start_server_command)
-    time.sleep(6)
+    sleep(6)
     return server
 
 
 def start_nodes():
-    start_node_command = ['java', '-Dwebdriver.gecko.driver=../../common_files/webbrowser_drivers/geckodriver.exe', '-Dwebdriver.chrome.driver=../../common_files/webbrowser_drivers/chromedriver.exe', '-jar', 'selenium-server-standalone-3.141.59.jar', '-role', 'node', '-hub', 'https://localhost:4444/grid/register/']
+    start_node_command = ['java', '-Dwebdriver.chrome.driver=' + Config.chrome_driver_path, '-jar', Config.selenium_server_jar_path, '-role', 'node', '-hub', 'https://' + Config.grid_server_ip_address + ':4444/grid/register/']
     nodes = []
-    for node_number in range(Config.number_of_grid_nodes):
+    for node_number in range(Config.number_of_grid_nodes_on_this_device):
         nodes.append(Popen(start_node_command))
-        time.sleep(7)
+        sleep(7)
     return nodes
 
 

@@ -1,7 +1,6 @@
 from time import sleep
 from numpy import array_split
 from multiprocessing import Process, Value, Pipe
-from selenium.webdriver.support import expected_conditions as ec
 
 from configuration import Config
 from website import Logs
@@ -146,7 +145,7 @@ def run_getting_logs_threads():
         print("'perform_tests' property in Configuration is empty. No test to perform.")
     else:
         top_sites = io.read_n_top_rows_csv(n=Config.number_of_sites_for_testing)
-        browser_jobs = array_split(top_sites, Config.number_of_browser_instances)
+        browser_jobs = array_split(top_sites, Config.number_of_concurent_sites_testing)
         testing_threads = []
         thread_mark = 'A'
         sites_offset = 0
@@ -162,7 +161,8 @@ def run_getting_logs_threads():
 
 
 def main():
-    server = grid.start_server()
+    if Config.is_grid_server_on_this_device:
+        server = grid.start_server()
     nodes = grid.start_nodes()
 
     try:
@@ -173,7 +173,8 @@ def main():
         sleep(3)
         io.terminate_zombie_processes()
         grid.end_nodes(nodes)
-        grid.end_server(server)
+        if Config.is_grid_server_on_this_device:
+            grid.end_server(server)
 
 
 if __name__ == "__main__":
