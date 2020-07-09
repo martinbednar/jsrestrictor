@@ -1,6 +1,9 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+from time import sleep
 
 from configuration import get_config
 
@@ -21,6 +24,7 @@ def get_position(driver):
     WebDriverWait(driver, 10).until(
         ec.presence_of_element_located((By.ID, 'mapnavi'))
     )
+    sleep(10)
     location = driver.find_element_by_id('placeToWriteGPSDetails').text
     location = location.replace(" ", "").split()
     position = {}
@@ -57,19 +61,18 @@ def get_device(driver):
 
 ## Get referrer - where the page was navigated from.
 #
-#  In this case, webpage FIT VUT is opened through Google search and referrer on page FIT VUT is returned.
+#  In this case, webpage amiunique.org is opened through test page and referrer on page amiunique.org is returned.
 def get_referrer(driver):
-    driver.get('https://www.google.com/')
-    search_input = driver.find_element_by_name('q')
-    search_input.send_keys("FIT VUT")
-    search_input.submit()
-    WebDriverWait(driver, 10).until(
-        ec.presence_of_element_located((By.ID, 'res'))
-    )
-    driver.find_elements_by_xpath('//a[contains(@href,"www.fit.vut.cz")]')[0].click()
-    WebDriverWait(driver, 10).until(
-        ec.presence_of_element_located((By.ID, 'main'))
-    )
+    driver.get(get_config("testing_page"))
+    sleep(2)
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.TAB)
+    actions.perform()
+    actions.perform()
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.RETURN)
+    actions.perform()
+    sleep(2)
     return driver.execute_script("return document.referrer")
 
 
