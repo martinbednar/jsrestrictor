@@ -12,14 +12,16 @@ def html_header():
            "body {background-color: white;} " \
            "img {width: 100%;} " \
            "td {width: 50%;  border: 1px solid black; padding: 5px; vertical-align: bottom;} " \
-           "table {width: 100%; text-align: center; border-collapse: collapse;} " \
+           "th {padding-top: 10px;} " \
+           "table {width: 100%; text-align: center; border-collapse: collapse; background-color: rgb(248,248,248);} " \
            ".differences-table {width: 50%; margin-left: 25%; margin-right: 25%;} " \
            ".treshold-cointainer {width: 100%; text-align: center;} " \
            ".slider {width: 85%; display: block; margin: auto;} " \
-           "h2 {float: left; margin-bottom: 10px; margin-left: 10px;} " \
-           "h3 {text-align: right; margin-bottom: 10px; margin-right: 10px;} " \
-           ".site-container {margin: 50px 0px 30px 0px;} " \
-           ".site-container-td {border: none;} " \
+           "h2 {float: left; margin: 10px;} " \
+           "h3 {text-align: right; margin: 10px;} " \
+           ".site-container {margin: 50px 0px 30px 0px; border: 1px solid black;} " \
+           ".site-container-td {border: none; padding: 10px;} " \
+           ".site-container-header {background-color: rgb(240,240,240); border-bottom: 1px solid black;} " \
            ".visible {display: table;} " \
            ".hidden {display: none;} " \
            "#treshold-value {font-weight: bold;} " \
@@ -58,7 +60,7 @@ def html_footer():
 
 
 def build_site_screenshots_comparison(site, site_name, site_number, average_color_of_differences):
-    output = '<table class="site-container visible" mean_pixel_value_of_diff="' + str(average_color_of_differences) + '"><tr><td class="site-container-td"><h2>' + str(site_number) +\
+    output = '<table class="site-container visible" mean_pixel_value_of_diff="' + str(average_color_of_differences) + '"><tr class="site-container-header"><td class="site-container-td"><h2>' + str(site_number) +\
              ") "  + site_name + '</h2></td><td class="site-container-td"><h3>Mean pixel value in Differences image: ' + str(average_color_of_differences) + '</h3></td></tr><tr><td colspan="2" class="site-container-td"><table><tr><th>Without JSR</th><th>With JSR</th></tr>'
     output += '<tr><td><img src="' + site + '/without_jsr.png"></td><td><img src="' + site + '/with_jsr.png"></td></tr></table>'
     output += '<table class="differences-table"><tr><th>Differences</th></tr><tr><td><img src="' + site + '/differences.png"></td></tr></table></td></tr></table>'
