@@ -1,7 +1,8 @@
-import io_funcs as io
 from os import listdir
 import cv2
 import numpy as np
+
+import io_funcs as io
 
 
 def html_header():
@@ -66,7 +67,8 @@ def main():
 
     output = html_header()
 
-    sites = listdir("../data/screenshots")
+    sites = list(filter(io.is_dir, listdir("../data/screenshots")))
+    print(sites)
     sites.sort(key=lambda x: int(x.split('_')[0]))
     j = 1
     sites_number = len(sites)

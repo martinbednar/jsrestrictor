@@ -7,6 +7,13 @@ def delete_file_if_exists(path):
         os.remove(path)
 
 
+def is_dir(folder_name):
+    path_prefix = "../data/screenshots"
+    folder_path = os.path.join(path_prefix, folder_name)
+    if os.path.isdir(folder_path):
+        return True
+
+
 def get_json_file_content(path):
     data = []
     try:
