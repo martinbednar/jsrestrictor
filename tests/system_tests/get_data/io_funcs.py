@@ -59,5 +59,5 @@ def finish_output_files():
 
 
 def terminate_zombie_processes():
-    system("taskkill /f /im chromedriver.exe")
-    system("taskkill /f /im chrome.exe")
+    system("taskkill /f /im chromedriver* 1>nul 2>&1")
+    system("taskkill /f /im chrome* 1>nul 2>&1")
