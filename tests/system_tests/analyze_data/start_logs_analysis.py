@@ -11,6 +11,7 @@ def html_header():
            "body {background-color: white} " \
            "table {width: 100%; border-collapse: collapse; table-layout: fixed;} " \
            ".added-log {background-color: LightPink} " \
+           "h2 {margin-left: 10px;} " \
            "th, td {width: 50%; border: 1px solid black; word-wrap: break-word; padding: 5px;} " \
            ".colored-results-table-visible td {width: 33%; border: none; padding: 5px; color: white; text-align: center;} " \
            ".colored-results-table-visible .method {background-color: red;} " \
