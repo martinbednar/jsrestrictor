@@ -39,6 +39,9 @@ class MetaConfig(type):
     @property
     def chrome_driver_path(self):
         return self._chrome_driver_path
+    @property
+    def jsr_extension_for_chrome_path(self):
+        return self._jsr_extension_for_chrome_path
 
 
 class Config(metaclass=MetaConfig):
@@ -60,3 +63,4 @@ class Config(metaclass=MetaConfig):
 
     _selenium_server_jar_path = './selenium/selenium-server-standalone-3.141.59.jar'
     _chrome_driver_path = '../../common_files/webbrowser_drivers/chromedriver.exe'
+    _jsr_extension_for_chrome_path = '../../common_files/JSR/chrome_JSR.crx'

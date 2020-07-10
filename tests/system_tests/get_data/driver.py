@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
 from web_browser_type import BrowserType
+from configuration import Config
 
 
 ## Find URL of JSR option page after JSR was installed to browser.
@@ -46,10 +47,10 @@ def create_driver(browser_type, with_jsr, jsr_level):
     o.add_argument("--start-maximized")
     if with_jsr:
         if browser_type == BrowserType.CHROME:
-            o.add_extension('../../common_files/JSR/chrome_JSR.crx')
+            o.add_extension(Config.jsr_extension_for_chrome_path)
 
     driver = webdriver.Remote(
-        command_executor='http://localhost:4444/wd/hub',
+        command_executor='http://' + Config.grid_server_ip_address + ':4444/wd/hub',
         desired_capabilities=d,
         options=o)
 
