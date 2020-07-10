@@ -11,20 +11,23 @@ def html_header():
            "<style>" \
            "body {background-color: white;} " \
            "img {width: 100%;} " \
-           "td {width: 50%;  border: 1px solid black; padding: 5px;} " \
+           "td {width: 50%;  border: 1px solid black; padding: 5px; vertical-align: bottom;} " \
            "table {width: 100%; text-align: center; border-collapse: collapse;} " \
            ".differences-table {width: 50%; margin-left: 25%; margin-right: 25%;} " \
            ".treshold-cointainer {width: 100%; text-align: center;} " \
            ".slider {width: 85%; display: block; margin: auto;} " \
-           "h2 {width: 50%; float: left;} " \
-           "h3 {width: 50%; text-align: right; float: right; margin-top: 5px;} " \
-           ".site-container {display: initial;} " \
-           ".site-container-hidden {display: none;} " \
+           "h2 {float: left; margin-bottom: 10px; margin-left: 10px;} " \
+           "h3 {text-align: right; margin-bottom: 10px; margin-right: 10px;} " \
+           ".site-container {margin: 50px 0px 30px 0px;} " \
+           ".site-container-td {border: none;} " \
+           ".visible {display: table;} " \
+           ".hidden {display: none;} " \
+           "#treshold-value {font-weight: bold;} " \
            "</style>" \
            "</head>" \
            '<body><h1>Screenshots comparison</h1>' \
            '<div class="treshold-cointainer"><input type="range" min="0" max="255" value="0" class="slider" id="threshold">' \
-           '<p>The treshold for the mean value of pixels in the Differences image (Screenshots below treshold will not be shown on this page.): <span id="treshold_value"></span></p></div>'
+           '<p>The treshold for the mean value of pixels in the Differences image (Screenshots below treshold will not be shown on this page.): <span id="treshold-value"></span></p></div>'
 
 
 def html_footer():
@@ -33,21 +36,21 @@ def html_footer():
            "function hideIfUnderTreshold(item) {" \
            'var slider = document.getElementById("threshold");' \
            'if (parseFloat(item.getAttribute("mean_pixel_value_of_diff")) < slider.value) {' \
-           'item.classList.remove("site-container"); item.classList.add("site-container-hidden");}' \
+           'item.classList.remove("visible"); item.classList.add("hidden");}' \
            "}" \
            "function showIfNotUnderTreshold(item) {" \
            'var slider = document.getElementById("threshold");' \
            'if (!(parseFloat(item.getAttribute("mean_pixel_value_of_diff")) < slider.value)) {' \
-           'item.classList.remove("site-container-hidden"); item.classList.add("site-container");}' \
+           'item.classList.remove("hidden"); item.classList.add("visible");}' \
            "}" \
            'var slider = document.getElementById("threshold");' \
-           'var slider_value = document.getElementById("treshold_value");' \
+           'var slider_value = document.getElementById("treshold-value");' \
            'slider_value.innerHTML = slider.value;' \
            'slider.oninput = function() {' \
            'slider_value.innerHTML = this.value;' \
-           'var visibleSites = Array.from(document.getElementsByClassName("site-container"));' \
+           'var visibleSites = Array.from(document.querySelectorAll(".site-container.visible"));' \
            'visibleSites.forEach(hideIfUnderTreshold);' \
-           'var hiddenSites = Array.from(document.getElementsByClassName("site-container-hidden"));' \
+           'var hiddenSites = Array.from(document.querySelectorAll(".site-container.hidden"));' \
            'hiddenSites.forEach(showIfNotUnderTreshold);' \
            '}' \
            "</script>" \
@@ -55,11 +58,19 @@ def html_footer():
 
 
 def build_site_screenshots_comparison(site, site_name, site_number, average_color_of_differences):
-    output = '<div class="site-container" mean_pixel_value_of_diff="' + str(average_color_of_differences) + '"><br><h2>' + str(site_number) +\
-             ") "  + site_name + '</h2><h3>Mean pixel value in Differences image: ' + str(average_color_of_differences) + '</h3><table><tr><th>Without JSR</th><th>With JSR</th></tr>'
+    output = '<table class="site-container visible" mean_pixel_value_of_diff="' + str(average_color_of_differences) + '"><tr><td class="site-container-td"><h2>' + str(site_number) +\
+             ") "  + site_name + '</h2></td><td class="site-container-td"><h3>Mean pixel value in Differences image: ' + str(average_color_of_differences) + '</h3></td></tr><tr><td colspan="2" class="site-container-td"><table><tr><th>Without JSR</th><th>With JSR</th></tr>'
     output += '<tr><td><img src="' + site + '/without_jsr.png"></td><td><img src="' + site + '/with_jsr.png"></td></tr></table>'
-    output += '<table class="differences-table"><tr><th>Differences</th></tr><tr><td><img src="' + site + '/differences.png"></td></tr></table></div>'
+    output += '<table class="differences-table"><tr><th>Differences</th></tr><tr><td><img src="' + site + '/differences.png"></td></tr></table></td></tr></table>'
     return output
+
+
+def create_differences_img(site):
+    screen_without_jsr = cv2.imread("../data/screenshots/" + site + "/without_jsr.png")
+    screen_with_jsr = cv2.imread("../data/screenshots/" + site + "/with_jsr.png")
+    differences = cv2.subtract(screen_with_jsr, screen_without_jsr)
+    cv2.imwrite("../data/screenshots/" + site + "/differences.png", differences)
+    return cv2.cvtColor(differences, cv2.COLOR_BGR2GRAY)
 
 
 def main():
@@ -68,19 +79,15 @@ def main():
     output = html_header()
 
     sites = list(filter(io.is_dir, listdir("../data/screenshots")))
-    print(sites)
     sites.sort(key=lambda x: int(x.split('_')[0]))
     j = 1
     sites_number = len(sites)
     for site in sites:
         site_name = site.split('_', 1)[1]
         print("Site " + str(j) + " of " + str(sites_number) + ": " + site_name)
-        screen_without_jsr = cv2.imread("../data/screenshots/" + site + "/without_jsr.png")
-        screen_with_jsr = cv2.imread("../data/screenshots/" + site + "/with_jsr.png")
-        differences = cv2.subtract(screen_with_jsr, screen_without_jsr)
-        cv2.imwrite("../data/screenshots/" + site + "/differences.png", differences)
-        differences_gray = cv2.cvtColor(differences, cv2.COLOR_BGR2GRAY)
-        output += build_site_screenshots_comparison(site, site_name, j, round(np.mean(differences_gray), 3))
+        differences_gray = create_differences_img(site)
+        mean_pixel_value_of_difference = round(np.mean(differences_gray), 3)
+        output += build_site_screenshots_comparison(site, site_name, j, mean_pixel_value_of_difference)
         j += 1
 
     output += html_footer()
