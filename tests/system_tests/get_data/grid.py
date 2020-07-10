@@ -20,7 +20,9 @@ def start_nodes():
     return nodes
 
 
-def end_nodes(nodes):
+def end_nodes(nodes, manually):
+    if manually:
+        input("After testing, press Enter to end the nodes.")
     for node in nodes:
         node.kill()
 

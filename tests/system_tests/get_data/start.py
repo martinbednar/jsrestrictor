@@ -165,16 +165,18 @@ def main():
         server = grid.start_server()
     nodes = grid.start_nodes()
 
-    try:
-        io.init_output_files()
-        run_getting_logs_threads()
-        io.finish_output_files()
-    finally:
-        sleep(3)
-        io.terminate_zombie_processes()
-        grid.end_nodes(nodes)
-        if Config.is_grid_server_on_this_device:
+    if Config.is_grid_server_on_this_device:
+        try:
+            io.init_output_files()
+            run_getting_logs_threads()
+            io.finish_output_files()
+        finally:
+            sleep(3)
+            io.terminate_zombie_processes()
+            grid.end_nodes(nodes, manually=False)
             grid.end_server(server)
+    else:
+        grid().end_nodes(nodes, manually=True)
 
 
 if __name__ == "__main__":
