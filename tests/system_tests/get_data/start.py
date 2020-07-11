@@ -72,7 +72,7 @@ def get_page_logs_thread(my_driver, with_jsr, site, site_number, logs_ready, ret
         ret_logs.send(logs)
 
 
-def get_logs_thread(thread_mark, browser_type, top_sites, sites_offset):
+def testing_controller_thread(thread_mark, browser_type, top_sites, sites_offset):
     driver_without_jsr = driver.create_driver(browser_type, with_jsr=False, jsr_level=None)
     driver_with_jsr = driver.create_driver(browser_type, with_jsr=True, jsr_level=Config.jsr_level)
 
@@ -129,7 +129,7 @@ def get_logs_thread(thread_mark, browser_type, top_sites, sites_offset):
 def run_browsers_thread(thread_mark, browser_job, sites_offset):
     browser_threads = []
     for browser_type in Config.tested_browsers:
-        new_thread = Process(target=get_logs_thread, args=(thread_mark, browser_type, browser_job, sites_offset))
+        new_thread = Process(target=testing_controller_thread, args=(thread_mark, browser_type, browser_job, sites_offset))
         browser_threads.append(new_thread)
         new_thread.start()
 

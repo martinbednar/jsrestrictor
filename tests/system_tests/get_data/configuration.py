@@ -45,7 +45,7 @@ class MetaConfig(type):
 
 
 class Config(metaclass=MetaConfig):
-    _sites_to_test_csv_path = './tranco/top_sites.csv'
+    _sites_to_test_csv_path = './top_sites/tranco.csv'
     _number_of_sites_for_testing = 6
     _tested_browsers = [BrowserType.CHROME]
     _jsr_level = 2
