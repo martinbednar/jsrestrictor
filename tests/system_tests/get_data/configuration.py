@@ -25,8 +25,8 @@ class MetaConfig(type):
     def number_of_grid_nodes_on_this_device(self):
         return self._number_of_grid_nodes_on_this_device
     @property
-    def number_of_concurent_sites_testing(self):
-        return self._number_of_concurent_sites_testing
+    def number_of_concurrent_sites_testing(self):
+        return self._number_of_concurrent_sites_testing
     @property
     def get_page_data_timeout(self):
         return self._get_page_data_timeout
@@ -54,7 +54,7 @@ class Config(metaclass=MetaConfig):
     _grid_server_ip_address = 'localhost'
     _number_of_grid_nodes_on_this_device = 1
     #max is number_of_grid_nodes * 5
-    _number_of_concurent_sites_testing = 1
+    _number_of_concurrent_sites_testing = 1
 
     # in seconds
     _get_page_data_timeout = 180

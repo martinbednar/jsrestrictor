@@ -142,7 +142,7 @@ def run_getting_logs_threads():
         print("'perform_tests' property in Configuration is empty. No test to perform.")
     else:
         top_sites = io.read_n_top_rows_csv(n=Config.number_of_sites_for_testing)
-        browser_jobs = array_split(top_sites, Config.number_of_concurent_sites_testing)
+        browser_jobs = array_split(top_sites, Config.number_of_concurrent_sites_testing)
         testing_threads = []
         thread_mark = 'A'
         sites_offset = 0
