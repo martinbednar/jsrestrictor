@@ -40,7 +40,7 @@ def receive_logs(send_logs_pipe_ready, receive_logs_pipe, get_logs_thread):
     return logs
 
 
-def get_page_logs_thread(my_driver, with_jsr, site, site_number, logs_ready, ret_logs):
+def get_page_data_thread(my_driver, with_jsr, site, site_number, logs_ready, ret_logs):
     logs = []
     confirm_alerts_if_open(my_driver, with_jsr, 10)
     try:
@@ -93,10 +93,10 @@ def testing_controller_thread(thread_mark, browser_type, top_sites, sites_offset
         send_logs_without_jsr_pipe_ready.value = 0
         send_logs_with_jsr_pipe_ready.value = 0
 
-        get_logs_without_jsr_thread = Process(target=get_page_logs_thread, args=(driver_without_jsr, False, top_site, sites_offset + site_number, send_logs_without_jsr_pipe_ready, send_logs_without_jsr_pipe))
+        get_logs_without_jsr_thread = Process(target=get_page_data_thread, args=(driver_without_jsr, False, top_site, sites_offset + site_number, send_logs_without_jsr_pipe_ready, send_logs_without_jsr_pipe))
         get_logs_without_jsr_thread.start()
 
-        get_logs_with_jsr_thread = Process(target=get_page_logs_thread, args=(driver_with_jsr, True, top_site, sites_offset + site_number, send_logs_with_jsr_pipe_ready, send_logs_with_jsr_pipe))
+        get_logs_with_jsr_thread = Process(target=get_page_data_thread, args=(driver_with_jsr, True, top_site, sites_offset + site_number, send_logs_with_jsr_pipe_ready, send_logs_with_jsr_pipe))
         get_logs_with_jsr_thread.start()
 
         for _ in range(int(Config.get_page_data_timeout/Config.wait_between_checks_if_page_data_loaded)):
