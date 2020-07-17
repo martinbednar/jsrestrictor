@@ -14,9 +14,12 @@ def start_server():
 def start_nodes():
     start_node_command = ['java', '-Dwebdriver.chrome.driver=' + Config.chrome_driver_path, '-jar', Config.selenium_server_jar_path, '-role', 'node', '-hub', 'https://' + Config.grid_server_ip_address + ':4444/grid/register/']
     nodes = []
-    for node_number in range(Config.number_of_grid_nodes_on_this_device):
-        nodes.append(Popen(start_node_command))
-        sleep(7)
+    if Config.number_of_grid_nodes_on_this_device == 0:
+        input("When all testing nodes will be running, press Enter to start JSR system testing.")
+    else:
+        for node_number in range(Config.number_of_grid_nodes_on_this_device):
+            nodes.append(Popen(start_node_command))
+            sleep(7)
     return nodes
 
 
