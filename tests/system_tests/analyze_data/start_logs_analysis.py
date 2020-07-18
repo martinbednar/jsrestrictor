@@ -1,12 +1,12 @@
 import levenshtein_distance as levenshtein
 import cosine_similarity as cosine
-import simple_comparsion as simple
+import simple_comparison as simple
 import io_funcs as io
 
 
 def html_header():
     return "<html>" \
-           "<head><title>Logs comparsion</title>" \
+           "<head><title>Logs comparison</title>" \
            "<style>" \
            "body {background-color: white} " \
            "table {width: 100%; border-collapse: collapse; table-layout: fixed;} " \
@@ -19,7 +19,7 @@ def html_header():
            ".colored-results-table-visible {display: table; margin-bottom: 5px} " \
            "</style>" \
            "</head>" \
-           "<body><h1>Logs comparsion</h1>"
+           "<body><h1>Logs comparison</h1>"
 
 
 def html_footer():
@@ -47,7 +47,7 @@ def build_site_logs_table(site, site_number):
             if i < len(site['logs_with_jsr']):
                 output_tmp += "<td"
                 if simple.was_log_added(site['logs_with_jsr'][i], site['logs_without_jsr']):
-                    output_tmp += ' class="method">Simple comparsion</td><td'
+                    output_tmp += ' class="method">Simple comparison</td><td'
                     colored_results_table_visible = True
                 else:
                     output_tmp += "></td><td"
@@ -80,7 +80,7 @@ def build_site_logs_table(site, site_number):
 
 
 def main():
-    io.delete_file_if_exists("../data/logs/logs_comparsion.html")
+    io.delete_file_if_exists("../data/logs/logs_comparison.html")
 
     sites_logs = io.get_json_file_content("../data/logs/logs.json")
 
@@ -93,7 +93,7 @@ def main():
         j += 1
     output += html_footer()
 
-    io.write_file("../data/logs/logs_comparsion.html", output)
+    io.write_file("../data/logs/logs_comparison.html", output)
 
 
 if __name__ == "__main__":
