@@ -29,7 +29,12 @@ def html_footer():
 def build_site_logs_table(site, site_number):
     output = "<br><h2>" + str(site_number) + ") " + site['site'] + "</h2><table><tr><th>Without JSR</th><th>With JSR</th></tr>"
     i = 0
-    while i < max(len(site['logs_without_jsr']), len(site['logs_with_jsr'])):
+    max_lenght = 0
+    if site['logs_with_jsr'] != "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE":
+        max_lenght = max(len(site['logs_without_jsr']), len(site['logs_with_jsr']))
+    else:
+        max_lenght = len(site['logs_without_jsr'])
+    while i < max_lenght:
         output += "<tr><td>"
         if i < len(site['logs_without_jsr']):
             output += "Level: " + site['logs_without_jsr'][i]['level'] + "<br>"
@@ -38,32 +43,36 @@ def build_site_logs_table(site, site_number):
         output += "</td><td"
         output_tmp = "><tr>"
         colored_results_table_visible = False
-        if i < len(site['logs_with_jsr']):
-            output_tmp += "<td"
-            if simple.was_log_added(site['logs_with_jsr'][i], site['logs_without_jsr']):
-                output_tmp += ' class="method">Simple comparsion</td><td'
-                colored_results_table_visible = True
-            else:
-                output_tmp += "></td><td"
-            if levenshtein.was_log_added(site['logs_with_jsr'][i], site['logs_without_jsr']):
-                output_tmp += ' class="method">Levenshtein distance</td><td'
-                colored_results_table_visible = True
-            else:
-                output_tmp += "></td><td"
-            if cosine.was_log_added(site['logs_with_jsr'][i], site['logs_without_jsr']):
-                output_tmp += ' class="method">Cosine similarity</td>'
-                colored_results_table_visible = True
-            else:
-                output_tmp += "></td>"
+        if site['logs_with_jsr'] != "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE":
+            if i < len(site['logs_with_jsr']):
+                output_tmp += "<td"
+                if simple.was_log_added(site['logs_with_jsr'][i], site['logs_without_jsr']):
+                    output_tmp += ' class="method">Simple comparsion</td><td'
+                    colored_results_table_visible = True
+                else:
+                    output_tmp += "></td><td"
+                if levenshtein.was_log_added(site['logs_with_jsr'][i], site['logs_without_jsr']):
+                    output_tmp += ' class="method">Levenshtein distance</td><td'
+                    colored_results_table_visible = True
+                else:
+                    output_tmp += "></td><td"
+                if cosine.was_log_added(site['logs_with_jsr'][i], site['logs_without_jsr']):
+                    output_tmp += ' class="method">Cosine similarity</td>'
+                    colored_results_table_visible = True
+                else:
+                    output_tmp += "></td>"
         if colored_results_table_visible:
             output += ' class="added-log"><table class="colored-results-table-visible"'
         else:
             output += '><table class="colored-results-table"'
         output += output_tmp + '</tr></table>'
-        if i < len(site['logs_with_jsr']):
-            output += "Level: " + site['logs_with_jsr'][i]['level'] + "<br>"
-            output += "Source: " + site['logs_with_jsr'][i]['source'] + "<br>"
-            output += "Message: " + site['logs_with_jsr'][i]['message']
+        if site['logs_with_jsr'] != "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE":
+            if i < len(site['logs_with_jsr']):
+                output += "Level: " + site['logs_with_jsr'][i]['level'] + "<br>"
+                output += "Source: " + site['logs_with_jsr'][i]['source'] + "<br>"
+                output += "Message: " + site['logs_with_jsr'][i]['message']
+        elif i == 0:
+            output += "ERROR_WHILE_LOADING_THIS_OR_PREVIOUS_PAGE"
         output += "</td></tr>"
         i += 1
     output += "</table>"
