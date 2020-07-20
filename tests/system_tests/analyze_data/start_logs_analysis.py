@@ -87,6 +87,8 @@ def main():
     output = html_header()
     j = 1
     sites_number = len(sites_logs)
+    if sites_number == 0:
+        print("No logs for analysis found. Please, include getting logs to configuration and run getting data first.")
     for site in sites_logs:
         print("Site " + str(j) + " of " + str(sites_number) + ": " + site['site'])
         output += build_site_logs_table(site, j)

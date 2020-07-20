@@ -70,9 +70,18 @@ def build_site_screenshots_comparison(site, site_name, site_number, average_colo
 def create_differences_img(site):
     screen_without_jsr = cv2.imread("../data/screenshots/" + site + "/without_jsr.png")
     screen_with_jsr = cv2.imread("../data/screenshots/" + site + "/with_jsr.png")
+    if screen_without_jsr is None or screen_with_jsr is None:
+        return None
     differences = cv2.subtract(screen_with_jsr, screen_without_jsr)
     cv2.imwrite("../data/screenshots/" + site + "/differences.png", differences)
     return cv2.cvtColor(differences, cv2.COLOR_BGR2GRAY)
+
+
+def get_rounded_mean_pixel_value(img, precision):
+    if img is None:
+        return None
+    else:
+        return round(np.mean(img), precision)
 
 
 def main():
@@ -84,11 +93,13 @@ def main():
     sites.sort(key=lambda x: int(x.split('_')[0]))
     j = 1
     sites_number = len(sites)
+    if sites_number == 0:
+        print("No screenshots for analysis found. Please, include getting screenshots to configuration and run getting data first.")
     for site in sites:
         site_name = site.split('_', 1)[1]
         print("Site " + str(j) + " of " + str(sites_number) + ": " + site_name)
         differences_gray = create_differences_img(site)
-        mean_pixel_value_of_difference = round(np.mean(differences_gray), 3)
+        mean_pixel_value_of_difference = get_rounded_mean_pixel_value(differences_gray, 3)
         output += build_site_screenshots_comparison(site, site_name, j, mean_pixel_value_of_difference)
         j += 1
 
