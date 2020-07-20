@@ -1,6 +1,4 @@
-const browser = chrome;
-
-browser.storage.sync = {
+chrome.storage.sync = {
 	__default__: 2, // Default protection level
 	version: 2,     // The version of this storage
 	custom_levels: {}, // associative array of custom level (key, its id => object)
