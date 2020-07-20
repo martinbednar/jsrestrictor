@@ -1,7 +1,7 @@
 /// <reference path="../../common/helpers.js">
 
 describe("Helpers", function() {
-	describe("Escape function", function() {
+	describe("Function escape", function() {
 		it("should be defined",function() {
 			expect(escape).toBeDefined();
 		});
@@ -38,6 +38,25 @@ describe("Helpers", function() {
 		});
 		it("should replace multiple character",function() {
 			expect(escape("&Te\"stova' 'v<eta>.")).toBe("&amp;Te&quot;stova&#039; &#039;v&lt;eta&gt;.");
+		});
+	});
+	describe("Function gen_random32", function() {
+		it("should be defined",function() {
+			expect(gen_random32).toBeDefined();
+		});
+		it("should return number",function() {
+			expect(gen_random32()).toEqual(jasmine.any(Number));
+		});
+		it("should not throw exception",function() {
+			expect(function(){
+				gen_random32()
+			}).not.toThrow();
+		});
+		it("should return number less than or equal to UInt32Max",function() {
+			expect(gen_random32()).toBeLessThanOrEqual(0xFFFFFFFF);
+		});
+		it("should return number greather than or equal to Zero",function() {
+			expect(gen_random32()).toBeGreaterThanOrEqual(0x0);
 		});
 	});
 });
