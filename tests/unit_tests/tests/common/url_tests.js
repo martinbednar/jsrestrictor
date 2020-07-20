@@ -1,49 +1,49 @@
 /// <reference path="../../common/url.js">
 
 describe("URL", function() {
-	describe("Extract root domain function", function() {		
+	describe("Function extractSubDomains", function() {		
 		it("should be defined",function() {
-			expect(extractRootDomain).toBeDefined();
+			expect(extractSubDomains).toBeDefined();
 		});
-		it("should return string",function() {
-			expect(extractRootDomain("")).toEqual(jasmine.any(String));
+		it("should return array",function() {
+			expect(extractSubDomains("")).toEqual(jasmine.any(Array));
+		});
+		it("should return array of strings",function() {
+			expect(extractSubDomains("")[0]).toEqual(jasmine.any(String));
 		});
 		it("should throw error when parametr is undefined",function() {
-			expect(function() {extractRootDomain(undefined)}).toThrowError();
+			expect(function() {extractSubDomains(undefined)}).toThrowError();
 		});
-		it("should return empty string when parametr is empty string",function() {
-			expect(extractRootDomain("")).toBe("");
+		it("should return array with one empty string when parametr is empty string",function() {
+			expect(extractSubDomains("")).toEqual(new Array(1).fill(""));
 		});
 		it("should return parametr when parametr is nonsense without dots",function() {
-			expect(extractRootDomain("gsf14f56sdvds1,-dfsv,§ú")).toBe("gsf14f56sdvds1,-dfsv,§ú");
+			expect(extractSubDomains("gsf14f56sdvds1,-dfsv,§ú")).toEqual(["gsf14f56sdvds1,-dfsv,§ú"]);
 		});
-		it("should return root domain",function() {
-			expect(extractRootDomain("vutbr.cz")).toBe("vutbr.cz");
-			expect(extractRootDomain("fit.vutbr.cz")).toBe("vutbr.cz");
-			expect(extractRootDomain("wis.fit.vutbr.cz")).toBe("vutbr.cz");
-			expect(extractRootDomain("eva.fit.vutbr.cz")).toBe("vutbr.cz");
-			expect(extractRootDomain("netfox-hyperv.fit.vutbr.cz")).toBe("vutbr.cz");
-			expect(extractRootDomain("project.bigred.cornell.edu")).toBe("cornell.edu");
-			expect(extractRootDomain("test.eva.fit.vutbr.cz")).toBe("vutbr.cz");
-		});
-		// This and the previous test is in mutually exclusion relationship. This or previous test can pass, but not both.
-		// This test specify correct behavior (not only root domain should be extracted, but subdomains too).
-		// But previous test coresponds with name of the function. Name of the function should be changed and
-		// whole domain should be returned.
-		xit("should return root domain with subdomain for mutually independent sites on a single root domain",function() {
-			expect(extractRootDomain("sites.google.com")).toBe("sites.google.com");
-			expect(extractRootDomain("code.google.com")).toBe("code.google.com");
-			expect(extractRootDomain("docs.google.com")).toBe("docs.google.com");
-			expect(extractRootDomain("support.google.com")).toBe("support.google.com");
-			expect(extractRootDomain("polcak.github.io")).toBe("polcak.github.io");
-			expect(extractRootDomain("martinbednar.github.io")).toBe("martinbednar.github.io");
-			expect(extractRootDomain("swatblog.rtgp.xyz")).toBe("swatblog.rtgp.xyz");
-			expect(extractRootDomain("thenetworg.crm4.dynamics.com")).toBe("thenetworg.crm4.dynamics.com");
+		it("should return array of domains",function() {
+			expect(extractSubDomains("vutbr.cz")).toEqual(["vutbr.cz"]);
+			expect(extractSubDomains("fit.vutbr.cz")).toEqual(["vutbr.cz","fit.vutbr.cz"]);
+			expect(extractSubDomains("wis.fit.vutbr.cz")).toEqual(["vutbr.cz","fit.vutbr.cz","wis.fit.vutbr.cz"]);
+			expect(extractSubDomains("eva.fit.vutbr.cz")).toEqual(["vutbr.cz","fit.vutbr.cz","eva.fit.vutbr.cz"]);
+			expect(extractSubDomains("netfox-hyperv.fit.vutbr.cz")).toEqual(["vutbr.cz","fit.vutbr.cz","netfox-hyperv.fit.vutbr.cz"]);
+			expect(extractSubDomains("project.bigred.cornell.edu")).toEqual(["cornell.edu","bigred.cornell.edu","project.bigred.cornell.edu"]);
+			expect(extractSubDomains("test.eva.fit.vutbr.cz")).toEqual(["vutbr.cz","fit.vutbr.cz","eva.fit.vutbr.cz","test.eva.fit.vutbr.cz"]);
+			expect(extractSubDomains("sites.google.com")).toEqual(["google.com","sites.google.com"]);
+			expect(extractSubDomains("code.google.com")).toEqual(["google.com","code.google.com"]);
+			expect(extractSubDomains("docs.google.com")).toEqual(["google.com","docs.google.com"]);
+			expect(extractSubDomains("support.google.com")).toEqual(["google.com","support.google.com"]);
+			expect(extractSubDomains("polcak.github.io")).toEqual(["github.io","polcak.github.io"]);
+			expect(extractSubDomains("martinbednar.github.io")).toEqual(["github.io","martinbednar.github.io"]);
+			expect(extractSubDomains("swatblog.rtgp.xyz")).toEqual(["rtgp.xyz","swatblog.rtgp.xyz"]);
+			expect(extractSubDomains("thenetworg.crm4.dynamics.com")).toEqual(["dynamics.com","crm4.dynamics.com","thenetworg.crm4.dynamics.com"]);
 		});
 		xit("should return IP address for IP address (no domainname) - example URL: http://89.45.196.133/paneln/Login.aspx)",function() {
 			//example web page: http://89.45.196.133/paneln/Login.aspx
-			expect(extractRootDomain("89.45.196.133")).toBe("89.45.196.133");
-			expect(extractRootDomain("2001:67c:1220:809::93e5:917")).toBe("2001:67c:1220:809::93e5:917");
+			//Documentation of function extractSubDomains tells, that only domainname can be given as an argument,
+			//but in function getCurrentLevelJSON in file levels.js can be function extractSubDomains called with IP address.
+			//This test simulate, what happend, when the function extractSubDomains is called with existing IP address from URL.
+			expect(extractSubDomains("89.45.196.133")).toBe("89.45.196.133");
+			expect(extractSubDomains("2001:67c:1220:809::93e5:917")).toBe("2001:67c:1220:809::93e5:917");
 		});
 	});
 });
