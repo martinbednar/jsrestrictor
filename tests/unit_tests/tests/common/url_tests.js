@@ -42,8 +42,8 @@ describe("URL", function() {
 			//Documentation of function extractSubDomains tells, that only domainname can be given as an argument,
 			//but in function getCurrentLevelJSON in file levels.js can be function extractSubDomains called with IP address.
 			//This test simulate, what happend, when the function extractSubDomains is called with existing IP address from URL.
-			expect(extractSubDomains("89.45.196.133")).toBe("89.45.196.133");
-			expect(extractSubDomains("2001:67c:1220:809::93e5:917")).toBe("2001:67c:1220:809::93e5:917");
+			expect(extractSubDomains("89.45.196.133")).toEqual(["89.45.196.133"]);
+			expect(extractSubDomains("2001:67c:1220:809::93e5:917")).toEqual(["2001:67c:1220:809::93e5:917"]);
 		});
 	});
 });
