@@ -1,4 +1,0 @@
-Mock browser / chrome . storage for browser extension:
-
-sinon-chrome (https://github.com/acvetkov/sinon-chrome)
-webextensions-api-fake: (https://github.com/stoically/webextensions-api-fake)
