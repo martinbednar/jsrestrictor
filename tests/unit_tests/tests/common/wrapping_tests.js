@@ -63,7 +63,7 @@ describe("Wrapping", function() {
 				},
 			]
 			add_wrappers(ECMA_DATE_wrappers);
-			console.log(build_wrapping_code);
+			//console.log(build_wrapping_code);
 			expect(undefined).toBe(undefined);
 		});
 		afterAll(function() {
@@ -153,19 +153,51 @@ describe("Wrapping", function() {
 		});
 		it("should not return unchanged float number from argument when precision is 0",function() {
 			eval(noise_function);
-			expect(noise_function(1009.1013,0)).not.toBe(1009.1013);
+			var number_changed = false;
+			const input_nums = [1009.1013, 1019.1021, 1031.1033, 1039.1049, 1051.1061];
+			for (const num of input_nums) {
+				if (Math.abs(noise_function(num,0) - num) > 0.0001) {
+					number_changed = true;
+					break;
+				}
+			}
+			expect(number_changed).toBeTrue();
 		});
 		it("should not return unchanged float number from argument when precision is 1",function() {
 			eval(noise_function);
-			expect(noise_function(1009.1013,1)).not.toBe(1009.1013);
+			var number_changed = false;
+			const input_nums = [1009.1013, 1019.1021, 1031.1033, 1039.1049, 1051.1061];
+			for (const num of input_nums) {
+				if (Math.abs(noise_function(num,1) - num) > 0.0001) {
+					number_changed = true;
+					break;
+				}
+			}
+			expect(number_changed).toBeTrue();
 		});
 		it("should not return unchanged whole number from argument when precision is 0",function() {
 			eval(noise_function);
-			expect(noise_function(1013,0)).not.toBe(1009.1013);
+			var number_changed = false;
+			const input_nums = [1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049, 1051, 1061];
+			for (const num of input_nums) {
+				if (Math.abs(noise_function(num,0) - num) > 0.0001) {
+					number_changed = true;
+					break;
+				}
+			}
+			expect(number_changed).toBeTrue();
 		});
 		it("should not return unchanged whole number from argument when precision is 1",function() {
 			eval(noise_function);
-			expect(noise_function(1013,1)).not.toBe(1009.1013);
+			var number_changed = false;
+			const input_nums = [1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049, 1051, 1061];
+			for (const num of input_nums) {
+				if (Math.abs(noise_function(num,1) - num) > 0.0001) {
+					number_changed = true;
+					break;
+				}
+			}
+			expect(number_changed).toBeTrue();
 		});
 	});
 });
