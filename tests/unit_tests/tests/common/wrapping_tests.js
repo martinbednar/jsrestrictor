@@ -7,67 +7,42 @@ describe("Wrapping", function() {
 		});
 	});
 	describe("Function add_wrappers", function() {
-		beforeAll(function() {
-			build_wrapping_code = {};
+		var HRT_wrappers = [
+			{
+				parent_object: "Performance.prototype",
+				parent_object_property: "now",
+				wrapped_objects: [
+					{
+						original_name: "Performance.prototype.now",
+						wrapped_name: "origNow",
+					}
+				],
+				helping_code: rounding_function + noise_function + `
+					let precision = args[0];
+					let doNoise = args[1];
+				`,
+				wrapping_function_args: "",
+				wrapping_function_body: `
+						var originalPerformanceValue = origNow.call(window.performance);
+						var limit_precision = doNoise ? noise_function : rounding_function;
+						return limit_precision(originalPerformanceValue, precision);
+				`,
+			},
+		];
+		afterEach(function() {
+			setTimeout(function(){ build_wrapping_code = {}; }, 3000);
 		});
 		it("should be defined",function() {
 			expect(add_wrappers).toBeDefined();
 		});
 		it("should return nothing",function() {
-			var ECMA_DATE_wrappers = [
-				{
-					parent_object: "window",
-					parent_object_property: "Date",
-					wrapped_objects: [
-						{
-							original_name: "Date",
-							wrapped_name: "originalDateConstructor",
-						},
-					],
-					helping_code: rounding_function + noise_function +
-						`
-						var precision = args[0];
-						var doNoise = args[1];
-						var func = rounding_function;
-						if (doNoise) {
-							func = noise_function;
-						}
-						`,
-					wrapping_function_args: "",
-					wrapping_function_body: `
-						var wrapped = new originalDateConstructor(...arguments);
-						let cachedValue;
-						if (arguments[0] !== undefined) {
-							// Don't change lastValue if custom arguments are passed
-							 cachedValue = lastValue;
-						}
-						var changedValue = func(wrapped.getTime(), precision);
-						if (cachedValue) {
-							// Don't change lastValue if custom arguments are passed
-							 lastValue = cachedValue;
-						}
-						wrapped.setTime(changedValue);
-						return wrapped;
-						`,
-					wrapper_prototype: "originalDateConstructor",
-					post_wrapping_code: [
-						{
-							code_type: "function_define",
-							original_function: "originalDateConstructor.now",
-							parent_object: "window.Date",
-							parent_object_property: "now",
-							wrapping_function_args: "",
-							wrapping_function_body: "return func(originalDateConstructor.now.call(Date), precision);",
-						},
-					]
-				},
-			]
-			add_wrappers(ECMA_DATE_wrappers);
-			//console.log(build_wrapping_code);
-			expect(undefined).toBe(undefined);
+			expect(add_wrappers(HRT_wrappers)).toBe(undefined);
 		});
-		afterAll(function() {
-			build_wrapping_code = {};
+		it("should add wrappers to object build_wrapping_code",function() {
+			add_wrappers(HRT_wrappers);
+			for (wrapper of HRT_wrappers) {
+				expect(build_wrapping_code[wrapper.parent_object + "." + wrapper.parent_object_property]).toBe(wrapper);
+			}
 		});
 	});
 	describe("Function rounding_function", function() {
@@ -154,6 +129,7 @@ describe("Wrapping", function() {
 		it("should not return unchanged float number from argument when precision is 0",function() {
 			eval(noise_function);
 			var number_changed = false;
+			//whole part and decimal part are prime numbers
 			const input_nums = [1009.1013, 1019.1021, 1031.1033, 1039.1049, 1051.1061];
 			for (const num of input_nums) {
 				if (Math.abs(noise_function(num,0) - num) > 0.0001) {
@@ -166,6 +142,7 @@ describe("Wrapping", function() {
 		it("should not return unchanged float number from argument when precision is 1",function() {
 			eval(noise_function);
 			var number_changed = false;
+			//whole part and decimal part are prime numbers
 			const input_nums = [1009.1013, 1019.1021, 1031.1033, 1039.1049, 1051.1061];
 			for (const num of input_nums) {
 				if (Math.abs(noise_function(num,1) - num) > 0.0001) {
@@ -178,6 +155,7 @@ describe("Wrapping", function() {
 		it("should not return unchanged whole number from argument when precision is 0",function() {
 			eval(noise_function);
 			var number_changed = false;
+			//prime numbers
 			const input_nums = [1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049, 1051, 1061];
 			for (const num of input_nums) {
 				if (Math.abs(noise_function(num,0) - num) > 0.0001) {
@@ -190,6 +168,7 @@ describe("Wrapping", function() {
 		it("should not return unchanged whole number from argument when precision is 1",function() {
 			eval(noise_function);
 			var number_changed = false;
+			//prime numbers
 			const input_nums = [1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049, 1051, 1061];
 			for (const num of input_nums) {
 				if (Math.abs(noise_function(num,1) - num) > 0.0001) {
