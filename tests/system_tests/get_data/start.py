@@ -52,10 +52,10 @@ def receive_logs(send_logs_pipe_ready, receive_logs_pipe, get_logs_thread):
 ## Lod website in given browser and get data (log and screenshot) from browser when website is loaded.
 def get_page_data_thread(my_driver, with_jsr, site, site_number, logs_ready, ret_logs):
     logs = []
-    confirm_alerts_if_open(my_driver, with_jsr, 10)
+    confirm_alerts_if_open(my_driver, with_jsr, 20)
     try:
         clear_console_logs(my_driver, with_jsr)
-        confirm_alerts_if_open(my_driver, with_jsr, 10)
+        confirm_alerts_if_open(my_driver, with_jsr, 20)
         my_driver.get('http://www.' + site)
         confirm_alerts_if_open(my_driver, with_jsr, 100)
     except:
@@ -64,7 +64,7 @@ def get_page_data_thread(my_driver, with_jsr, site, site_number, logs_ready, ret
     else:
         if TestType.LOGS in Config.perform_tests:
             try:
-                confirm_alerts_if_open(my_driver, with_jsr, 10)
+                confirm_alerts_if_open(my_driver, with_jsr, 20)
                 logs = my_driver.get_log('browser')
             except:
                 print("An exception occurred while getting page logs: " + site)
@@ -75,7 +75,7 @@ def get_page_data_thread(my_driver, with_jsr, site, site_number, logs_ready, ret
                 if with_jsr:
                     jsr = "with"
                 io.create_folder_structure("../data/screenshots/" + str(site_number) + "_" + site)
-                confirm_alerts_if_open(my_driver, with_jsr, 10)
+                confirm_alerts_if_open(my_driver, with_jsr, 20)
                 my_driver.save_screenshot("../data/screenshots/" + str(site_number) + "_" + site + "/" + jsr + "_jsr" + ".png")
             except:
                 print("An exception occurred while getting page screenshot: " + site)
