@@ -11,7 +11,7 @@ from web_browser_type import BrowserType
 from test_type import TestType
 
 
-## If JSR is set to level 3, close JS alerts if any is open.
+## If JSR is active and set to level 3, close JS alerts if any is open.
 def confirm_alerts_if_open(my_driver, with_jsr, time):
     if with_jsr and Config.jsr_level == 3:
         i=0
@@ -23,6 +23,13 @@ def confirm_alerts_if_open(my_driver, with_jsr, time):
                 pass
             finally:
                 i += 1
+
+
+## If JSR is active and set to level 3, open page without XMLHttpRequest and clear logs from previous loaded page.
+def clear_console_logs(my_driver, with_jsr):
+        if with_jsr and Config.jsr_level == 3:
+            my_driver.get('https://polcak.github.io/jsrestrictor/test/test.html')
+            my_driver.get_log('browser')
 
 
 ## Receive browser logs from separate thread via pipe.
@@ -47,6 +54,8 @@ def get_page_data_thread(my_driver, with_jsr, site, site_number, logs_ready, ret
     logs = []
     confirm_alerts_if_open(my_driver, with_jsr, 10)
     try:
+        clear_console_logs(my_driver, with_jsr)
+        confirm_alerts_if_open(my_driver, with_jsr, 10)
         my_driver.get('http://www.' + site)
         confirm_alerts_if_open(my_driver, with_jsr, 100)
     except:
