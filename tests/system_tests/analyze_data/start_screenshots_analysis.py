@@ -5,6 +5,7 @@ import numpy as np
 import io_funcs as io
 
 
+## Build header of output HTML file.
 def html_header():
     return "<html>" \
            "<head><title>Screenshots comparison</title>" \
@@ -32,6 +33,7 @@ def html_header():
            '<p>The treshold for the mean value of pixels in the Differences image (Screenshots below treshold will not be shown on this page.): <span id="treshold-value"></span></p></div>'
 
 
+## Build footer of output HTML file.
 def html_footer():
     return "<br><br>" \
            "<script>" \
@@ -59,6 +61,7 @@ def html_footer():
            "</body></html>"
 
 
+## Build table with screenshots and diferences of screenshots for one site. Insert to output HTML file.
 def build_site_screenshots_comparison(site, site_name, site_number, average_color_of_differences):
     output = '<table class="site-container visible" mean_pixel_value_of_diff="' + str(average_color_of_differences) + '"><tr class="site-container-header"><td class="site-container-td"><h2>' + str(site_number) +\
              ") "  + site_name + '</h2></td><td class="site-container-td"><h3>Mean pixel value in Differences image: ' + str(average_color_of_differences) + '</h3></td></tr><tr><td colspan="2" class="site-container-td"><table><tr><th>Without JSR</th><th>With JSR</th></tr>'
@@ -67,6 +70,8 @@ def build_site_screenshots_comparison(site, site_name, site_number, average_colo
     return output
 
 
+## Create difference image between screenshot with JSR and screenshot without JSR by substracting
+#  one image from another.
 def create_differences_img(site):
     screen_without_jsr = cv2.imread("../data/screenshots/" + site + "/without_jsr.png")
     screen_with_jsr = cv2.imread("../data/screenshots/" + site + "/with_jsr.png")
@@ -77,6 +82,8 @@ def create_differences_img(site):
     return cv2.cvtColor(differences, cv2.COLOR_BGR2GRAY)
 
 
+## Get mean pixel value of given image.
+#  Round mean pixel value to given precision.
 def get_rounded_mean_pixel_value(img, precision):
     if img is None:
         return None
@@ -84,6 +91,7 @@ def get_rounded_mean_pixel_value(img, precision):
         return round(np.mean(img), precision)
 
 
+## Main function of screenshots analysis.
 def main():
     io.delete_file_if_exists("../data/screenshots/screenshots_comparison.html")
 
@@ -105,6 +113,7 @@ def main():
 
     output += html_footer()
     io.write_file("../data/screenshots/screenshots_comparison.html", output)
+
 
 if __name__ == "__main__":
     main()

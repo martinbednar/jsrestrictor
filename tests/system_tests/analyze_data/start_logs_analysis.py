@@ -4,6 +4,7 @@ import simple_comparison as simple
 import io_funcs as io
 
 
+## Build header of output HTML file.
 def html_header():
     return "<html>" \
            "<head><title>Logs comparison</title>" \
@@ -22,10 +23,12 @@ def html_header():
            "<body><h1>Logs comparison</h1>"
 
 
+## Build footer of output HTML file.
 def html_footer():
     return "<br><br></body></html>"
 
 
+## Build table with logs for one site. Insert to output HTML file.
 def build_site_logs_table(site, site_number):
     output = "<br><h2>" + str(site_number) + ") " + site['site'] + "</h2><table><tr><th>Without JSR</th><th>With JSR</th></tr>"
     i = 0
@@ -79,6 +82,7 @@ def build_site_logs_table(site, site_number):
     return output
 
 
+## Main function of logs analysis.
 def main():
     io.delete_file_if_exists("../data/logs/logs_comparison.html")
 

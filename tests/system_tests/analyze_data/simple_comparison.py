@@ -1,3 +1,4 @@
+## Check if log was added by JSR. Check with Simple method (equality of text strings).
 def was_log_added(log, logs_without_jsr):
     for log_without_jsr in logs_without_jsr:
         if log_without_jsr['level'] == log['level']:

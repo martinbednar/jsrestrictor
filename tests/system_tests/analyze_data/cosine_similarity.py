@@ -30,6 +30,7 @@ def cosine_sim_vectors(vec1, vec2):
     return cosine_similarity(vec1, vec2)[0][0]
 
 
+## Check if log was added by JSR. Check with Cosine similarity method.
 def was_log_added(log, logs_without_jsr):
     for log_without_jsr in logs_without_jsr:
         if log_without_jsr['level'] == log['level']:

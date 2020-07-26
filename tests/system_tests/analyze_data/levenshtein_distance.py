@@ -1,6 +1,6 @@
 import Levenshtein
 
-
+## Check if log was added by JSR. Check with Levenshtein distance method.
 def was_log_added(log, logs_without_jsr):
     for log_without_jsr in logs_without_jsr:
         if log_without_jsr['level'] == log['level']:

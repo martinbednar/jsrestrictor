@@ -2,11 +2,13 @@ import os
 import json
 
 
+## Delete file given by path if exists.
 def delete_file_if_exists(path):
     if os.path.exists(path):
         os.remove(path)
 
 
+## Test if given name belongs to directory. Return True or False.
 def is_dir(folder_name):
     path_prefix = "../data/screenshots"
     folder_path = os.path.join(path_prefix, folder_name)
@@ -14,6 +16,7 @@ def is_dir(folder_name):
         return True
 
 
+## Read and loads JSON file. Return dictionary with loaded data.
 def get_json_file_content(path):
     data = []
     try:
@@ -26,6 +29,7 @@ def get_json_file_content(path):
         return data
 
 
+## Write string content to file given by path.
 def write_file(path, content):
     with open(path, 'w', newline='') as f:
         f.write(content)
