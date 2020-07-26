@@ -30,12 +30,14 @@ def find_options_jsr_page_url(driver, browser_type):
                 return "chrome-extension://" + elem.split(':')[0][:-1] + "/options.html"
 
 
+## Set JSR level in web browser.
 def set_jsr_level(driver, browser_type, level):
     options_page = find_options_jsr_page_url(driver, browser_type)
     driver.get(options_page)
     driver.find_element_by_id('level-' + str(level)).click()
 
 
+## Create web browser driver and start web browser.
 def create_driver(browser_type, with_jsr, jsr_level):
     if browser_type == BrowserType.CHROME:
         d = DesiredCapabilities.CHROME

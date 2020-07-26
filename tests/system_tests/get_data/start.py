@@ -11,6 +11,7 @@ from web_browser_type import BrowserType
 from test_type import TestType
 
 
+## If JSR is set to level 3, close JS alerts if any is open.
 def confirm_alerts_if_open(my_driver, with_jsr, time):
     if with_jsr and Config.jsr_level == 3:
         i=0
@@ -24,6 +25,7 @@ def confirm_alerts_if_open(my_driver, with_jsr, time):
                 i += 1
 
 
+## Receive browser logs from separate thread via pipe.
 def receive_logs(send_logs_pipe_ready, receive_logs_pipe, get_logs_thread):
     if send_logs_pipe_ready.value == 1:
         logs = receive_logs_pipe.recv()
@@ -40,6 +42,7 @@ def receive_logs(send_logs_pipe_ready, receive_logs_pipe, get_logs_thread):
     return logs
 
 
+## Lod website in given browser and get data (log and screenshot) from browser when website is loaded.
 def get_page_data_thread(my_driver, with_jsr, site, site_number, logs_ready, ret_logs):
     logs = []
     confirm_alerts_if_open(my_driver, with_jsr, 10)
@@ -72,6 +75,7 @@ def get_page_data_thread(my_driver, with_jsr, site, site_number, logs_ready, ret
         ret_logs.send(logs)
 
 
+## Control getting data (logs and data) from one browser type for given part of top sites.
 def testing_controller_thread(thread_mark, browser_type, top_sites, sites_offset):
     driver_without_jsr = driver.create_driver(browser_type, with_jsr=False, jsr_level=None)
     driver_with_jsr = driver.create_driver(browser_type, with_jsr=True, jsr_level=Config.jsr_level)
@@ -126,6 +130,7 @@ def testing_controller_thread(thread_mark, browser_type, top_sites, sites_offset
     driver_with_jsr.quit()
 
 
+## Start separate thread for every browser type for perform tests.
 def run_browsers_thread(thread_mark, browser_job, sites_offset):
     browser_threads = []
     for browser_type in Config.tested_browsers:
@@ -137,6 +142,7 @@ def run_browsers_thread(thread_mark, browser_job, sites_offset):
         thread.join()
 
 
+## Start parallel threads for getting data from browsers and divide work to processes.
 def run_getting_logs_threads():
     if not Config.perform_tests:
         print("'perform_tests' property in Configuration is empty. No test to perform.")
@@ -157,6 +163,7 @@ def run_getting_logs_threads():
             thread.join()
 
 
+## Main function of getting data.
 def main():
     if Config.grid_server_ip_address == 'localhost':
         server = grid.start_server()
