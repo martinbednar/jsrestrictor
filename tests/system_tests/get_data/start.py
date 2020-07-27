@@ -189,7 +189,7 @@ def main():
             grid.end_nodes(nodes, manually=False)
             grid.end_server(server)
     else:
-        grid().end_nodes(nodes, manually=True)
+        grid.end_nodes(nodes, manually=True)
 
 
 if __name__ == "__main__":
