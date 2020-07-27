@@ -59,9 +59,9 @@ class Config(metaclass=MetaConfig):
 
     # IP address of Selenium Grid server in distributed environment.
     _grid_server_ip_address = 'localhost'
-    # Number of Selenium Grid nodes on thi device.
+    # Number of Selenium Grid nodes on this device.
     _number_of_grid_nodes_on_this_device = 1
-    # Degree of paralelism. It should be the same number as _number_of_grid_nodes_on_this_device.
+    # Degree of paralelism. It should be the same number as total number of grid nodes.
     _number_of_concurrent_sites_testing = 1
 
     # Timeout during loading one site in seconds.
