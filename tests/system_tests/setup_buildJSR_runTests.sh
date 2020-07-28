@@ -4,7 +4,7 @@ function beforeExit {
 	if [ $retVal -ne 0 ]; then
 		echo "\"${last_command}\" command failed with exit code $?."
 		echo
-		echo "An error noticed during setup the test environment. Integration testing can not be started. Look at the README file and follow instructions to run the setup again."
+		echo "An error noticed during setup the test environment. System tests can not be started. Look at the README file and follow instructions to run the setup again."
 	fi
 	exit $retVal
 }
@@ -30,7 +30,7 @@ cd ../../system_tests
 # Stop handling errors.
 set +euo pipefail
 echo
-echo "No error noticed during setup the test environment. Integration testing is starting..."
+echo "No error noticed during setup the test environment. System tests are starting..."
 cd ./get_data
 python3 ./start.py
 cd ./analyze_data

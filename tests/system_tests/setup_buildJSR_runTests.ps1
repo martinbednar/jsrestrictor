@@ -14,10 +14,10 @@ Write-Host
 # Handle errors.
 if($Error.length -gt 0)
 {
-	Write-Host "An error noticed during setup the test environment. Integration testing can not be started. Look at the README file and follow instructions to run the setup again."
+	Write-Host "An error noticed during setup the test environment. System tests can not be started. Look at the README file and follow instructions to run the setup again."
 }
 else {
-	Write-Host "No error noticed during setup the test environment. Integration testing is starting..."
+	Write-Host "No error noticed during setup the test environment. System tests are starting..."
 	cd .\get_data
 	python .\start.py
 	cd ..\analyze_data
