@@ -18,7 +18,10 @@ if($Error.length -gt 0)
 }
 else {
 	Write-Host "No error noticed during setup the test environment. Integration testing is starting..."
-	python ./get_data/start.py
-	python ./analyze_data/start_screenshots_analysis.py
-	python ./analyze_data/start_logs_analysis.py
+	cd .\get_data
+	python .\start.py
+	cd ..\analyze_data
+	python .\start_screenshots_analysis.py
+	python .\start_logs_analysis.py
+	cd ..\
 }

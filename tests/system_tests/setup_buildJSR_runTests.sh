@@ -31,6 +31,9 @@ cd ../../system_tests
 set +euo pipefail
 echo
 echo "No error noticed during setup the test environment. Integration testing is starting..."
-python3 ./get_data/start.py
-python3 ./analyze_data/start_screenshots_analysis.py
-python3 ./analyze_data/start_logs_analysis.py
+cd ./get_data
+python3 ./start.py
+cd ./analyze_data
+python3 ./start_screenshots_analysis.py
+python3 ./start_logs_analysis.py
+cd ../
