@@ -1,8 +1,0 @@
-Python3.5+
-NumPy
-pip install python-Levenshtein  #problém s instalací
-Předtím nainstalovat Visual C++ build tools: https://stackoverflow.com/questions/44951456/pip-error-microsoft-visual-c-14-0-is-required
-
-sklearn
-nltk
-python -m nltk.downloader stopwords
