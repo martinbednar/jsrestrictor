@@ -70,6 +70,6 @@ class Config(metaclass=MetaConfig):
     _wait_between_checks_if_page_data_loaded = 10
 
     # Paths to files neccessary for testing.
-    _selenium_server_jar_path = './selenium/selenium-server-standalone-3.141.59.jar'
+    _selenium_server_jar_path = './selenium/selenium-server-standalone.jar'
     _chrome_driver_path = '../../common_files/webbrowser_drivers/chromedriver.exe'
     _jsr_extension_for_chrome_path = '../../common_files/JSR/chrome_JSR.crx'
