@@ -27,9 +27,86 @@ describe("Code builders", function() {
 		});
 	});
 	describe("Function build_code", function() {
+		beforeAll(function() {
+			my_very_simple_wrapper = {
+				wrapped_objects: [],
+				parent_object: "window",
+				parent_object_property: "Float64Array"
+			};
+			my_simple_wrapper = {
+				wrapped_objects: [],
+				parent_object: "window",
+				parent_object_property: "Float64Array",
+				post_wrapping_code: [{
+					code_type: "object_properties",
+					parent_object: "navigator",
+					parent_object_property: "deviceMemory",
+					wrapped_objects: [],
+					wrapped_properties: [{
+						property_name: "get",
+						property_value: "function(){return 4;}"
+					}]
+				}]
+			};
+			my_complicated_wrapper = {
+				wrapped_objects: [],
+				parent_object: "window",
+				parent_object_property: "Float64Array",
+				post_wrapping_code: [{
+					code_type: "object_properties",
+					parent_object: "navigator",
+					parent_object_property: "deviceMemory",
+					wrapped_objects: [],
+					wrapped_properties: [{
+						property_name: "get",
+						property_value: "function(){return 4;}"
+					}]
+				}]
+			};
+		});
 		it("should be defined",function() {
 			expect(build_code).toBeDefined();
 		});
+		it("should throw error when no wrapper is given as an argument",function() {
+			expect(function() {build_code()}).toThrowError();
+		});
+		it("should return string",function() {
+			expect(build_code(my_very_simple_wrapper)).toEqual(jasmine.any(String));
+		});
+		it("should return right code when argument is very simple wrapper",function() {
+			expect(build_code(my_very_simple_wrapper)).toBe("(function(...args) {Object.freeze(window.Float64Array);})();");
+		});
+		it("should return right code when argument is simple wrapper",function() {
+			expect(build_code(my_simple_wrapper)).toBe(`(function(...args) {
+		if (!("deviceMemory" in navigator)) {
+			// Do not wrap an object that is not defined, e.g. because it is experimental feature.
+			// This should reduce fingerprintability.
+			return;
+		}
+	descriptor = Object.getOwnPropertyDescriptor(
+			navigator, "deviceMemory");
+		if (descriptor === undefined) {
+			descriptor = { // Originally not a descriptor
+				get: navigator.deviceMemory,
+				set: undefined,
+				configurable: false,
+				enumerable: true,
+			};
+		}
+	
+			originalPDF = descriptor["get"];
+			replacementPD = function(){return 4;};
+			descriptor["get"] = replacementPD;
+			if (replacementPD instanceof Function) {
+				original_functions[replacementPD.toString()] = originalPDF.toString();
+			}
+		Object.defineProperty(navigator,
+		"deviceMemory", descriptor);
+	Object.freeze(window.Float64Array);})();`);
+		});
+	});
+	it("should return right code when argument is complicated wrapper",function() {
+		expect(build_code(my_very_simple_wrapper)).toBe("(function(...args) {Object.freeze(window.Float64Array);})();");
 	});
 	describe("Function wrap_code", function() {
 		beforeAll(function() {
