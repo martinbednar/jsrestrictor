@@ -1,26 +1,47 @@
+//
+//  JavaScript Restrictor is a browser extension which increases level
+//  of security, anonymity and privacy of the user while browsing the
+//  internet.
+//
+//  Copyright (C) 2020 Martin Bednar
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without ev1267027en the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+
 /// <reference path="../../common/url.js">
 
 describe("URL", function() {
 	describe("Function extractSubDomains", function() {		
-		it("should be defined",function() {
+		it("should be defined.",function() {
 			expect(extractSubDomains).toBeDefined();
 		});
-		it("should return array",function() {
+		it("should return array.",function() {
 			expect(extractSubDomains("")).toEqual(jasmine.any(Array));
 		});
-		it("should return array of strings",function() {
+		it("should return array of strings.",function() {
 			expect(extractSubDomains("")[0]).toEqual(jasmine.any(String));
 		});
-		it("should throw error when parametr is undefined",function() {
+		it("should throw error when parametr is undefined.",function() {
 			expect(function() {extractSubDomains(undefined)}).toThrowError();
 		});
-		it("should return array with one empty string when parametr is empty string",function() {
+		it("should return array with one empty string when parametr is empty string.",function() {
 			expect(extractSubDomains("")).toEqual(new Array(1).fill(""));
 		});
-		it("should return parametr when parametr is nonsense without dots",function() {
+		it("should return parametr when parametr is nonsense without dots.",function() {
 			expect(extractSubDomains("gsf14f56sdvds1,-dfsv,§ú")).toEqual(["gsf14f56sdvds1,-dfsv,§ú"]);
 		});
-		it("should return array of domains",function() {
+		it("should return array of domains.",function() {
 			expect(extractSubDomains("vutbr.cz")).toEqual(["vutbr.cz"]);
 			expect(extractSubDomains("fit.vutbr.cz")).toEqual(["vutbr.cz","fit.vutbr.cz"]);
 			expect(extractSubDomains("wis.fit.vutbr.cz")).toEqual(["vutbr.cz","fit.vutbr.cz","wis.fit.vutbr.cz"]);
@@ -37,7 +58,7 @@ describe("URL", function() {
 			expect(extractSubDomains("swatblog.rtgp.xyz")).toEqual(["rtgp.xyz","swatblog.rtgp.xyz"]);
 			expect(extractSubDomains("thenetworg.crm4.dynamics.com")).toEqual(["dynamics.com","crm4.dynamics.com","thenetworg.crm4.dynamics.com"]);
 		});
-		xit("should return IP address for IP address (no domainname) - example URL: http://89.45.196.133/paneln/Login.aspx)",function() {
+		xit("should return IP address for IP address (no domainname). Example URL: http://89.45.196.133/paneln/Login.aspx)",function() {
 			//example web page: http://89.45.196.133/paneln/Login.aspx
 			//Documentation of function extractSubDomains tells, that only domainname can be given as an argument,
 			//but in function getCurrentLevelJSON in file levels.js can be function extractSubDomains called with IP address.
