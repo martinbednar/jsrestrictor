@@ -1,6 +1,6 @@
 To build JSR from scratch:
 
-1. Go to the project repository [https://github.com/polcak/jsrestrictor]()
+1. Go to the project repository [https://github.com/polcak/jsrestrictor](https://github.com/polcak/jsrestrictor)
 1. Download the desired branch, e.g. as zip
 1. Unpack the zip file
 1. Run `make`
