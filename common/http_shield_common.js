@@ -700,6 +700,33 @@ function insertHostInStats(targetDomain)
 	return currentHost;
 }
 
+function beforeSendHeadersStatistical(sourceUrlHostname, targetUrlHostname) {
+	//Target is either host name or public IP
+	var currentHost = hostStatistics[sourceUrlHostname];
+
+	//If its the first time we're seeing this source host
+	if (currentHost == undefined)
+	{
+		currentHost = insertHostInStats(targetUrlHostname);
+		hostStatistics[sourceUrlHostname] = currentHost;
+		return;
+	}
+	//Check if we've seen this target for this source host
+	if (currentHost[targetUrlHostname] != undefined)
+	{
+		currentHost[targetUrlHostname].requests += 1;
+	}
+	else //If not, just insert the stats
+	{
+		currentHost[targetUrlHostname] = new Object();
+		currentHost[targetUrlHostname]["requests"] = 1;
+		currentHost[targetUrlHostname]["httpErrors"] = 0;
+		currentHost[targetUrlHostname]["hadError"] = false;
+		currentHost[targetUrlHostname]["successfulResponses"] = new Object();
+		currentHost["hosts"] += 1;
+	}
+}
+
 /// Creates and presents notification to the user
 /// works with webExtensions notification API
 function notifyBlockedHost(host) {

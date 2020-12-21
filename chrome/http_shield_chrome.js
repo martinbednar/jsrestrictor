@@ -152,6 +152,9 @@ function beforeSendHeadersListener(requestDetail) {
 		}
 	}
 	
+	//Add this request to statistics
+	beforeSendHeadersStatistical(sourceUrl.hostname, targetUrl.hostname);
+	
 	//Blocking direction Public -> Private
 	if (!isSourcePrivate && isDestinationPrivate)
 	{

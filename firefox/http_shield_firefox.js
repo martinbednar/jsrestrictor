@@ -163,6 +163,9 @@ async function beforeSendHeadersListener(requestDetail)
 	//Wait till all DNS resolutions are done, because its neccessary for upcoming actions
 	await Promise.all([sourceResolution, destinationResolution]);
 
+	//Add this request to statistics
+	beforeSendHeadersStatistical(sourceUrl.hostname, targetUrl.hostname);
+	
 	//Blocking direction Public -> Private
 	if (!isSourcePrivate && isDestinationPrivate)
 	{
