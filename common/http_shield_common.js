@@ -33,6 +33,45 @@ var localIPV4DNSZones;
 /// Locally served IPV6 DNS zones loaded from IANA
 var localIPV6DNSZones;
 
+
+/***** STATISTICAL PROCESSING - BEGIN ******/
+/// Associative array of hosts, that are currently blocked based on their previous actions
+var blockedHosts = new Object();
+/// Information about hosts, for which cant be used DNS query
+var hostStatistics = new Object();
+
+/// Percentage of hosts, that can register an HTTP error response
+var uniqueErrorHostsRatio = 10.0;
+/// If there are more hosts than uniqueErrorHostsLimit which are targeted from the same origin, the origin host becomes blocked
+var uniqueErrorHostsLimit = 20;
+/// Number of Request Timed Out errors allowed for one origin
+var errorsAllowed = 10;
+/// Number of HTTP client errors (eg. 404 not found, 403 forbidden etc.) per requestTimeInterval
+var httpClientErrorsAllowed = 5;
+
+/// Errors that are considered as possible attacker threat
+var httpErrorList = {
+	400:true,
+	404:true,
+	405:true,
+	406:true,
+	408:true,
+	410:true,
+	413:true,
+	414:true,
+	415:true,
+	501:true,
+	503:true,
+	505:true
+};
+
+/// String that defines Request Timed Out error in Chrome
+/// according to: https://developer.chrome.com/extensions/webRequest#event-onErrorOccurred
+/// It's not backwards compatible, but it's the best we have
+var chromeErrorString = "net::ERR_CONNECTION_TIMED_OUT";
+/***** STATISTICAL PROCESSING - END ******/
+
+
 /// Associtive array of hosts, that are currently among trusted "do not blocked" hosts
 var doNotBlockHosts = new Object();
 browser.storage.sync.get(["whitelistedHosts"], function(result){
@@ -54,6 +93,17 @@ browser.storage.sync.get(["requestShieldOn"], function(result){
 			beforeSendHeadersListener,
 			{urls: ["<all_urls>"]},
 			["blocking", "requestHeaders"]
+		);
+		
+		browser.webRequest.onHeadersReceived.addListener(
+			onHeadersReceivedRequestListener,
+			{urls: ["<all_urls>"]},
+			["blocking"]
+		);
+
+		browser.webRequest.onErrorOccurred.addListener(
+			onErrorOccuredListener,
+			{urls: ["<all_urls>"]}
 		);
 
 		if (typeof onResponseStartedListener === "function")
@@ -422,6 +472,17 @@ function commonMessageListener(message, sender, sendResponse)
 			{urls: ["<all_urls>"]},
 			["blocking", "requestHeaders"]
 		);
+		
+		browser.webRequest.onHeadersReceived.addListener(
+			onHeadersReceivedRequestListener,
+			{urls: ["<all_urls>"]},
+			["blocking"]
+		);
+
+		browser.webRequest.onErrorOccurred.addListener(
+			onErrorOccuredListener,
+			{urls: ["<all_urls>"]}
+		);
 
 		if (typeof onResponseStartedListener === "function")
 		{
@@ -437,6 +498,9 @@ function commonMessageListener(message, sender, sendResponse)
 	{
 		//Disconnect the listeners
 		browser.webRequest.onBeforeSendHeaders.removeListener(beforeSendHeadersListener);
+		
+		browser.webRequest.onHeadersReceived.removeListener(onHeadersReceivedRequestListener);
+		browser.webRequest.onErrorOccurred.removeListener(onErrorOccuredListener);
 		
 		if (typeof onResponseStartedListener === "function")
 		{
