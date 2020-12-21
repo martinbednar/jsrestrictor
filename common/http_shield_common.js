@@ -508,3 +508,206 @@ function commonMessageListener(message, sender, sendResponse)
 		}
 	}
 }
+
+/***** STATISTICAL PROCESSING - BEGIN ******/
+/// If the browser regained connectivity - came online
+window.addEventListener("online", function()
+{
+	//Hook up the listener to the onErrorOccured webRequest event
+	browser.webRequest.onErrorOccurred.addListener(
+		onErrorOccuredListener,
+		{urls: ["<all_urls>"]}
+	);
+});
+
+/// If the browser lost connectivity - gone offline
+window.addEventListener("offline", function()
+{
+	//Disconnect the listener from the onErrorOccured webRequest event
+	browser.webRequest.onErrorOccurred.removeListener(onErrorOccuredListener);
+});
+
+/// webRequest event listener, hooked to onErrorOccured event
+/// Catches all errors, checks them for Request Timed out errors
+/// Iterates error counter, blocks the host if limit was exceeded
+/// Takes object representing error in responseDetails variable
+function onErrorOccuredListener(responseDetails) {
+
+	//It's neccessary to have both of these defined, otherwise the error can't be analyzed
+	if (responseDetails.initiator === undefined || responseDetails.url === undefined)
+	{
+		return {cancel:false};
+	}
+	var sourceUrl = new URL(responseDetails.initiator);
+	//Removing www. from hostname, so the hostnames are uniform
+	sourceUrl.hostname = sourceUrl.hostname.replace(/^www\./,'');
+	var targetUrl = new URL(responseDetails.url);
+	targetUrl.hostname = targetUrl.hostname.replace(/^www\./,'');
+
+	//Host found among user's trusted hosts, allow it right away
+	if (checkWhitelist(sourceUrl.hostname))
+	{
+		return {cancel:false};
+	}
+	//Host found among user's untrusted, thus blocked, hosts, blocking it without further actions
+	if (blockedHosts[sourceUrl.hostname] != undefined)
+	{
+		return {cancel:true};
+	}
+
+	//If the error is TIMED_OUT -> access to non-existing IP
+	if (responseDetails.error == chromeErrorString)
+	{
+		//Count erros for given host
+		if (hostStatistics[sourceUrl.hostname] != undefined)
+		{
+			hostStatistics[sourceUrl.hostname]["errors"] += 1;
+		}
+		else
+		{
+			hostStatistics[sourceUrl.hostname] = insertHostInStats(targetUrl.hostname);
+			hostStatistics[sourceUrl.hostname]["errors"] = 1;
+		}
+		//Block the host if the error limit was exceeded
+		if(hostStatistics[sourceUrl.hostname]["errors"] > errorsAllowed)
+		{
+			notifyBlockedHost(sourceUrl.hostname);
+			blockedHosts[sourceUrl.hostname] = true;
+		}
+
+	}
+	return {cancel:false};
+}
+
+/// webRequest event listener, hooked to onErrorOccured event
+/// Catches all responses, analyzes those with record in hostStatistics
+/// Modifies counters, blocks if one of the limits was exceeded
+function onHeadersReceivedRequestListener(headers)
+{
+	//It's neccessary to have both of these defined, otherwise the response can't be analyzed
+	if (headers.initiator === undefined || headers.url === undefined)
+	{
+		return {cancel:false};
+	}
+
+	var sourceUrl = new URL(headers.initiator);
+	//Removing www. from hostname, so the hostnames are uniform
+	sourceUrl.hostname = sourceUrl.hostname.replace(/^www\./,'');
+	var targetUrl = new URL(headers.url);
+	targetUrl.hostname = targetUrl.hostname.replace(/^www\./,'');
+
+	//Host found among user's trusted hosts, allow it right away
+	if (checkWhitelist(sourceUrl.hostname))
+	{
+		return {cancel:false};
+	}
+
+	//Host found among user's untrusted, thus blocked, hosts, blocking it without further actions
+	if (blockedHosts[sourceUrl.hostname] != undefined)
+	{
+		return {cancel:true};
+	}
+
+	//If it's the error code that exists in httpErrorList
+	if (httpErrorList[headers.statusCode] != undefined)
+	{
+		//Obtain record for given origin from statistics array
+		//Record has to be there already, because it was inserted there while
+		//encountering the request from this origin
+		var currentHost = hostStatistics[sourceUrl.hostname];
+
+		//Check if the target domain was already encountered for this source origin
+		if (currentHost[targetUrl.hostname] != undefined)
+		{
+			//If so, iterate http errors variable for this origin and target domain
+			currentHost[targetUrl.hostname]["httpErrors"] += 1;
+			//If it's firt error from this target
+			if(!currentHost[targetUrl.hostname]["hadError"])
+			{
+				//Iterate global counter for this source origin
+				currentHost["httpErrors"] += 1;
+				//Set that we've seen the error from this target already
+				currentHost[targetUrl.hostname]["hadError"] = true;
+
+				//Allow atleast one error hosts, if 10% ratio is less than one error host
+				//Set hosts to 10, if there are less than 10 hosts
+				var hosts = currentHost["hosts"] < uniqueErrorHostsRatio ? uniqueErrorHostsRatio : currentHost["hosts"];
+				var errors = currentHost["httpErrors"];
+				var errorRatio =	errors*1.0 / hosts * 100;
+				//If the ratio, or the fixed limit for source origin was exceeded
+				if (errorRatio > uniqueErrorHostsRatio || errors > uniqueErrorHostsLimit)
+				{
+					//Block the origin
+					notifyBlockedHost(sourceUrl.hostname);
+					blockedHosts[sourceUrl.hostname] = true;
+					return {cancel:true};
+				}
+			}
+			//If the limit for http error response from target host was exceeded
+			if(currentHost[targetUrl.hostname]["httpErrors"] > httpClientErrorsAllowed)
+			{
+				//Block the origin
+				notifyBlockedHost(sourceUrl.hostname);
+				blockedHosts[sourceUrl.hostname] = true;
+				return {cancel:true};
+			}
+		}
+	}
+	//Successful response
+	else if ((headers.statusCode >= 100) && (headers.statusCode < 400))
+	{
+		//Obtain record for given origin from statistics array
+		var currentHost = hostStatistics[sourceUrl.hostname];
+		//Check if we've seen this target for given source origin
+		if (currentHost[targetUrl.hostname] != undefined)
+		{
+			//if so, check if it's the first successful response from this target URL
+			if (currentHost[targetUrl.hostname]["successfulResponses"][targetUrl] === undefined)
+			{
+				//If so, note that we've seen this URL already
+				currentHost[targetUrl.hostname]["successfulResponses"][targetUrl] = 1;
+				//Decrement the counter
+				currentHost[targetUrl.hostname]["httpErrors"] -= 0.5;
+			}
+			else
+			{
+				currentHost[targetUrl.hostname]["successfulResponses"][targetUrl] += 1;
+			}
+
+			//Normalize the number, if it's less than zero
+			if (currentHost[targetUrl.hostname]["httpErrors"] < 0)
+				currentHost[targetUrl.hostname]["httpErrors"] = 0;
+		}
+	}
+	return {cancel:false};
+}
+
+/// Function that creates object representing source host
+/// Recieves target hostname in targetDomain argument
+function insertHostInStats(targetDomain)
+{
+	var currentHost = new Object();
+	currentHost[targetDomain] = new Object();
+	currentHost[targetDomain]["requests"] = 1;
+	currentHost[targetDomain]["httpErrors"] = 0;
+	currentHost[targetDomain]["hadError"] = false;
+	currentHost[targetDomain]["successfulResponses"] = new Object();
+	currentHost["hosts"] = 1;
+	currentHost["requests"] = 1;
+	currentHost["httpErrors"] = 0;
+	currentHost["errors"] = 0;
+
+	return currentHost;
+}
+
+/// Creates and presents notification to the user
+/// works with webExtensions notification API
+function notifyBlockedHost(host) {
+	browser.notifications.create({
+		"type": "basic",
+		"iconUrl": browser.extension.getURL("img/icon-48.png"),
+		"title": "Host was blocked!",
+		"message": "Host: " + host + " issued to many unsuccessful requests. This may be just an error in your network connectivity or innocent error of the web site. But it can also be a sign of malicious activities such as using your browser as a proxy to scan your local network. It is up to you to decide if you trust the web site and give it an exception from the Network Boundary Scanner using pop up or the option page."
+	});
+}
+/***** STATISTICAL PROCESSING - END ******/
