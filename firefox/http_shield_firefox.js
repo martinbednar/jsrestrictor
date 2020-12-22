@@ -63,6 +63,12 @@ async function beforeSendHeadersListener(requestDetail)
 		return {cancel:false};
 	}
 
+	//Host found among user's untrusted, thus blocked, hosts, blocking it without further actions
+	if (blockedHosts[sourceUrl.hostname] != undefined)
+	{
+		return {cancel:true};
+	}
+
 	//Checking type of SOURCE URL
 	if (isIPV4(sourceUrl.hostname)) //SOURCE is IPV4 adddr
 	{
