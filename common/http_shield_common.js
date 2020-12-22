@@ -65,10 +65,12 @@ var httpErrorList = {
 	505:true
 };
 
-/// String that defines Request Timed Out error in Chrome
+/// String that defines Request Timed Out error in Chrome and Firefox
 /// according to: https://developer.chrome.com/extensions/webRequest#event-onErrorOccurred
+/// and to: https://developer.mozilla.org/en-US/docs/Mozilla/Errors
 /// It's not backwards compatible, but it's the best we have
 var chromeErrorString = "net::ERR_CONNECTION_TIMED_OUT";
+var firefoxErrorString = "NS_ERROR_NET_TIMEOUT";
 /***** STATISTICAL PROCESSING - END ******/
 
 
@@ -101,18 +103,26 @@ browser.storage.sync.get(["requestShieldOn"], function(result){
 			["blocking"]
 		);
 
-		browser.webRequest.onErrorOccurred.addListener(
-			onErrorOccuredListener,
-			{urls: ["<all_urls>"]}
-		);
-
 		if (typeof onResponseStartedListener === "function")
 		{
+			//Bind listeners for Chrome only
 			browser.webRequest.onResponseStarted.addListener(
 			onResponseStartedListener,
 			{urls: ["<all_urls>"]},
 			["responseHeaders"]
 			);
+
+			browser.webRequest.onErrorOccurred.addListener(
+				onErrorOccuredListener,
+				{urls: ["<all_urls>"]}
+			);
+		}
+		else {
+			//Bind listeners for Firefox only
+			browser.webRequest.onCompleted.addListener(
+				onErrorOccuredListener,
+				{urls: ["<all_urls>"]}
+			)
 		}
 	}
 });
@@ -479,18 +489,26 @@ function commonMessageListener(message, sender, sendResponse)
 			["blocking"]
 		);
 
-		browser.webRequest.onErrorOccurred.addListener(
-			onErrorOccuredListener,
-			{urls: ["<all_urls>"]}
-		);
-
 		if (typeof onResponseStartedListener === "function")
 		{
+			//Bind listeners for Chrome only
 			browser.webRequest.onResponseStarted.addListener(
 			onResponseStartedListener,
 			{urls: ["<all_urls>"]},
 			["responseHeaders"]
 			);
+
+			browser.webRequest.onErrorOccurred.addListener(
+				onErrorOccuredListener,
+				{urls: ["<all_urls>"]}
+			);
+		}
+		else {
+			//Bind listeners for Firefox only
+			browser.webRequest.onCompleted.addListener(
+				onErrorOccuredListener,
+				{urls: ["<all_urls>"]}
+			)
 		}
 	}
 	//HTTP request shield was turned off
@@ -500,11 +518,14 @@ function commonMessageListener(message, sender, sendResponse)
 		browser.webRequest.onBeforeSendHeaders.removeListener(beforeSendHeadersListener);
 		
 		browser.webRequest.onHeadersReceived.removeListener(onHeadersReceivedRequestListener);
-		browser.webRequest.onErrorOccurred.removeListener(onErrorOccuredListener);
 		
 		if (typeof onResponseStartedListener === "function")
 		{
 			browser.webRequest.onResponseStarted.removeListener(onResponseStartedListener);
+			browser.webRequest.onErrorOccurred.removeListener(onErrorOccuredListener);
+		}
+		else {
+			browser.webRequest.onCompleted.removeListener(onErrorOccuredListener);
 		}
 	}
 }
@@ -532,7 +553,11 @@ window.addEventListener("offline", function()
 /// Iterates error counter, blocks the host if limit was exceeded
 /// Takes object representing error in responseDetails variable
 function onErrorOccuredListener(responseDetails) {
-
+	//Initiator in Chrome is originUrl in Firefox.
+	if(responseDetails.initiator === undefined) {
+		responseDetails.initiator = responseDetails.originUrl;
+	}
+	
 	//It's neccessary to have both of these defined, otherwise the error can't be analyzed
 	if (responseDetails.initiator === undefined || responseDetails.url === undefined)
 	{
@@ -556,7 +581,7 @@ function onErrorOccuredListener(responseDetails) {
 	}
 
 	//If the error is TIMED_OUT -> access to non-existing IP
-	if (responseDetails.error == chromeErrorString)
+	if (responseDetails.error == chromeErrorString || responseDetails.error == firefoxErrorString)
 	{
 		//Count erros for given host
 		if (hostStatistics[sourceUrl.hostname] != undefined)
