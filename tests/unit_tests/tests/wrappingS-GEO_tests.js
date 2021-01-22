@@ -103,6 +103,66 @@ describe("GEO", function() {
 				},
 				timestamp: 1610954058112
 			},
+			tana_river: {
+				coords: {
+					accuracy: 150,
+					altitude: null,
+					altitudeAccuracy: null,
+					heading: null,
+					latitude: -0.02171,
+					longitude: 38.57106,
+					speed: null
+				},
+				timestamp: 1610954158112
+			},
+			cape_town: {
+				coords: {
+					accuracy: 150,
+					altitude: null,
+					altitudeAccuracy: null,
+					heading: null,
+					latitude: -33.9226,
+					longitude: 18.4226,
+					speed: null
+				},
+				timestamp: 1610954158112
+			},
+			christchurch: {
+				coords: {
+					accuracy: 150,
+					altitude: null,
+					altitudeAccuracy: null,
+					heading: null,
+					latitude: -43.531,
+					longitude: 172.6328,
+					speed: null
+				},
+				timestamp: 1610954158112
+			},
+			buenos_aires: {
+				coords: {
+					accuracy: 150,
+					altitude: null,
+					altitudeAccuracy: null,
+					heading: null,
+					latitude: -34.5880,
+					longitude: -58.4390,
+					speed: null
+				},
+				timestamp: 1610954158112
+			},
+			spitsbergen: {
+				coords: {
+					accuracy: 150,
+					altitude: null,
+					altitudeAccuracy: null,
+					heading: null,
+					latitude: 80.0177,
+					longitude: 21.1954,
+					speed: null
+				},
+				timestamp: 1610954158112
+			},
 			equator_0meridian: {
 				coords: {
 					accuracy: 150,
