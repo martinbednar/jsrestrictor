@@ -20,9 +20,9 @@
 //
 
 /// <reference path="../../common/wrappingS-GEO.js">
-
+			
 describe("GEO", function() {
-	describe("processOriginalGPSDataObject_globals", function() {
+	xdescribe("processOriginalGPSDataObject_globals", function() {
 		it("should be defined.",function() {
 			expect(processOriginalGPSDataObject_globals).toBeDefined();
 		});
@@ -237,16 +237,16 @@ describe("GEO", function() {
 			return Value * Math.PI / 180;
 		}
 		
-		it("should be defined.",function() {
+		xit("should be defined.",function() {
 			expect(processOriginalGPSDataObject).toBeDefined();
 		});
-		it("should be function.",function() {
+		xit("should be function.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined) {
 				eval(processOriginalGPSDataObject);
 				expect(typeof processOriginalGPSDataObject).toBe('function');
 			}
 		});
-		it("should return given coordinates when flag provideAccurateGeolocationData is set.",function() {
+		xit("should return given coordinates when flag provideAccurateGeolocationData is set.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined && typeof processOriginalGPSDataObject_globals !== undefined) {
 				eval(processOriginalGPSDataObject);
 				eval(processOriginalGPSDataObject_globals);
@@ -261,7 +261,7 @@ describe("GEO", function() {
 				}
 			}
 		});
-		it("should return changed timestamp when flag provideAccurateGeolocationData is set.",function() {
+		xit("should return changed timestamp when flag provideAccurateGeolocationData is set.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined && typeof processOriginalGPSDataObject_globals !== undefined) {
 				eval(processOriginalGPSDataObject);
 				eval(processOriginalGPSDataObject_globals);
@@ -276,7 +276,7 @@ describe("GEO", function() {
 				}
 			}
 		});
-		it("should return given coordinates when previouslyReturnedCoords are set.",function() {
+		xit("should return given coordinates when previouslyReturnedCoords are set.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined && typeof processOriginalGPSDataObject_globals !== undefined) {
 				eval(processOriginalGPSDataObject);
 				eval(processOriginalGPSDataObject_globals);
@@ -292,7 +292,7 @@ describe("GEO", function() {
 				}
 			}
 		});
-		it("should return changed timestamp when previouslyReturnedCoords are set.",function() {
+		xit("should return changed timestamp when previouslyReturnedCoords are set.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined && typeof processOriginalGPSDataObject_globals !== undefined) {
 				eval(processOriginalGPSDataObject);
 				eval(processOriginalGPSDataObject_globals);
@@ -308,7 +308,7 @@ describe("GEO", function() {
 				}
 			}
 		});
-		it("should return coords that are not equal to original coords.",function() {
+		xit("should return coords that are not equal to original coords.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined && typeof processOriginalGPSDataObject_globals !== undefined) {
 				eval(processOriginalGPSDataObject);
 				eval(processOriginalGPSDataObject_globals);
@@ -333,7 +333,7 @@ describe("GEO", function() {
 			}
 		});
 		// Required accuracy overview: https://github.com/polcak/jsrestrictor/blob/master/common/levels.js#L254
-		it("should return changed coords that are in required accuracy.",function() {
+		xit("should return changed coords that are in required accuracy.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined && typeof processOriginalGPSDataObject_globals !== undefined) {
 				eval(processOriginalGPSDataObject);
 				eval(processOriginalGPSDataObject_globals);
@@ -360,7 +360,7 @@ describe("GEO", function() {
 				}
 			}
 		});
-		it("should return changed timestamp.",function() {
+		xit("should return changed timestamp.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined && typeof processOriginalGPSDataObject_globals !== undefined) {
 				eval(processOriginalGPSDataObject);
 				eval(processOriginalGPSDataObject_globals);
@@ -380,7 +380,7 @@ describe("GEO", function() {
 				}
 			}
 		});
-		it("should not return nonsence coords.",function() {
+		xit("should not return nonsence coords.",function() {
 			if (typeof processOriginalGPSDataObject !== undefined && typeof processOriginalGPSDataObject_globals !== undefined) {
 				eval(processOriginalGPSDataObject);
 				eval(processOriginalGPSDataObject_globals);
@@ -409,6 +409,20 @@ describe("GEO", function() {
 					}
 				}
 			}
+		});
+		
+		it("should import.",function() {
+			//console.log(helping_code);
+			console.log("tady");
+			//var str="originalGetCurrentPosition";
+			//helping_code.replace(/GetCurrentPosition/g, "bla");
+			//console.log(helping_code);
+			eval(helping_code);
+			console.log("tu");
+			processOriginalGPSDataObject(undefined, originalPositions['fit_vut']);
+			console.log("zde");
+			console.log(processOriginalGPSDataObject(undefined, originalPositions[position_key]));
+			expect(processOriginalGPSDataObject).toBeDefined();
 		});
 	});
 });

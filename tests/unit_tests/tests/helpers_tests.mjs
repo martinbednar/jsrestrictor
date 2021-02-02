@@ -21,6 +21,8 @@
 
 /// <reference path="../../common/helpers.js">
 
+import { escape, gen_random32 } from '../tmp/helpers.mjs';
+
 describe("Helpers", function() {
 	describe("Function escape", function() {
 		it("should be defined.",function() {
