@@ -19,10 +19,6 @@
 //  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-var chrome = {};
-
-chrome.storage = {};
-
 chrome.storage.sync = {
 	__default__: 2, // Default protection level
 	version: 2,     // The version of this storage

@@ -21,6 +21,8 @@
 
 /// <reference path="../../common/background.js">
 
+const { tab_levels, tab_urls, current_level, updateBadge, queryInfo, tabUpdate, tabActivate, connected } = require('../tmp/background.js');
+
 describe("Background", function() {
 	describe("Function updateBadge", function() {		
 		it("should be defined.",function() {

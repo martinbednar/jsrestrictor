@@ -8,4 +8,4 @@ sed -e 's/function/export function/' ../../common/helpers.js > ./tmp/helpers.mjs
 jasmine --config=./config/jasmine.json
 
 # Remove ./tmp directory after tests finished.
-
+rm -rf ./tmp

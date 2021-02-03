@@ -1,0 +1,16 @@
+{
+  "name": "unit_tests",
+  "version": "1.0.0",
+  "description": "JSR unit tests.",
+  "main": "",
+  "scripts": {
+    "test": "jasmine --config=./config/jasmine.json",
+    "start": "jasmine --config=./config/jasmine.json"
+  },
+  "author": "Martin Bednar, ibednar@fit.vutbr.cz",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "^3.6.4",
+    "sinon-chrome": "^3.0.1"
+  }
+}
