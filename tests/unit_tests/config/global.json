@@ -1,0 +1,12 @@
+{
+	"scripts": [
+		{
+			"name": "helpers",
+			"remove_custom_namespace": false,
+			"src_script_require": [
+			],
+			"test_script_require": [
+			]
+		}
+	]
+}

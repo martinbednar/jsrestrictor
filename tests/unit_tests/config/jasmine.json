@@ -1,11 +1,1 @@
-{
-  "spec_dir": "tests",
-  "spec_files": [
-    "helpers_tests.js",
-    "background_tests.js"
-  ],
-  "helpers": [
-  ],
-  "stopSpecOnExpectationFailure": false,
-  "random": true
-}
+{ "spec_dir": "tests", "spec_files": [ SPEC_FILES ], "helpers": [ ], "stopSpecOnExpectationFailure": false, "random": true } 

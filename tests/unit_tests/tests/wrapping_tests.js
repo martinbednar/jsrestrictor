@@ -21,6 +21,8 @@
 
 /// <reference path="../../common/wrapping.js">
 
+const { build_wrapping_code, add_wrappers, rounding_function, noise_function } = require('../tmp/wrapping.js');
+
 describe("Wrapping", function() {
 	describe("Object build_wrapping_code", function() {		
 		it("should be defined.",function() {

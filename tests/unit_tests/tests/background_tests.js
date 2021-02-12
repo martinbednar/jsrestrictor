@@ -23,6 +23,8 @@
 
 const { tab_levels, tab_urls, current_level, updateBadge, queryInfo, tabUpdate, tabActivate, connected } = require('../tmp/background.js');
 
+const { levels } = require('../tmp/levels.js');
+
 describe("Background", function() {
 	describe("Function updateBadge", function() {		
 		it("should be defined.",function() {
