@@ -3,9 +3,68 @@
 		{
 			"name": "helpers",
 			"remove_custom_namespace": false,
-			"src_script_require": [
+			"src_script_requirements": [
 			],
-			"test_script_require": [
+			"test_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./helpers.js",
+							"names": [
+								"escape",
+								"gen_random32"
+							]
+						}
+					]
+				}
+			],
+			"extra_exports": [
+			]
+		},
+		{
+			"name": "browser",
+			"remove_custom_namespace": false,
+			"src_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "sinon-chrome",
+							"names": [
+								"chrome"
+							]
+						},
+						{
+							"from": "navigator",
+							"names": [
+								"navigator"
+							]
+						},
+						{
+							"from": "window",
+							"names": [
+								"window"
+							]
+						}
+					]
+				}
+			],
+			"test_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./browser.js",
+							"names": [
+								"browser"
+							]
+						}
+					]
+				}
+			],
+			"extra_exports": [
+				"browser"
 			]
 		}
 	]

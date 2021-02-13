@@ -12,28 +12,138 @@ script_names=""
 
 # Iterate over all scripts in global configuration.
 for k in $(jq '.scripts | keys | .[]' ./config/global.json); do
+	# Get current script.
 	script=$(jq -r ".scripts[$k]" ./config/global.json);
 	
+	# Get script name.
 	name=$(jq -r '.name' <<< "$script");
+	test_script_name="${name}_tests.js"
+	source_script_name="${name}.js"
+	# Add current script name to list of all testing scripts that will be run.
 	if [ $k -eq 0 ]
 	then
-		script_names+="\"${name}_tests.js\""
+		script_names+="\"${test_script_name}\""
 	else
-		script_names+="\" ,${name}_tests.js\""
+		script_names+=", \"${test_script_name}\""
 	fi
 	
+	cp ./tests/$test_script_name ./tmp/$test_script_name
+	
+	all_test_script_requirements=""
+	
+	# Iterate over test script requirements.
+	for l in $(jq '.test_script_requirements | keys | .[]' <<< "$script"); do
+		# Get current script.
+		requirements_type=$(jq -r ".test_script_requirements[$l]" <<< "$script");
+		
+		# Get requirement type.
+		type=$(jq -r '.type' <<< "$requirements_type");
+		
+		for m in $(jq '.requirements | keys | .[]' <<< "$requirements_type"); do
+			# Get current requirements.
+			requirements=$(jq -r ".requirements[$m]" <<< "$requirements_type");
+			
+			# Get requirement from.
+			from=$(jq -r '.from' <<< "$requirements");
+			
+			all_test_script_requirements+="${type} { "
+			
+			for n in $(jq '.names | keys | .[]' <<< "$requirements"); do
+				# Get current requirement name.
+				requirement_name=$(jq -r ".names[$n]" <<< "$requirements");
+				
+				# Add current requirement name.
+				if [ $n -eq 0 ]
+				then
+					all_test_script_requirements+="${requirement_name}"
+				else
+					all_test_script_requirements+=", ${requirement_name}"
+				fi
+				
+			done
+			
+			all_test_script_requirements+=" } = require('${from}');"
+		done
+	done
+	
+	sed -i "1s~^~$all_test_script_requirements~" ./tmp/$test_script_name
+	
+	
+	cp ../../common/$source_script_name ./tmp/$source_script_name
+	
+	
+	all_src_script_requirements=""
+	
+	# Iterate over source script requirements.
+	for l in $(jq '.src_script_requirements | keys | .[]' <<< "$script"); do
+		# Get current script.
+		requirements_type=$(jq -r ".src_script_requirements[$l]" <<< "$script");
+		
+		# Get requirement type.
+		type=$(jq -r '.type' <<< "$requirements_type");
+		
+		for m in $(jq '.requirements | keys | .[]' <<< "$requirements_type"); do
+			# Get current requirements.
+			requirements=$(jq -r ".requirements[$m]" <<< "$requirements_type");
+			
+			# Get requirement from.
+			from=$(jq -r '.from' <<< "$requirements");
+			
+			all_src_script_requirements+="${type} "
+			
+			for n in $(jq '.names | keys | .[]' <<< "$requirements"); do
+				# Get current requirement name.
+				requirement_name=$(jq -r ".names[$n]" <<< "$requirements");
+				
+				# Add current requirement name.
+				if [ $n -eq 0 ]
+				then
+					all_src_script_requirements+="${requirement_name}"
+				else
+					all_src_script_requirements+=", ${requirement_name}"
+				fi
+				
+			done
+			
+			all_src_script_requirements+=" = require('${from}');"
+		done
+	done
+	
+	sed -i "1s~^~$all_src_script_requirements~" ./tmp/$source_script_name
+	
+	exports=""
+	
+	while IFS= read -r line; do
+		if [[ $line == function* ]] ;
+		then
+			IFS=' (' read -ra line_divided <<< "$line"
+			function_name="${line_divided[1]}"
+			exports+="exports.${function_name} = ${function_name}; "
+		fi
+		
+		if [[ $line == var* ]] ;
+		then
+			IFS=' =' read -ra line_divided <<< "$line"
+			var_name="${line_divided[1]}"
+			exports+="exports.${var_name} = ${var_name}; "
+		fi
+	done < ./tmp/$source_script_name
+	
+	for l in $(jq '.extra_exports | keys | .[]' <<< "$script"); do
+		# Get current export.
+		export=$(jq -r ".extra_exports[$l]" <<< "$script");
+		exports+="exports.${export} = ${export}; "
+	done
+	
+	echo $exports >> ./tmp/$source_script_name
 done
 
-jasmine_config_backup=$(cat ./config/jasmine.json)
+cp ./config/jasmine.json ./tmp/jasmine.json
 
-sed -i "s/SPEC_FILES/$script_names/" ./config/jasmine.json
-
-# Preprocessing JSR source code before unit tests running. Save preprocessed to the new ./tmp directory.
-#sed -e 's/function/export function/' ../../common/helpers.js > ./tmp/helpers.mjs
+sed -i "s/<<SPEC_FILES>>/$script_names/" ./tmp/jasmine.json
 
 # Run unit tests in framework Jasmine for NodeJS.
-jasmine --config=./config/jasmine.json
+jasmine --config=./tmp/jasmine.json
 
 # Remove ./tmp directory after tests finished.
 #rm -rf ./tmp
-echo $jasmine_config_backup > ./config/jasmine.json

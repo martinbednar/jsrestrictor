@@ -21,8 +21,6 @@
 
 /// <reference path="../../common/browser.js">
 
-const { browser } = require('../tmp/browser.js');
-
 describe("Browser", function() {
 	it("should be defined.",function() {
 		expect(browser).toBeDefined();

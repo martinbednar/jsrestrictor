@@ -21,10 +21,6 @@
 
 /// <reference path="../../common/helpers.js">
 
-//import crypto from 'crypto'
-
-const { escape, gen_random32 } = require('../tmp/helpers.js');
-
 describe("Helpers", function() {
 	describe("Function escape", function() {
 		it("should be defined.",function() {
