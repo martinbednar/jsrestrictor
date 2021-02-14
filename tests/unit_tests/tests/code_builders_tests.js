@@ -21,10 +21,6 @@
 
 /// <reference path="../../common/code_builders.js">
 
-const { enclose_wrapping, enclose_wrapping2, define_page_context_function, generate_assign_function_code, generate_object_properties, generate_delete_properties, build_code, wrap_code } = require('../tmp/code_builders.js');
-
-const { levels, wrapping_groups } = require('../tmp/levels.js');
-
 describe("Code builders", function() {
 	describe("Function build_code", function() {
 		var my_very_simple_wrapper = {

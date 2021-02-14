@@ -21,10 +21,6 @@
 
 /// <reference path="../../common/levels.js">
 
-var { wrapping_groups, is_api_undefined, are_all_api_unsupported, level_0, level_1, level_2, level_3, levels, default_level, domains, wrapped_codes, init_levels, updateLevels, changedLevels, setDefaultLevel, saveDomainLevels, getCurrentLevelJSON } = require('../tmp/levels.js');
-
-const { wrap_code } = require('../tmp/code_builders.js');
-
 describe("Levels", function() {
 	describe("Function getCurrentLevelJSON", function() {
 		beforeAll(function() {

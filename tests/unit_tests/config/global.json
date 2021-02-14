@@ -18,8 +18,6 @@
 						}
 					]
 				}
-			],
-			"extra_exports": [
 			]
 		},
 		{
@@ -31,21 +29,7 @@
 					"requirements": [
 						{
 							"from": "sinon-chrome",
-							"names": [
-								"chrome"
-							]
-						},
-						{
-							"from": "navigator",
-							"names": [
-								"navigator"
-							]
-						},
-						{
-							"from": "window",
-							"names": [
-								"window"
-							]
+							"name": "chrome"
 						}
 					]
 				}
@@ -66,6 +50,227 @@
 			"extra_exports": [
 				"browser"
 			]
+		},
+		{
+			"name": "url",
+			"remove_custom_namespace": false,
+			"src_script_requirements": [
+			],
+			"test_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./url.js",
+							"names": [
+								"extractSubDomains"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "levels",
+			"remove_custom_namespace": false,
+			"src_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "sinon-chrome",
+							"name": "chrome"
+						},
+						{
+							"from": "navigator",
+							"name": "navigator"
+						},
+						{
+							"from": "window",
+							"name": "window"
+						},
+						{
+							"from": "./url.js",
+							"name": "{ extractSubDomains }"
+						}
+					]
+				}
+			],
+			"test_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./levels.js",
+							"names": [
+								"wrapping_groups",
+								"is_api_undefined",
+								"are_all_api_unsupported",
+								"level_0",
+								"level_1",
+								"level_2",
+								"level_3",
+								"levels",
+								"default_level",
+								"wrapped_codes",
+								"init_levels",
+								"updateLevels",
+								"changedLevels",
+								"setDefaultLevel",
+								"saveDomainLevels",
+								"getCurrentLevelJSON"
+							]
+						},
+						{
+							"from": "./code_builders.js",
+							"names": [
+								"wrap_code"
+							]
+						}
+					]
+				},
+				{
+					"type": "var",
+					"requirements": [
+						{
+							"from": "./levels.js",
+							"names": [
+								"domains"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "code_builders",
+			"remove_custom_namespace": false,
+			"src_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./wrapping.js",
+							"name": "build_wrapping_code"
+						}
+					]
+				}
+			],
+			"test_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./code_builders.js",
+							"names": [
+								"enclose_wrapping",
+								"enclose_wrapping2",
+								"define_page_context_function",
+								"generate_assign_function_code",
+								"generate_object_properties",
+								"generate_delete_properties",
+								"build_code",
+								"wrap_code"
+							]
+						},
+						{
+							"from": "./levels.js",
+							"names": [
+								"levels",
+								"wrapping_groups"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "wrapping",
+			"remove_custom_namespace": false,
+			"src_script_requirements": [
+			],
+			"test_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./wrapping.js",
+							"names": [
+								"build_wrapping_code",
+								"add_wrappers",
+								"rounding_function",
+								"noise_function"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "background",
+			"remove_custom_namespace": false,
+			"src_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./levels.js",
+							"name": "{ getCurrentLevelJSON }"
+						},
+						{
+							"from": "sinon-chrome",
+							"name": "chrome"
+						}
+					]
+				}
+			],
+			"test_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./background.js",
+							"names": [
+								"build_wrapping_code",
+								"add_wrappers",
+								"rounding_function",
+								"noise_function"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "wrappingS-GEO",
+			"remove_custom_namespace": true,
+			"src_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./wrapping.js",
+							"name": "{ add_wrappers }"
+						}
+					]
+				}
+			],
+			"test_script_requirements": [
+				{
+					"type": "const",
+					"requirements": [
+						{
+							"from": "./wrappingS-GEO.js",
+							"names": [
+								"processOriginalGPSDataObject_globals",
+								"processOriginalGPSDataObject",
+								"wrappers"
+							]
+						}
+					]
+				}
+			],
+			"inject_code_to_src": "function gen_random32() { return 0.2 * 4294967295; }"
 		}
 	]
 }

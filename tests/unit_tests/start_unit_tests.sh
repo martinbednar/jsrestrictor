@@ -71,6 +71,18 @@ for k in $(jq '.scripts | keys | .[]' ./config/global.json); do
 	
 	cp ../../common/$source_script_name ./tmp/$source_script_name
 	
+	remove_custom_namespace=$(jq -r '.remove_custom_namespace' <<< "$script")
+	if [ $remove_custom_namespace == "true" ]
+	then
+		sed -i -e "s/(function() {//" -e "s/})();//" -e "s/successCallback/return/" ./tmp/$source_script_name
+	fi
+	
+	
+	# Get code for injecting.
+	inject_code=$(jq -r '.inject_code_to_src' <<< "$script");
+	
+	sed -i "1s~^~$inject_code~" ./tmp/$source_script_name
+	
 	
 	all_src_script_requirements=""
 	
@@ -89,23 +101,10 @@ for k in $(jq '.scripts | keys | .[]' ./config/global.json); do
 			# Get requirement from.
 			from=$(jq -r '.from' <<< "$requirements");
 			
-			all_src_script_requirements+="${type} "
+			# Get requirement name.
+			requirement_name=$(jq -r '.name' <<< "$requirements");
 			
-			for n in $(jq '.names | keys | .[]' <<< "$requirements"); do
-				# Get current requirement name.
-				requirement_name=$(jq -r ".names[$n]" <<< "$requirements");
-				
-				# Add current requirement name.
-				if [ $n -eq 0 ]
-				then
-					all_src_script_requirements+="${requirement_name}"
-				else
-					all_src_script_requirements+=", ${requirement_name}"
-				fi
-				
-			done
-			
-			all_src_script_requirements+=" = require('${from}');"
+			all_src_script_requirements+="${type} ${requirement_name} = require('${from}');"
 		done
 	done
 	
@@ -114,26 +113,45 @@ for k in $(jq '.scripts | keys | .[]' ./config/global.json); do
 	exports=""
 	
 	while IFS= read -r line; do
-		if [[ $line == function* ]] ;
+		if [[ $remove_custom_namespace == "false" ]] ;
 		then
-			IFS=' (' read -ra line_divided <<< "$line"
-			function_name="${line_divided[1]}"
-			exports+="exports.${function_name} = ${function_name}; "
-		fi
-		
-		if [[ $line == var* ]] ;
-		then
-			IFS=' =' read -ra line_divided <<< "$line"
-			var_name="${line_divided[1]}"
-			exports+="exports.${var_name} = ${var_name}; "
+			if [[ $line == function* ]] ;
+			then
+				IFS=' (' read -ra line_divided <<< "$line"
+				function_name="${line_divided[1]}"
+				exports+="exports.${function_name} = ${function_name}; "
+			elif [[ $line == var* ]] ;
+			then
+				IFS=' =' read -ra line_divided <<< "$line"
+				var_name="${line_divided[1]}"
+				exports+="exports.${var_name} = ${var_name}; "
+			fi
+		else
+			echo "$line"
+			line=$(sed 's/^.//' <<< $line)
+			echo "$line"
+			if [[ $line == function* ]] ;
+			then
+				IFS=' (' read -ra line_divided <<< "$line"
+				function_name="${line_divided[1]}"
+				exports+="exports.${function_name} = ${function_name}; "
+			elif [[ $line == var* ]] ;
+			then
+				IFS=' =' read -ra line_divided <<< "$line"
+				var_name="${line_divided[1]}"
+				exports+="exports.${var_name} = ${var_name}; "
+			fi
 		fi
 	done < ./tmp/$source_script_name
 	
-	for l in $(jq '.extra_exports | keys | .[]' <<< "$script"); do
-		# Get current export.
-		export=$(jq -r ".extra_exports[$l]" <<< "$script");
-		exports+="exports.${export} = ${export}; "
-	done
+	if [[ $(jq '.extra_exports' <<< "$script") != "null" ]] ;
+	then
+		for l in $(jq '.extra_exports | keys | .[]' <<< "$script"); do
+			# Get current export.
+			export=$(jq -r ".extra_exports[$l]" <<< "$script");
+			exports+="exports.${export} = ${export}; "
+		done
+	fi
 	
 	echo $exports >> ./tmp/$source_script_name
 done

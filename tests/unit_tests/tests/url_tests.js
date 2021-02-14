@@ -21,8 +21,6 @@
 
 /// <reference path="../../common/url.js">
 
-const { extractSubDomains } = require('../tmp/url.js');
-
 describe("URL", function() {
 	describe("Function extractSubDomains", function() {		
 		it("should be defined.",function() {

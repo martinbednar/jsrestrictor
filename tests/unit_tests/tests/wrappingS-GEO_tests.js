@@ -21,8 +21,6 @@
 
 /// <reference path="../../common/wrappingS-GEO.js">
 
-const { processOriginalGPSDataObject_globals, processOriginalGPSDataObject, wrappers } = require('../tmp/wrappingS-GEO.js');
-
 describe("GEO", function() {	
 	describe("processOriginalGPSDataObject_globals", function() {
 		it("should be defined.",function() {
