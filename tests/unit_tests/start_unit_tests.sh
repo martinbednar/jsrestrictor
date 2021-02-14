@@ -109,8 +109,18 @@ for k in $(jq '.scripts | keys | .[]' ./config/global.json); do
 	inject_code=$(jq -r '.inject_code_to_src' <<< "$script")
 	if [[ $inject_code != "null" ]] ;
 	then
-		# Inject given code to source script.
-		sed -i "1s~^~$inject_code~" ./tmp/$source_script_name
+		inject_code_begin=$(jq -r '.begin' <<< "$inject_code")
+		if [[ $inject_code_begin != "null" ]] ;
+		then
+			# Inject given code to the begin of the source script.
+			sed -i "1s~^~$inject_code_begin~" ./tmp/$source_script_name
+		fi
+		inject_code_end=$(jq -r '.end' <<< "$inject_code")
+		if [[ $inject_code_end != "null" ]] ;
+		then
+			# Inject given code to the end of the source script.
+			echo $inject_code_end >> ./tmp/$source_script_name
+		fi
 	fi
 	
 	
@@ -219,4 +229,4 @@ sed -i "s/<<SPEC_FILES>>/$script_names/" ./tmp/jasmine.json
 jasmine --config=./tmp/jasmine.json
 
 # Remove ./tmp directory (temporary working directory) after tests finished.
-rm -rf ./tmp
+#rm -rf ./tmp

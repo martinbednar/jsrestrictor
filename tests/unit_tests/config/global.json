@@ -112,6 +112,7 @@
 								"level_3",
 								"levels",
 								"default_level",
+								"domains",
 								"wrapped_codes",
 								"init_levels",
 								"updateLevels",
@@ -128,19 +129,13 @@
 							]
 						}
 					]
-				},
-				{
-					"type": "var",
-					"requirements": [
-						{
-							"from": "./levels.js",
-							"names": [
-								"domains"
-							]
-						}
-					]
 				}
-			]
+			],
+			"inject_code_to_src": 
+			{
+				"begin": "function gen_random32() { return 0.2 * 4294967295; }",
+				"end": "domains = {}; domains['stackoverflow.com'] = level_3; domains['polcak.github.io'] = level_2; domains['github.io'] = level_3; domains['swatblog.rtgp.xyz'] = level_1; domains['mail.google.com'] = level_0; domains['example.net'] = level_3; domains['vas-hosting.cz'] = level_2; domains['crm4.dynamics.com'] = level_1; domains['dynamics.com'] = level_2; domains['csob.cz'] = level_0;"
+			}
 		},
 		{
 			"name": "code_builders",
@@ -270,7 +265,10 @@
 					]
 				}
 			],
-			"inject_code_to_src": "function gen_random32() { return 0.2 * 4294967295; }"
+			"inject_code_to_src":
+			{
+				"begin": "function gen_random32() { return 0.2 * 4294967295; }"
+			}
 		}
 	]
 }
