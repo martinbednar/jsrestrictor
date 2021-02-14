@@ -127,9 +127,7 @@ for k in $(jq '.scripts | keys | .[]' ./config/global.json); do
 				exports+="exports.${var_name} = ${var_name}; "
 			fi
 		else
-			echo "$line"
 			line=$(sed 's/^.//' <<< $line)
-			echo "$line"
 			if [[ $line == function* ]] ;
 			then
 				IFS=' (' read -ra line_divided <<< "$line"
@@ -164,4 +162,4 @@ sed -i "s/<<SPEC_FILES>>/$script_names/" ./tmp/jasmine.json
 jasmine --config=./tmp/jasmine.json
 
 # Remove ./tmp directory after tests finished.
-#rm -rf ./tmp
+rm -rf ./tmp
