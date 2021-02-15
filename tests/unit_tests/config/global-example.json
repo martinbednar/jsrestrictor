@@ -8,8 +8,14 @@
 					"type": "const or var or ...",
 					"requirements": [
 						{
-							"from": "file or imported library",
-							"name": "name of imported library or name of object with brackets imported from file (e.g. { myFunction })"
+							"from": "file or library",
+							"objects": [
+								"array of names of objects to be imported from file or library"
+							]
+						},
+						{
+							"import": "file or library",
+							"as": "name for whole imported file or library"
 						}
 					]
 				}
@@ -19,15 +25,23 @@
 					"type": "const or var or ...",
 					"requirements": [
 						{
-							"from": "file or imported library",
-							"names": [
-								"names of objects to be imported from file or library separated by comma"
+							"from": "file or library",
+							"objects": [
+								"array of names of objects to be imported from file or library"
 							]
+						},
+						{
+							"import": "file or library",
+							"as": "name for whole imported file or library"
 						}
 					]
 				}
 			],
-			"inject_code_to_src": "code to be injected at the begging of source script after requirements",
+			"inject_code_to_src":
+			{
+				"begin": "code to be injected at the begging of source script after requirements",
+				"end": "code to be injected at the end of source script before exports"
+			},
 			"extra_exports": [
 				"Names of objects to be exported from source file (separated by comma).",
 				"Global functions and vars should be exported automatically and it is not necessary to introduce them here.",
