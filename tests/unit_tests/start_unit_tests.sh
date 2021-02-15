@@ -65,6 +65,7 @@ function get_requirements {
 	done
 }
 
+echo Preparation for testing STARTED.
 
 # Create directory ./tmp if not exists. Temporary working directory for one tests running.
 # Will be deleted when unit tests will be finished.
@@ -229,8 +230,16 @@ cp ./config/jasmine.json ./tmp/jasmine.json
 # Add all testing scripts from global configuration to Jasmine confiduration.
 sed -i "s/<<SPEC_FILES>>/$script_names/" ./tmp/jasmine.json
 
+echo Preparation for testing FINISHED.
+echo Testing STARTED.
+
 # Run unit tests in framework Jasmine for NodeJS.
 jasmine --config=./tmp/jasmine.json
 
+echo Testing FINISHED.
+echo Cleanup STARTED.
+
 # Remove ./tmp directory (temporary working directory) after tests finished.
-#rm -rf ./tmp
+rm -rf ./tmp
+
+echo Cleanup FINISHED.
