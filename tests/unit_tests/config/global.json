@@ -11,7 +11,7 @@
 					"requirements": [
 						{
 							"from": "./helpers.js",
-							"names": [
+							"objects": [
 								"escape",
 								"gen_random32"
 							]
@@ -28,8 +28,8 @@
 					"type": "const",
 					"requirements": [
 						{
-							"from": "sinon-chrome",
-							"name": "chrome"
+							"import": "sinon-chrome",
+							"as": "chrome"
 						}
 					]
 				}
@@ -40,7 +40,7 @@
 					"requirements": [
 						{
 							"from": "./browser.js",
-							"names": [
+							"objects": [
 								"browser"
 							]
 						}
@@ -62,7 +62,7 @@
 					"requirements": [
 						{
 							"from": "./url.js",
-							"names": [
+							"objects": [
 								"extractSubDomains"
 							]
 						}
@@ -78,20 +78,22 @@
 					"type": "const",
 					"requirements": [
 						{
-							"from": "sinon-chrome",
-							"name": "chrome"
+							"import": "sinon-chrome",
+							"as": "chrome"
 						},
 						{
-							"from": "navigator",
-							"name": "navigator"
+							"import": "navigator",
+							"as": "navigator"
 						},
 						{
-							"from": "window",
-							"name": "window"
+							"import": "window",
+							"as": "window"
 						},
 						{
 							"from": "./url.js",
-							"name": "{ extractSubDomains }"
+							"objects": [
+								"extractSubDomains"
+							]
 						}
 					]
 				}
@@ -102,7 +104,7 @@
 					"requirements": [
 						{
 							"from": "./levels.js",
-							"names": [
+							"objects": [
 								"wrapping_groups",
 								"is_api_undefined",
 								"are_all_api_unsupported",
@@ -124,7 +126,7 @@
 						},
 						{
 							"from": "./code_builders.js",
-							"names": [
+							"objects": [
 								"wrap_code"
 							]
 						}
@@ -146,7 +148,9 @@
 					"requirements": [
 						{
 							"from": "./wrapping.js",
-							"name": "build_wrapping_code"
+							"objects": [
+								"build_wrapping_code"
+							]
 						}
 					]
 				}
@@ -157,7 +161,7 @@
 					"requirements": [
 						{
 							"from": "./code_builders.js",
-							"names": [
+							"objects": [
 								"enclose_wrapping",
 								"enclose_wrapping2",
 								"define_page_context_function",
@@ -170,7 +174,7 @@
 						},
 						{
 							"from": "./levels.js",
-							"names": [
+							"objects": [
 								"levels",
 								"wrapping_groups"
 							]
@@ -190,7 +194,7 @@
 					"requirements": [
 						{
 							"from": "./wrapping.js",
-							"names": [
+							"objects": [
 								"build_wrapping_code",
 								"add_wrappers",
 								"rounding_function",
@@ -210,11 +214,13 @@
 					"requirements": [
 						{
 							"from": "./levels.js",
-							"name": "{ getCurrentLevelJSON }"
+							"objects": [
+								"getCurrentLevelJSON"
+							]
 						},
 						{
-							"from": "sinon-chrome",
-							"name": "chrome"
+							"import": "sinon-chrome",
+							"as": "chrome"
 						}
 					]
 				}
@@ -225,7 +231,7 @@
 					"requirements": [
 						{
 							"from": "./background.js",
-							"names": [
+							"objects": [
 								"build_wrapping_code",
 								"add_wrappers",
 								"rounding_function",
@@ -245,7 +251,9 @@
 					"requirements": [
 						{
 							"from": "./wrapping.js",
-							"name": "{ add_wrappers }"
+							"objects": [
+								"add_wrappers"
+							]
 						}
 					]
 				}
@@ -256,7 +264,7 @@
 					"requirements": [
 						{
 							"from": "./wrappingS-GEO.js",
-							"names": [
+							"objects": [
 								"processOriginalGPSDataObject_globals",
 								"processOriginalGPSDataObject",
 								"wrappers"

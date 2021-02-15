@@ -20,6 +20,52 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+
+function get_requirements {
+	# Get requirement type.
+	type=$(jq -r '.type' <<< "$requirements_type")
+	
+	for m in $(jq '.requirements | keys | .[]' <<< "$requirements_type"); do
+		# Get current requirements.
+		requirements=$(jq -r ".requirements[$m]" <<< "$requirements_type")
+		
+		# Get requirement from.
+		from=$(jq -r '.from' <<< "$requirements")
+		
+		# Get requirement import.
+		import=$(jq -r '.import' <<< "$requirements")
+		
+		if [[ $from != "null" ]]
+		then
+			all_script_requirements+="${type} { "
+		
+			# Iterate over test script requirement names.
+			for n in $(jq '.objects | keys | .[]' <<< "$requirements"); do
+				# Get current requirement name.
+				requirement_object=$(jq -r ".objects[$n]" <<< "$requirements")
+				
+				# Add current requirement name.
+				if [ $n -eq 0 ]
+				then
+					all_script_requirements+="${requirement_object}"
+				else
+					all_script_requirements+=", ${requirement_object}"
+				fi
+				
+			done
+			
+			all_script_requirements+=" } = require('${from}');"			
+		elif [[ $import != "null" ]]
+		then
+			# Get requirement as.
+			requirement_as=$(jq -r '.as' <<< "$requirements")
+			
+			all_script_requirements+="${type} ${requirement_as} = require('${import}');"
+		fi
+	done
+}
+
+
 # Create directory ./tmp if not exists. Temporary working directory for one tests running.
 # Will be deleted when unit tests will be finished.
 mkdir -p ./tmp
@@ -52,45 +98,17 @@ for k in $(jq '.scripts | keys | .[]' ./config/global.json); do
 	cp ./tests/$test_script_name ./tmp/$test_script_name
 	
 	# Variable for collecting all test script requirements.
-	all_test_script_requirements=""
+	all_script_requirements=""
 	
 	# Iterate over test script requirements.
 	for l in $(jq '.test_script_requirements | keys | .[]' <<< "$script"); do
 		# Get current script.
 		requirements_type=$(jq -r ".test_script_requirements[$l]" <<< "$script")
 		
-		# Get requirement type.
-		type=$(jq -r '.type' <<< "$requirements_type")
-		
-		for m in $(jq '.requirements | keys | .[]' <<< "$requirements_type"); do
-			# Get current requirements.
-			requirements=$(jq -r ".requirements[$m]" <<< "$requirements_type")
-			
-			# Get requirement from.
-			from=$(jq -r '.from' <<< "$requirements")
-			
-			all_test_script_requirements+="${type} { "
-			
-			# Iterate over test script requirement names.
-			for n in $(jq '.names | keys | .[]' <<< "$requirements"); do
-				# Get current requirement name.
-				requirement_name=$(jq -r ".names[$n]" <<< "$requirements")
-				
-				# Add current requirement name.
-				if [ $n -eq 0 ]
-				then
-					all_test_script_requirements+="${requirement_name}"
-				else
-					all_test_script_requirements+=", ${requirement_name}"
-				fi
-				
-			done
-			
-			all_test_script_requirements+=" } = require('${from}');"
-		done
+		get_requirements
 	done
 	
-	sed -i "1s~^~$all_test_script_requirements~" ./tmp/$test_script_name
+	sed -i "1s~^~$all_script_requirements~" ./tmp/$test_script_name
 	
 	
 	########################   MODIFY SOURCE SCRIPT   ########################
@@ -127,31 +145,17 @@ for k in $(jq '.scripts | keys | .[]' ./config/global.json); do
 	########################   SET SOURCE SCRIPT REQUIREMENTS   ########################
 	
 	# Variable for collecting all source script requirements.
-	all_src_script_requirements=""
+	all_script_requirements=""
 	
 	# Iterate over source script requirements.
 	for l in $(jq '.src_script_requirements | keys | .[]' <<< "$script"); do
 		# Get current script.
 		requirements_type=$(jq -r ".src_script_requirements[$l]" <<< "$script")
 		
-		# Get requirement type.
-		type=$(jq -r '.type' <<< "$requirements_type")
-		
-		for m in $(jq '.requirements | keys | .[]' <<< "$requirements_type"); do
-			# Get current requirements.
-			requirements=$(jq -r ".requirements[$m]" <<< "$requirements_type")
-			
-			# Get requirement from.
-			from=$(jq -r '.from' <<< "$requirements")
-			
-			# Get requirement name.
-			requirement_name=$(jq -r '.name' <<< "$requirements")
-			
-			all_src_script_requirements+="${type} ${requirement_name} = require('${from}');"
-		done
+		get_requirements
 	done
 	
-	sed -i "1s~^~$all_src_script_requirements~" ./tmp/$source_script_name
+	sed -i "1s~^~$all_script_requirements~" ./tmp/$source_script_name
 	
 	
 	########################   SET SOURCE SCRIPT EXPORTS   ########################
