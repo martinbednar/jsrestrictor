@@ -273,28 +273,26 @@ describe("GEO", function() {
 			}
 		}
 		
-		//This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
-		//Source: https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
-		function calcCrow(lat1, lon1, lat2, lon2) 
+		//This function takes latitude and longitude of two location and returns the distance between them (in km).
+		function calcDistance(lat1, long1, lat2, long2) 
 		{
-		  var R = 6371; // km
-		  var dLat = toRad(lat2-lat1);
-		  var dLon = toRad(lon2-lon1);
-		  var lat1 = toRad(lat1);
-		  var lat2 = toRad(lat2);
+			var earth_radius = 6371; // km
+			var distance_lat = toRadians(lat2-lat1); // rad
+			var distance_long = toRadians(long2-long1); // rad
+			var lat1 = toRadians(lat1); // rad
+			var lat2 = toRadians(lat2); // rad
 
-		  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-			Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-		  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-		  var d = R * c;
-		  return d;
+			// Haversine formula  
+			var a = Math.sin(distance_lat/2) * Math.sin(distance_lat/2) +
+				Math.sin(distance_long/2) * Math.sin(distance_long/2) * Math.cos(lat1) * Math.cos(lat2); 
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+			var distance = earth_radius * c;
+			return distance;
 		}
 
 		// Converts numeric degrees to radians
-		//Source: https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
-		function toRad(Value) 
-		{
-			return Value * Math.PI / 180;
+		function toRadians (angle) {
+			return angle * (Math.PI / 180);
 		}
 		
 		it("should be defined.",function() {
@@ -410,7 +408,7 @@ describe("GEO", function() {
 					for (const position_key in originalPositions) {
 						original_coords = originalPositions[position_key]['coords'];
 						changed_coords = processOriginalGPSDataObject(undefined, originalPositions[position_key])['coords'];
-						expect(calcCrow(changed_coords['latitude'],
+						expect(calcDistance(changed_coords['latitude'],
 										changed_coords['longitude'],
 										original_coords['latitude'],
 										original_coords['longitude'])).toBeLessThan(10*desiredAccuracy,
