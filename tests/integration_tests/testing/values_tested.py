@@ -103,6 +103,7 @@ class TestedValues:
                  referrer,
                  time,
                  performance,
+                 performance_toString,
                  protect_canvas
                  ):
         self.navigator = Navigator(
@@ -133,4 +134,5 @@ class TestedValues:
         self.referrer = referrer
         self.time = time
         self.performance = performance
+        self.performance_toString = performance_toString
         self.protect_canvas = protect_canvas

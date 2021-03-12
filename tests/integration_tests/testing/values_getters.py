@@ -116,3 +116,9 @@ def is_canvas_spoofed(driver):
         return "ERROR"
     else:
         return is_spoofed
+
+## Get performance.now.toString().
+#
+#  Only executing javascript and geting returned values. No support page is needed.
+def get_performance_toString(driver):
+    return driver.execute_script("return performance.now.toString()")
