@@ -59,4 +59,5 @@ def test_performance(browser, expected):
 
 ## Test performance methods.toString(). They should be always unchanged by JSR.
 def test_performance_toString(browser, performance_toString):
-    assert performance_toString == browser.real.performance_toString
+    for method in performance_toString:
+        assert performance_toString[method] == browser.real.performance_toString[method]

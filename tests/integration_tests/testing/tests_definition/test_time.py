@@ -61,4 +61,5 @@ def test_hours_minutes_seconds(browser):
 
 ## Test Date methods.toString(). They should be always unchanged by JSR.
 def test_time_toString(browser, time_toString):
-    assert time_toString == browser.real.time_toString
+    for method in time_toString:
+        assert time_toString[method] == browser.real.time_toString[method]
