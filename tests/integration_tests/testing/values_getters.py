@@ -190,5 +190,5 @@ def get_time_toString(driver):
     output['Date.prototype.toString.toString()'] = driver.execute_script("let d = new Date(); return d.toString.toString()")
     output['Date.prototype.toTimeString.toString()'] = driver.execute_script("let d = new Date(); return d.toTimeString.toString()")
     output['Date.prototype.toUTCString.toString()'] = driver.execute_script("let d = new Date(); return d.toUTCString.toString()")
-    output['Date.prototype.valueOf.toString()'] = driver.execute_script("let d = new Date(); return d.valueOf.toString()")444
+    output['Date.prototype.valueOf.toString()'] = driver.execute_script("let d = new Date(); return d.valueOf.toString()")
     return output
