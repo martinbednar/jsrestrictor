@@ -26,7 +26,7 @@ import random
 
 from math_operations import is_in_accuracy
 from configuration import get_config
-from values_getters import get_time_toString
+from values_getters import get_time_toString, get_milliseconds_toString
 
 
 ## Setup method - it is run before time tests execution starts.
@@ -47,6 +47,15 @@ def time_toString(browser):
 	return get_time_toString(browser.driver)
 
 
+## Setup method - it is run before time tests execution starts.
+#
+#  This setup method initialize variable milliseconds_toString that contains function d.getMilliseconds.toString(), where d is new Date(), and
+#  this variable is provided to milliseconds_toString test and the function in the variable is compared with real value.
+@pytest.fixture(scope='module', autouse=True)
+def milliseconds_toString(browser):
+	return get_milliseconds_toString(browser.driver)
+
+
 ## Test hours.
 #  Hours should be real value. Maximal deviation should be 1 (change hour during command execution or another timezone).
 def test_hours_minutes_seconds(browser):
@@ -62,3 +71,8 @@ def test_hours_minutes_seconds(browser):
 ## Test Date.toString(). It should be always unchanged by JSR.
 def test_time_toString(browser, time_toString):
     assert time_toString == browser.real.time_toString
+
+
+## Test Date.toString(). It should be always unchanged by JSR.
+def test_milliseconds_toString(browser, milliseconds_toString):
+    assert milliseconds_toString == browser.real.milliseconds_toString

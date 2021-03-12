@@ -135,5 +135,5 @@ def get_time_toString(driver):
 ## Get d.getMilliseconds.toString(), where d = new Date().
 #
 #  Only executing javascript and geting returned values. No support page is needed.
-def getMilliseconds_toString(driver):
+def get_milliseconds_toString(driver):
     return driver.execute_script("let d = new Date(); return d.getMilliseconds.toString()")
