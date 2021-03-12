@@ -27,10 +27,10 @@ from math_operations import is_in_accuracy
 from values_getters import get_performance_toString
 
 
-## Setup method - it is run before hw tests execution starts.
+## Setup method - it is run before performance tests execution starts.
 #
-#  This setup method initialize variable device that contains current data about device and
-#  this variable is provided to device tests and values in device variable are compared with expected values.
+#  This setup method initialize variable performance_toString that contains function performance.now.toString() and
+#  this variable is provided to performance_toString test and the function in the variable is compared with real value.
 @pytest.fixture(scope='module', autouse=True)
 def performance_toString(browser):
 	return get_performance_toString(browser.driver)

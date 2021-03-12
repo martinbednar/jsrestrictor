@@ -117,8 +117,23 @@ def is_canvas_spoofed(driver):
     else:
         return is_spoofed
 
+
 ## Get performance.now.toString().
 #
 #  Only executing javascript and geting returned values. No support page is needed.
 def get_performance_toString(driver):
     return driver.execute_script("return performance.now.toString()")
+
+
+## Get Date.toString().
+#
+#  Only executing javascript and geting returned values. No support page is needed.
+def get_time_toString(driver):
+    return driver.execute_script("return Date.toString()")
+
+
+## Get d.getMilliseconds.toString(), where d = new Date().
+#
+#  Only executing javascript and geting returned values. No support page is needed.
+def getMilliseconds_toString(driver):
+    return driver.execute_script("let d = new Date(); return d.getMilliseconds.toString()")
