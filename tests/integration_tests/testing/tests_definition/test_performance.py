@@ -29,8 +29,8 @@ from values_getters import get_performance_toString
 
 ## Setup method - it is run before performance tests execution starts.
 #
-#  This setup method initialize variable performance_toString that contains function performance.now.toString() and
-#  this variable is provided to performance_toString test and the function in the variable is compared with real value.
+#  This setup method initialize variable performance_toString that contains performance methods.toString() and
+#  this variable is provided to performance_toString test and the methods.toString() in the variable are compared with real values.
 @pytest.fixture(scope='module', autouse=True)
 def performance_toString(browser):
 	return get_performance_toString(browser.driver)
@@ -57,6 +57,6 @@ def test_performance(browser, expected):
         assert not is_performance_rounded
 
 
-## Test performance.now.toString(). It should be always unchanged by JSR.
+## Test performance methods.toString(). They should be always unchanged by JSR.
 def test_performance_toString(browser, performance_toString):
     assert performance_toString == browser.real.performance_toString

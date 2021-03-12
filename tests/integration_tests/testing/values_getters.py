@@ -118,14 +118,26 @@ def is_canvas_spoofed(driver):
         return is_spoofed
 
 
-## Get performance.now.toString().
+## Get performance methods.toString().
 #
 #  Only executing javascript and geting returned values. No support page is needed.
 def get_performance_toString(driver):
-    return driver.execute_script("return performance.now.toString()")
+    output = {}
+    output['performance.now.toString()'] = driver.execute_script("return performance.now.toString()")
+    output['performance.clearMarks.toString()'] = driver.execute_script("return performance.clearMarks.toString()")
+    output['performance.clearMeasures.toString()'] = driver.execute_script("return performance.clearMeasures.toString()")
+    output['performance.clearResourceTimings.toString()'] = driver.execute_script("return performance.clearResourceTimings.toString()")
+    output['performance.getEntries.toString()'] = driver.execute_script("return performance.getEntries.toString()")
+    output['performance.getEntriesByName.toString()'] = driver.execute_script("return performance.getEntriesByName.toString()")
+    output['performance.getEntriesByType.toString()'] = driver.execute_script("return performance.getEntriesByType.toString()")
+    output['performance.mark.toString()'] = driver.execute_script("return performance.mark.toString()")
+    output['performance.measure.toString()'] = driver.execute_script("return performance.measure.toString()")
+    output['performance.setResourceTimingBufferSize.toString()'] = driver.execute_script("return performance.setResourceTimingBufferSize.toString()")
+    output['performance.toJSON.toString()'] = driver.execute_script("return performance.toJSON.toString()")
+    return output
 
 
-## Get Date methods toString().
+## Get Date methods.toString().
 #
 #  Only executing javascript and geting returned values. No support page is needed.
 def get_time_toString(driver):
@@ -178,6 +190,5 @@ def get_time_toString(driver):
     output['Date.prototype.toString.toString()'] = driver.execute_script("let d = new Date(); return d.toString.toString()")
     output['Date.prototype.toTimeString.toString()'] = driver.execute_script("let d = new Date(); return d.toTimeString.toString()")
     output['Date.prototype.toUTCString.toString()'] = driver.execute_script("let d = new Date(); return d.toUTCString.toString()")
-    output['Date.prototype.valueOf.toString()'] = driver.execute_script("let d = new Date(); return d.valueOf.toString()")
-    
+    output['Date.prototype.valueOf.toString()'] = driver.execute_script("let d = new Date(); return d.valueOf.toString()")444
     return output
