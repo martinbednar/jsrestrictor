@@ -125,7 +125,7 @@ def get_performance_toString(driver):
     return driver.execute_script("return performance.now.toString()")
 
 
-## Get Date.toString().
+## Get Date methods toString().
 #
 #  Only executing javascript and geting returned values. No support page is needed.
 def get_time_toString(driver):

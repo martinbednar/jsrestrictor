@@ -40,8 +40,8 @@ def load_test_page(browser):
 
 ## Setup method - it is run before time tests execution starts.
 #
-#  This setup method initialize variable time_toString that contains function Date.toString() and
-#  this variable is provided to time_toString test and the function in the variable is compared with real value.
+#  This setup method initialize variable time_toString that contains Date methods toString() and
+#  this variable is provided to time_toString test and the methods toString() in the variable are compared with real values.
 @pytest.fixture(scope='module', autouse=True)
 def time_toString(browser):
 	return get_time_toString(browser.driver)
@@ -59,6 +59,6 @@ def test_hours_minutes_seconds(browser):
     assert abs(js_time - p_time) < 4
 
 
-## Test Date.toString(). It should be always unchanged by JSR.
+## Test Date methods toString(). They should be always unchanged by JSR.
 def test_time_toString(browser, time_toString):
     assert time_toString == browser.real.time_toString
