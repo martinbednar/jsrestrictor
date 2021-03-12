@@ -55,7 +55,6 @@ def init(driver):
         referrer=values_getters.get_referrer(driver),
         time=None,
         time_toString=values_getters.get_time_toString(driver),
-        milliseconds_toString=values_getters.get_milliseconds_toString(driver),
         performance=None,
         performance_toString=values_getters.get_performance_toString(driver),
         protect_canvas=None

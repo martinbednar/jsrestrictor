@@ -103,7 +103,6 @@ class TestedValues:
                  referrer,
                  time,
                  time_toString,
-                 milliseconds_toString,
                  performance,
                  performance_toString,
                  protect_canvas
@@ -136,7 +135,6 @@ class TestedValues:
         self.referrer = referrer
         self.time = time
         self.time_toString = time_toString
-        self.milliseconds_toString = milliseconds_toString
         self.performance = performance
         self.performance_toString = performance_toString
         self.protect_canvas = protect_canvas
