@@ -192,3 +192,14 @@ def get_time_toString(driver):
     output['Date.prototype.toUTCString.toString()'] = driver.execute_script("let d = new Date(); return d.toUTCString.toString()")
     output['Date.prototype.valueOf.toString()'] = driver.execute_script("let d = new Date(); return d.valueOf.toString()")
     return output
+
+
+## Get geo methods.toString().
+#
+#  Only executing javascript and geting returned values. No support page is needed.
+def get_gps_toString(driver):
+    output = {}
+    output['navigator.geolocation.getCurrentPosition.toString()'] = driver.execute_script("return navigator.geolocation.getCurrentPosition.toString()")
+    output['navigator.geolocation.watchPosition.toString()'] = driver.execute_script("return navigator.geolocation.watchPosition.toString()")
+    output['navigator.geolocation.clearWatch.toString()'] = driver.execute_script("return navigator.geolocation.clearWatch.toString()")
+    return output
